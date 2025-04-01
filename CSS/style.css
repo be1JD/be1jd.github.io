@@ -1,0 +1,165 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    background-color: black;
+    color: white;
+    padding: 15px;
+}
+
+nav {
+    height: 75px;
+    width: calc(100vw - 30px);
+    background-color: rgba(17, 17, 17, 0.5);
+    justify-content: space-between;
+}
+
+.logo_container {
+    background-color: rgba(217, 217, 217, 0.1);
+    width: 150px;
+    height: 92%;
+    border-radius: 5px;
+    justify-content: space-evenly;
+    font-size: 32px;
+    font-weight: bolder;
+    color: rgb(9, 85, 108);
+}
+
+.logo_container img {
+    border-radius: 30px;
+}
+
+.nav_btn_container {
+    margin: 15px;
+    height: 45px;
+    gap: 58px;
+}
+
+.nav_btn {
+    width: 172px;
+    height: inherit;
+    border-radius: 10px;
+    background-color: rgba(139, 106, 154, 0.2);
+}
+
+.icon_container {
+    height: 45px;
+    width: 38px;
+    border-radius: 10px;
+    background-color: rgba(17, 17, 17, .7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.aboutme {
+    justify-content: center;
+}
+
+.nav_btn_text {
+    width: 134px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 21px;
+}
+
+main {
+    margin-top: 50px;
+}
+
+.hero {
+    height: 225px;
+    width: calc(100vw - 30px);
+    background-color: rgba(17, 17, 17, 1);
+    justify-content: space-between;
+}
+
+.hero_text {
+    margin: 40px;
+    width: 63vw;
+}
+
+.hero_text> :nth-child(1) {
+    font-size: 39px;
+}
+
+.hero_text> :nth-child(2) {
+    font-size: 31px;
+}
+
+#type_effect {
+    margin-left: 30px;
+    color: rgba(127, 0, 255, 1);
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.cursor_blink {
+    animation: blink 0.75s step-end infinite;
+}
+
+@keyframes blink {
+
+    from,
+    to {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+
+.hero_text> :nth-child(3) {
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.hero_image {
+    height: 100%;
+    width: 480px;
+    clip-path: polygon(12% 0, 100% 0%, 100% 100%, 0% 100%);
+    /*You can use CSS clip-path Maker to clip the photos and stuff*/
+}
+
+.hero_image img {
+    height: inherit;
+    width: inherit;
+    object-fit: cover;
+}
+
+/* Below code is for cutting the image image corner but using border which is not that good */
+
+/* .box { */
+/* --b: 4px;  border */
+/* --s: 20px; size of the cut */
+/*      */
+/*     */
+/* display:inline-block; */
+/* aspect-ratio:1.5; */
+/* position:relative; */
+/* z-index:0; */
+/* } */
+/* .box:before { */
+/* content:""; */
+/* position:absolute; */
+/* inset:0; */
+/* z-index:-1; */
+/* background: linear-gradient(45deg,red,blue); */
+/* --g1:#000 var(--b),#0000 0 calc(100% - var(--b)),#000 0; */
+/* --g2:#0000   calc(0.707*var(--s)),  */
+/* #000  0 calc(0.707*var(--s) + var(--b)), */
+/* #0000 0 calc(100% - 0.707*var(--s) - var(--b)), */
+/* #000  0 calc(100% - 0.707*var(--s)), */
+/* #0000 0; */
+/* -webkit-mask: */
+/* linear-gradient(45deg ,var(--g2)), */
+/* linear-gradient(-45deg,var(--g2)), */
+/* linear-gradient(90deg ,var(--g1)) 50%/100% calc(100% - 2*var(--s)) no-repeat, */
+/* linear-gradient(180deg,var(--g1)) 50%/calc(100% - 2*var(--s)) 100% no-repeat; */
+/* } */

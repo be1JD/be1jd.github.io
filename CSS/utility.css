@@ -1,0 +1,14 @@
+.flex{
+display: flex;
+}
+.justifycenter{
+    justify-content: center;
+}
+.aligncenter{
+    align-items: center;
+}
+.icon_setter{
+   filter: invert(1);
+   height: 30px;
+   width: 30px;
+}
