@@ -2,9 +2,11 @@
     margin: 0;
     padding: 0;
     font-family: "Poppins", sans-serif;
+    /* overflow: hidden; */
 }
 
 body {
+    height: 95vh;
     background-color: black;
     color: white;
     padding: 15px;
@@ -68,11 +70,13 @@ nav {
 }
 
 main {
-    margin-top: 50px;
+    height: 70%;
+    padding-top: 25px;
 }
 
 .hero {
-    height: 225px;
+    /* height: 225px; */
+    height: 40%;
     width: calc(100vw - 30px);
     background-color: rgba(17, 17, 17, 1);
     justify-content: space-between;
@@ -84,7 +88,10 @@ main {
 }
 
 .hero_text> :nth-child(1) {
-    font-size: 39px;
+    /* font-size: 39px; */
+    /* You can use vh( view height ) unit for font size realtive to viewing screen  */
+    font-size: 5vh;
+    font-weight: bolder;
 }
 
 .hero_text> :nth-child(2) {
@@ -133,33 +140,87 @@ main {
     object-fit: cover;
 }
 
-/* Below code is for cutting the image image corner but using border which is not that good */
+.projects_section {
+    height: 65%;
+    width: 100%;
+    margin-top: 4%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
 
-/* .box { */
-/* --b: 4px;  border */
-/* --s: 20px; size of the cut */
-/*      */
-/*     */
-/* display:inline-block; */
-/* aspect-ratio:1.5; */
-/* position:relative; */
-/* z-index:0; */
+.show_panel {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+.leftswipe {
+    height: 100%;
+    width: 5%;
+    /* background-color: grey; */
+}
+
+/* .arrow_left { */
+    /* width: 0; */
+    /* height: 0; */
+    /* position: absolute; */
+    /* border-top: 35px solid transparent; */
+    /* border-right: 60px solid #555; */
+    /* border-bottom: 35px solid transparent; */
 /* } */
-/* .box:before { */
-/* content:""; */
-/* position:absolute; */
-/* inset:0; */
-/* z-index:-1; */
-/* background: linear-gradient(45deg,red,blue); */
-/* --g1:#000 var(--b),#0000 0 calc(100% - var(--b)),#000 0; */
-/* --g2:#0000   calc(0.707*var(--s)),  */
-/* #000  0 calc(0.707*var(--s) + var(--b)), */
-/* #0000 0 calc(100% - 0.707*var(--s) - var(--b)), */
-/* #000  0 calc(100% - 0.707*var(--s)), */
-/* #0000 0; */
-/* -webkit-mask: */
-/* linear-gradient(45deg ,var(--g2)), */
-/* linear-gradient(-45deg,var(--g2)), */
-/* linear-gradient(90deg ,var(--g1)) 50%/100% calc(100% - 2*var(--s)) no-repeat, */
-/* linear-gradient(180deg,var(--g1)) 50%/calc(100% - 2*var(--s)) 100% no-repeat; */
-/* } */
+
+.arrow_left {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  color: white;
+  background-color: rgba(81, 79, 79, 1); /* Main color of the button */
+  font-weight: bold;
+  font-family: sans-serif;
+  clip-path: polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%, 0% 50%);
+  cursor: pointer;
+}
+.arrow_text_left{
+    margin-left: 10px;
+}
+
+.rightswipe {
+    height: 100%;
+    width: 5%;
+    /* background-color: grey; */
+    flex-direction: column;
+}
+.arrow_right {
+  position: relative;
+  width: 70px;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  color: white;
+  background-color: rgba(81, 79, 79, 1); /* Main color of the button */
+  font-weight: bold;
+  font-family: sans-serif;
+  clip-path: polygon(0% 0%, 0% 0%, 100% 50%, 0% 100%, 0% 50%);
+  cursor: pointer;
+}
+.arrow_text_right{
+    margin-right: 10px;
+}
+.cards_container {
+    height: 100%;
+    width: 70%;
+    background-color: rgb(132, 191, 191);
+}
+
+.Projects_redirect {
+    height: 15%;
+    width: 80%;
+    background-color: bisque;
+}
