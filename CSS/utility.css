@@ -8,11 +8,17 @@ display: flex;
 .justifycenter{
     justify-content: center;
 }
+.justifybetween{
+    justify-content: space-between;
+}
+.justifyevenly{
+    justify-content: space-evenly;
+}
 .aligncenter{
     align-items: center;
 }
 .icon_setter{
    filter: invert(1);
-   height: 30px;
-   width: 30px;
+   height: 25px;
+   width: 25px;
 }

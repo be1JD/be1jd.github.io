@@ -1,2 +1,0 @@
---> Embedded contact and about me page :- 
-         - The (Contact) and (About me) page will be embedded through JS

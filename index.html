@@ -7,10 +7,16 @@
     <title>JD Web</title>
     <link rel="stylesheet" href="CSS/style.css">
     <link rel="stylesheet" href="CSS/utility.css">
+    <link rel="stylesheet" href="CSS/media_query.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Creepster&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
         rel="stylesheet">
 </head>
 
@@ -19,22 +25,30 @@
         <nav class="flex aligncenter">
             <div class="logo_container flex aligncenter">JD<img width="64px" height="64px"
                     src="Assets/Awakening Spirit.webp" alt=""></div>
-            <div class="nav_btn_container flex">
-                <div class="myproject nav_btn flex aligncenter">
+            <div class="nav_btn_container flex justifyevenly">
+                <button id="home" class="nav_btn flex aligncenter">
+                    <div class="icon_container"><img class="icon_setter" src="Assets/Home.png" alt=""></div>
+                    <div class="nav_btn_text">Home</div>
+                </button>
+                <button id="myproject" class="nav_btn flex aligncenter">
                     <div class="icon_container"><img class="icon_setter" src="Assets/Projects.svg" alt=""></div>
                     <div class="nav_btn_text">My Project</div>
-                </div>
-                <div class="electronics nav_btn flex aligncenter">
+                </button>
+                <button id="electronics" class="nav_btn flex aligncenter">
                     <div class="icon_container"><img class="icon_setter" src="Assets/Electronics.svg" alt=""></div>
                     <div class="nav_btn_text">Electronics</div>
-                </div>
-                <div class="aboutme nav_btn flex aligncenter">
+                </button>
+                <button id="aboutme" class="nav_btn flex aligncenter">
                     <div class="nav_btn_text">About Me</div>
-                </div>
-                <div class="contact nav_btn flex aligncenter">
+                </button>
+                <button id="contact" class="nav_btn flex aligncenter">
                     <div class="icon_container"><img class="icon_setter" src="Assets/Contact.svg" alt=""></div>
                     <div class="nav_btn_text">Contact</div>
-                </div>
+                </button>
+                <!-- <button id="menu_container"> -->
+                <!-- <div class="menu_icon_container flex aligncenter justifycenter"><img class="menu_icon" -->
+                <!-- src="Assets/Menu_icon.png" alt=""></div> -->
+                <!-- </button> -->
             </div>
         </nav>
     </header>
@@ -48,7 +62,7 @@
             </div>
             <div class="hero_image"><img src="Assets/Mypic.jpg" alt=""></div>
         </div>
-        <div class="projects_section">
+        <div class="projects_section flex_column">
             <div class="show_panel">
                 <div class="leftswipe  flex_column justifycenter">
                     <div class="left_swipe_container">
@@ -57,10 +71,12 @@
                         </div>
                     </div>
                 </div>
-                <div class="cards_container">
+                <div class="cards_container flex aligncenter justifycenter">
                     <div class="cards card1"></div>
                     <div class="cards card2"></div>
                     <div class="cards card3"></div>
+                    <div class="cards card4"></div>
+                    <div class="cards card5"></div>
                 </div>
                 <div class="rightswipe flex_column justifycenter">
                     <div class="right_swipe_container">
@@ -69,13 +85,25 @@
                         </div>
                     </div>
                 </div>
+                <div class="progress_info">
+                    <div class="progress_meter">mtr</div>
+                </div>
+                <div class="project_details">
+                    <div class="project_intro">
+                        <div class="name">Project Name</div>
+                        <div class="desctiption">Desctiption</div>
+                        <div class="project_feature">Features</div>
+                    </div>
+                </div>
             </div>
-            <div class="Projects_redirect">
-                <a href="" class="web_proj_btn"></a>
-                <a href="" class="elec_proj_btn"></a>
+            <div class="Projects_redirect_bar flex justifybetween aligncenter">
+                <a href="" class="prj_rdrct_btns web_proj_btn">My Web Project</a>
+                <a href="" class="prj_rdrct_btns Pelec_proj_btn">My Electronics Project</a>
             </div>
         </div>
     </main>
+    <div class="aboutme_enable">
+    </div>
     <footer></footer>
 </body>
 <script src="JS/script.js"></script>

@@ -1,0 +1,83 @@
+/* Media query for Mobile Phones  */
+@media only screen and (max-width: 1000px) {
+
+    nav {
+        width: 1080px;
+        height: 70px;
+    }
+
+    .logo_container {
+        width: 130px;
+    }
+
+    .nav_btn_container {
+        height: fit-content;
+        padding-right: 30px;
+    }
+
+    .nav_btn_text {
+        font-size: 12px;
+    }
+
+    /* .nav_btn { */
+    /* display: none; */
+    /* } */
+    /* .menu_icon_container{ */
+    /* height: 50px; */
+    /* width: 50px; */
+    /* } */
+    /* .menu_icon{ */
+    /* height: 35px; */
+    /* width: 35px; */
+    /* } */
+
+    main {
+        height: fit-content;
+        width: 1060px;
+    }
+
+    .hero {
+        margin-top: 10%;
+        height: 300px;
+        width: 1060px;
+    }
+
+    .hero_text {
+        width: 50%;
+    }
+
+    .hero_image {
+        height: 300px;
+        width: 400px;
+        clip-path: polygon(23% 0, 100% 0%, 100% 100%, 0% 100%);
+    }
+
+    .projects_section {
+        height: 1080px;
+        margin-top: 20%;
+    }
+
+    .show_panel {
+        height: 1080px;
+        width: 1020px;
+        background-color: rgba(17, 17, 17, 1);
+    }
+
+    .arrow_left {
+        right: 7px;
+    }
+
+    .arrow_right {
+        left: 0px;
+
+    }
+
+    .cards_container {
+        width: 75%;
+    }
+
+    .cards {
+        height: 550px;
+        width: 920px;
+    }
+}
