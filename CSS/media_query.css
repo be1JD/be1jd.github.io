@@ -80,4 +80,18 @@
         height: 550px;
         width: 920px;
     }
+
+    /* Code for Contact page */
+    .contact_page_enable {
+        height: fit-content;
+        width: 1060px;
+    }
+
+    /* Code for About me page */
+    .aboutme_page_enable {
+        height: fit-content;
+        width: 1060px;
+    }
+
+
 }

@@ -6,6 +6,18 @@ let currentText = "";
 const typingSpeed = 30; // Speed in milliseconds
 const pause = 1000; // Pause between typing and deleting
 
+// Get all the Buttons on Nav bar
+let home = document.querySelector("#home");
+let myproject = document.querySelector("#myproject");
+let electronics = document.querySelector("#electronics");
+let aboutme = document.querySelector("#aboutme");
+let contact = document.querySelector("#contact");
+
+//Element Containing Main pages
+let main_tag = document.querySelector("main");
+let contact_page = document.querySelector(".contact_page_enable")
+let aboutme_page = document.querySelector(".aboutme_page_enable")
+
 // Typing Effect Function
 function type() {
     const targetText = texts[currentTextIndex];
@@ -47,10 +59,13 @@ document.addEventListener("DOMContentLoaded", type);
 // });
 
 // Lengthy code but reasonalble right now 
-let myproject = document.querySelector("#myproject");
-let electronics = document.querySelector("#electronics");
-let aboutme = document.querySelector("#aboutme");
-let contact = document.querySelector("#contact");
+// Contact button
+home.addEventListener("click", () => {
+    console.log("Pressed Home");
+    main_tag.style.display = "block"
+    contact_page.style.display = "none"
+    aboutme_page.style.display = "none"
+})
 
 // My Project button
 myproject.addEventListener("click", () => {
@@ -65,15 +80,17 @@ electronics.addEventListener("click", () => {
 // About me button
 aboutme.addEventListener("click", () => {
     console.log("Pressed aboutme");
-    let main_tag = document.querySelector("main");
     main_tag.style.display = "none"
+    contact_page.style.display = "none"
+    aboutme_page.style.display = "block"
 })
 
 // Contact button
 contact.addEventListener("click", () => {
-    console.log("Pressed contact");
-    let main_tag = document.querySelector("main");
+    console.log("Pressed contact"); 
     main_tag.style.display = "none"
+    contact_page.style.display = "block"
+    aboutme_page.style.display = "none"
 })
 
 
