@@ -1,0 +1,5 @@
+1. Circle percentage meter for project progress
+-- To show how much project is completed
+
+2. Design for phone first in most of the cases
+
