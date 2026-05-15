@@ -5,26 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JD Web</title>
+    <meta name="description" content="JD Patel's web development and electronics portfolio with projects, experiments, and FPV car controller work.">
     <link rel="stylesheet" href="CSS/style.css">
     <link rel="stylesheet" href="CSS/utility.css">
     <link rel="stylesheet" href="CSS/media_query.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Creepster&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Creepster&family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
 </head>
 
 <body>
     <header>
         <nav class="flex aligncenter">
-            <div class="logo_container flex aligncenter">JD<img width="64px" height="64px"
-                    src="Assets/Awakening Spirit.webp" alt=""></div>
+            <div class="logo_container flex aligncenter">JD<img width="64" height="64"
+                    src="Assets/Awakening Spirit.webp" alt="JD Web logo"></div>
             <div class="nav_btn_container flex justifyevenly">
                 <button id="home" class="nav_btn flex aligncenter">
                     <div class="icon_container"><img class="icon_setter" src="Assets/Home.png" alt=""></div>
@@ -56,66 +52,78 @@
         <div class="hero flex aligncenter">
             <div class="hero_text">
                 <p>Welcome to JDWeb </p>
-                <p>Explore &nbsp;<span id="type_effect"></span><span class="cursor_blink">|</span></span></p>
+                <p>Explore &nbsp;<span id="type_effect"></span><span class="cursor_blink">|</span></p>
                 <p>Want to know more about programming or electronics, then you can check out my
                     project and ideas to explore deeper into it</p>
             </div>
-            <div class="hero_image"><img src="Assets/Mypic.jpg" alt=""></div>
+            <div class="hero_image"><img src="Assets/Mypic.jpg" alt="JD Patel" fetchpriority="high"></div>
         </div>
-        <div class="projects_section flex_column">
+        <section id="projects" class="projects_section flex_column" aria-label="Projects">
             <div class="show_panel">
                 <div class="leftswipe  flex_column justifycenter">
                     <div class="left_swipe_container">
-                        <div class="arrow_left">
+                        <button class="arrow_left" type="button" aria-label="Previous project">
                             <div class="arrow_text_left">Left</div>
-                        </div>
+                        </button>
                     </div>
                 </div>
                 <div class="cards_container flex aligncenter justifycenter">
-                    <div class="cards card1"></div>
-                    <div class="cards card2"></div>
-                    <div class="cards card3"></div>
-                    <div class="cards card4"></div>
-                    <div class="cards card5"></div>
+                    <article class="cards card1 active_card" data-project="0">
+                        <div class="card_tag">Electronics + Web</div>
+                        <h3>FPV Car Web Controller</h3>
+                        <p>Browser-based driving HUD for an FPV RC car with steering, speed, brake, and settings controls.</p>
+                        <a class="card_link" href="FPV_Car/RC_Control_4.3.html">Open Controller</a>
+                    </article>
+                    <article class="cards card2" data-project="1">
+                        <div class="card_tag">Web</div>
+                        <h3>Portfolio Website</h3>
+                        <p>A static GitHub Pages site for web and electronics project experiments.</p>
+                    </article>
+                    <article class="cards card3" data-project="2">
+                        <div class="card_tag">Electronics</div>
+                        <h3>Electronics Lab</h3>
+                        <p>Space for circuit builds, hardware tests, and embedded control ideas.</p>
+                    </article>
                 </div>
                 <div class="rightswipe flex_column justifycenter">
                     <div class="right_swipe_container">
-                        <div class="arrow_right">
+                        <button class="arrow_right" type="button" aria-label="Next project">
                             <div class="arrow_text_right">Right</div>
-                        </div>
+                        </button>
                     </div>
                 </div>
                 <div class="progress_info">
-                    <div class="progress_meter">mtr</div>
+                    <div class="progress_meter">1 / 3</div>
                 </div>
                 <div class="project_details">
                     <div class="project_intro flex_column justifybetween">
                         <div class="prject_name ">
-                            <h3>Project Name</h3>
-                            <div class="desctiption">description of the project that is shown currently</div>
+                            <h3>FPV Car Web Controller</h3>
+                            <div class="desctiption">A static, mobile-first controller page for an FPV RC car. It is GitHub Pages friendly and connects to the car over WebSocket when hosted on the device network.</div>
                         </div>
                         <div class="project_feature">
                             <h4>Features</h4>
                             <ul>
-                                <li>Feature 1</li>
-                                <li>Feature 2</li>
-                                <li>Feature 3</li>
-                                <li>Feature 4</li>
+                                <li>Touch steering and speed control</li>
+                                <li>Forward, reverse, brake, and center actions</li>
+                                <li>Status and debug panels</li>
+                                <li>Static HTML deployment support</li>
                             </ul>
                         </div>
+                        <a class="project_open_link" href="FPV_Car/RC_Control_4.3.html">Launch FPV Controller</a>
                     </div>
                 </div>
             </div>
             <div class="Projects_redirect_bar flex justifybetween aligncenter">
-                <a href="" class="prj_rdrct_btns web_proj_btn">My Web Project</a>
-                <a href="" class="prj_rdrct_btns Pelec_proj_btn">My Electronics Project</a>
+                <a href="#projects" class="prj_rdrct_btns web_proj_btn">My Web Project</a>
+                <a href="FPV_Car/RC_Control_4.3.html" class="prj_rdrct_btns Pelec_proj_btn">FPV Controller</a>
             </div>
-        </div>
+        </section>
     </main>
     <div class="aboutme_page_enable">
-        <span class="aboutme_text flex aligncenter justifycenter" >My name is JD Patel and I love to work with electronics .
-I also work with web technologies and good at  developing websites.</div>
-    </span>
+        <div class="aboutme_text flex aligncenter justifycenter">My name is JD Patel and I love to work with electronics.
+            I also work with web technologies and enjoy developing websites.</div>
+    </div>
     <div class="contact_page_enable">
         <div class="copysection flex_column aligncenter">
             <div class="copy_email copy_block">
@@ -144,13 +152,13 @@ I also work with web technologies and good at  developing websites.</div>
             <h2 class="query_title flex aligncenter justifycenter">ONLINE INQUIRY</h2>
             <div class="query_box_container">
                 <input class="query_box" type="text" name="name" id="" placeholder="Name">
-                <input class="query_box" type="text" name="contact_info" id="" placeholder="Emial or Mobile No">
+                <input class="query_box" type="text" name="contact_info" id="" placeholder="Email or Mobile No">
                 <input class="query_box" type="text" name="message" id="" placeholder="Message...">
             </div>
         </div>
     </div>
     <footer></footer>
+    <script src="JS/script.js" defer></script>
 </body>
-<script src="JS/script.js"></script>
 
 </html>

@@ -2,8 +2,12 @@
 @media only screen and (max-width: 1000px) {
 
     nav {
-        width: 1080px;
-        height: 70px;
+        width: 100%;
+        min-width: 0;
+        height: auto;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding: 8px;
     }
 
     .logo_container {
@@ -11,8 +15,16 @@
     }
 
     .nav_btn_container {
+        max-width: 100%;
         height: fit-content;
-        padding-right: 30px;
+        padding-right: 0;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+
+    .nav_btn {
+        min-width: 145px;
     }
 
     .nav_btn_text {
@@ -33,13 +45,14 @@
 
     main {
         height: fit-content;
-        width: 1060px;
+        width: 100%;
     }
 
     .hero {
-        margin-top: 10%;
-        height: 300px;
-        width: 1060px;
+        margin-top: 24px;
+        min-height: 300px;
+        height: auto;
+        width: 100%;
     }
 
     .hero_text {
@@ -53,14 +66,44 @@
     }
 
     .projects_section {
-        height: 1080px;
-        margin-top: 20%;
+        min-height: 1080px;
+        height: auto;
+        margin-top: 80px;
     }
 
     .show_panel {
-        height: 1080px;
-        width: 1020px;
+        height: auto;
+        min-height: 1080px;
+        width: 100%;
         background-color: rgba(17, 17, 17, 1);
+        grid-template-columns: 70px 1fr 70px;
+        grid-template-areas:
+            "left cards right"
+            "progress progress progress"
+            "details details details";
+        padding: 18px;
+    }
+
+    .leftswipe {
+        grid-area: left;
+        width: auto;
+    }
+
+    .cards_container {
+        grid-area: cards;
+    }
+
+    .rightswipe {
+        grid-area: right;
+        width: auto;
+    }
+
+    .progress_info {
+        grid-area: progress;
+    }
+
+    .project_details {
+        grid-area: details;
     }
 
     .arrow_left {
@@ -73,24 +116,34 @@
     }
 
     .cards_container {
-        width: 75%;
+        width: 100%;
+        padding: 10px;
     }
 
     .cards {
-        height: 550px;
-        width: 920px;
+        min-height: 420px;
+        height: auto;
+        width: min(760px, 78vw);
+    }
+
+    .Projects_redirect_bar {
+        width: 100%;
+        height: auto;
+        gap: 18px;
+        flex-wrap: wrap;
+        justify-content: center;
     }
 
     /* Code for Contact page */
     .contact_page_enable {
         height: fit-content;
-        width: 1060px;
+        width: 100%;
     }
 
     /* Code for About me page */
     .aboutme_page_enable {
         height: fit-content;
-        width: 1060px;
+        width: 100%;
     }
 
 

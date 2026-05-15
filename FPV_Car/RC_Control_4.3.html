@@ -1,0 +1,1263 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>JetRay</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --app-height: 100dvh;
+            --panel-gap: clamp(8px, 1.8vw, 14px);
+            --stat-width: clamp(72px, 14vw, 96px);
+            --side-button: clamp(58px, 12vw, 72px);
+            --drive-width: clamp(64px, 13vw, 82px);
+            --drive-height: clamp(120px, 28vh, 168px);
+            --brake-height: clamp(102px, 22vh, 146px);
+            --speed-panel-height: clamp(78px, 14vh, 104px);
+            --steer-panel-width: min(200px, 35vw);
+            --speed-slider-width: min(100%, 240px);
+            --steer-track-height: clamp(62px, 11vh, 78px);
+            --steer-track-pad-left: clamp(14px, 3vw, 26px);
+            --steer-track-pad-right: clamp(8px, 1.8vw, 14px);
+            --steer-track-thickness: clamp(14px, 2.2vh, 18px);
+            --steer-thumb-size: clamp(28px, 4vh, 34px);
+            --text-lg: clamp(18px, 4vw, 22px);
+            --text-md: clamp(16px, 3vw, 20px);
+            --text-sm: clamp(10px, 2vw, 12px);
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html,
+        body {
+            margin: 0;
+            min-height: 100svh;
+            height: var(--app-height);
+            overflow: hidden;
+            background: #000;
+            font: 14px Arial, sans-serif;
+            color: #eef;
+        }
+
+        body {
+            position: fixed;
+            inset: 0;
+            user-select: none;
+            overscroll-behavior: none;
+            /* touch-action: pan-x pan-y; */
+            touch-action: none;
+        }
+
+        #video_feed {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background: #111;
+            pointer-events: none;
+        }
+
+        main {
+            position: relative;
+            z-index: 1;
+            min-height: 100svh;
+            height: var(--app-height);
+            padding: calc(10px + env(safe-area-inset-top)) calc(10px + env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) calc(10px + env(safe-area-inset-left));
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: linear-gradient(rgba(0, 0, 0, .18), rgba(0, 0, 0, .62));
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            gap: var(--panel-gap);
+            flex-wrap: wrap;
+        }
+
+        .nav_bar {
+            display: flex;
+            gap: var(--panel-gap);
+            flex-wrap: wrap;
+        }
+
+        .p {
+            border: 1px solid #1de3ff8a;
+            background: #06101866;
+            box-shadow: 0 0 0 1px #1de3ff33 inset, 0 0 16px #1de3ff22;
+            border-radius: 14px;
+            backdrop-filter: blur(6px);
+            padding: 10px 12px;
+        }
+
+        .stat_box {
+            min-width: 150px;
+        }
+
+        .stat_box b {
+            display: block;
+            font-size: 20px;
+            margin-top: 4px;
+        }
+
+        .stat_info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #9fc7d4;
+            font-size: 11px;
+            margin-top: 6px;
+        }
+
+        #stat_led {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #ff4f62;
+            box-shadow: 0 0 8px #ff4f62;
+        }
+
+        .ctrl_box {
+            min-width: var(--stat-width);
+            text-align: center;
+        }
+
+        .ctrl_box b {
+            display: block;
+            font-size: var(--text-lg);
+        }
+
+        .top-tools {
+            position: relative;
+        }
+
+        .debug_btn {
+            padding: 0 12px;
+            height: 42px;
+            color: #fff;
+            background: #0006;
+            border: 1px solid #1de3ff;
+            border-radius: 12px;
+        }
+
+        .disp_none {
+            display: none;
+        }
+
+        #db_panel {
+            border: 1px solid #1de3ff8a;
+            background: #06101866;
+            box-shadow: 0 0 0 1px #1de3ff33 inset, 0 0 16px #1de3ff22;
+            border-radius: 14px;
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            z-index: 5;
+            width: min(220px, calc(100vw - 24px));
+            padding: 8px 10px;
+            font: 10px/1.25 Consolas, monospace;
+            color: #7effb8;
+        }
+
+        #db_panel i {
+            display: flex;
+            justify-content: space-between;
+            color: #9fc7d4;
+            font-style: normal;
+            margin-bottom: 4px;
+        }
+
+        #db_panel p {
+            margin: 0 0 4px;
+            color: #2cff95;
+            word-break: break-word;
+        }
+
+        #db_panel pre {
+            margin: 0;
+            max-height: 54px;
+            overflow: auto;
+            white-space: pre-wrap;
+        }
+
+        .ctrl_sec {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: var(--panel-gap);
+            min-height: 0;
+            flex-wrap: wrap;
+        }
+
+        .left_ctrls {
+            display: flex;
+            flex-direction: column;
+            gap: var(--panel-gap);
+            align-items: stretch;
+            flex: 1;
+            min-width: 0;
+            max-width: min(58vw, 400px);
+        }
+
+        .right_ctrls {
+            display: flex;
+            /* gap: var(--panel-gap); */
+            gap: 40px;
+            align-items: flex-end;
+            margin-left: auto;
+            margin-right: 5%;
+            flex-wrap: nowrap;
+        }
+
+        .u {
+            text-align: center;
+            color: #9fc7d4;
+            font-size: 11px;
+        }
+
+        .u b {
+            display: block;
+            font-size: var(--text-md);
+            color: #eef;
+        }
+
+        .v {
+            width: 60px;
+            height: 190px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            border: none;
+            box-shadow: none;
+        }
+
+        .vw {
+            /* display: flex;
+            align-items: center;
+            justify-content: center; */
+
+            width: 40px;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 
+        #speed_bar {
+            -webkit-appearance: slider-vertical;
+            width: 30px;
+            height: 120px;
+            accent-color: #1de3ff;
+        } */
+        #speed_bar {
+            appearance: none;
+            -webkit-appearance: none;
+
+            width: 180px;
+            height: 18px;
+
+            transform: rotate(-90deg);
+
+            background: transparent;
+        }
+
+        /* Track */
+        #speed_bar::-webkit-slider-runnable-track {
+            height: 28px;
+            background: #6a6a6a53;
+            border-radius: 999px;
+            border: 1px solid #95edff33;
+        }
+
+        /* Thumb */
+        #speed_bar::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            margin-top: 2px;
+
+            border-radius: 50%;
+            background: #32d8f4;
+            border: none;
+
+            box-shadow: 0 0 0 3px #071019, 0 0 12px #32d8f455;
+        }
+
+        .w {
+            width: var(--steer-panel-width);
+            min-width: 0;
+            padding: 10px 12px 12px;
+            flex: 1 1 auto;
+            border: none;
+            box-shadow: none;
+            background: transparent;
+            backdrop-filter: none;
+        }
+
+        .steer_bar {
+            width: calc(100% - var(--steer-track-pad-left) - var(--steer-track-pad-right));
+            height: var(--steer-track-height);
+            margin: 10px var(--steer-track-pad-right) 4px var(--steer-track-pad-left);
+            accent-color: #32d8f4;
+            appearance: none;
+            -webkit-appearance: none;
+            background: transparent;
+        }
+
+        .steer_bar::-webkit-slider-runnable-track {
+            height: var(--steer-track-thickness);
+            /* background: #6a6a6a; */
+            background: #6a6a6a53;
+            border-radius: 999px;
+            border: 1px solid #95edff33;
+            box-shadow: inset 0 0 0 1px #00000030;
+        }
+
+        .steer_bar::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: var(--steer-thumb-size);
+            height: var(--steer-thumb-size);
+            margin-top: calc((var(--steer-track-thickness) - var(--steer-thumb-size)) / 2);
+            border-radius: 50%;
+            border: none;
+            background: #32d8f4;
+            box-shadow: 0 0 0 3px #071019, 0 0 12px #32d8f455;
+        }
+
+        .steer_bar::-moz-range-track {
+            height: var(--steer-track-thickness);
+            background: #6a6a6a;
+            border-radius: 999px;
+            border: 1px solid #95edff33;
+            box-shadow: inset 0 0 0 1px #00000030;
+        }
+
+        .steer_bar::-moz-range-progress {
+            height: var(--steer-track-thickness);
+            background: #6a6a6a;
+            border-radius: 999px;
+        }
+
+        .steer_bar::-moz-range-thumb {
+            width: var(--steer-thumb-size);
+            height: var(--steer-thumb-size);
+            border-radius: 50%;
+            border: none;
+            background: #32d8f4;
+            box-shadow: 0 0 0 3px #071019, 0 0 12px #32d8f455;
+        }
+
+        .c {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .a {
+            width: var(--side-button);
+            height: var(--side-button);
+            padding: 0 4px;
+            color: #fff;
+            background: #06101855;
+            border: 1px solid #1de3ff;
+            border-radius: 18px;
+            font-size: var(--text-sm);
+        }
+
+        .a small {
+            display: block;
+            font-size: clamp(8px, 1.7vw, 9px);
+            color: #9fc7d4;
+        }
+
+        .ps {
+            display: flex;
+            /* gap: var(--panel-gap); */
+            gap: 25px;
+            align-items: flex-end;
+        }
+
+        .pc {
+            display: flex;
+            flex-direction: column;
+            /* gap: var(--panel-gap); */
+            gap: 10px
+        }
+
+        .y {
+            width: var(--drive-width);
+            height: var(--drive-height);
+            position: relative;
+            overflow: hidden;
+            color: #fff;
+            background: linear-gradient(rgba(255, 255, 255, .08), rgba(255, 255, 255, .02));
+            border: 1px solid #1de3ff;
+            border-radius: 20px;
+            font: 700 clamp(14px, 2.8vw, 16px) Arial;
+            flex: 0 0 auto;
+        }
+
+        .y:before {
+            content: "";
+            position: absolute;
+            inset: clamp(10px, 2.4vh, 14px) clamp(12px, 2.8vw, 16px);
+            background: repeating-linear-gradient(180deg, #1de3ffb8 0 2px, #0000 2px 14px);
+            border-radius: 12px;
+        }
+
+        .y.red {
+            height: var(--brake-height);
+            border-color: #ff4f62;
+        }
+
+        .y.red:before {
+            background: repeating-linear-gradient(180deg, #ff4f62c8 0 2px, #0000 2px 14px);
+        }
+
+        .y span,
+        .a span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .on {
+            transform: scale(.98);
+            background: #1de3ff2a;
+        }
+
+        /* Setting Panel Styling Start */
+        /* FULLSCREEN SETTINGS */
+
+        .settings_overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            /* background: radial-gradient(circle at center, rgba(20, 40, 60, .96), rgba(0, 0, 0, .98)); */
+            background: radial-gradient(circle at center, rgba(20, 40, 60, .6), rgba(0, 0, 0, .7));
+            backdrop-filter: blur(1px);
+            display: none;
+            overflow: hidden;
+        }
+
+        .settings_overlay.show {
+            display: block;
+        }
+
+        /* CLOSE BUTTON */
+        .close_settings_btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid rgb(189, 119, 119);
+            /* border: 1px solid red; */
+            background: black;
+            font-size: 16px;
+            z-index: 20;
+        }
+
+        /* CENTER MENU */
+        /* .settings_menu {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        } */
+
+        /* HOME MENU */
+        .settings_home {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+        }
+
+        /* BIG BUTTONS */
+        .settings_card {
+            width: min(280px, 82vw);
+            height: 48px;
+            border-radius: 10px;
+            border: 1px solid #1de3ff;
+            background: rgba(6, 16, 24, .78);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: .2s;
+        }
+
+        .settings_card span {
+            font-size: 18px;
+        }
+
+        .settings_card:hover {
+            transform: scale(1.04);
+            border-color: #32d8f4;
+            box-shadow: 0 0 24px #1de3ff55;
+        }
+
+        /* PAGE AREA */
+        .settings_pages {
+            width: min(720px, 92vw);
+            margin-top: 5px;
+        }
+
+        .settings_page {
+            width: 100%;
+            min-height: 420px;
+            padding: 24px;
+            border-radius: 24px;
+            background: rgba(0, 0, 0, .1);
+            border: 1px solid #1de3ff33;
+            backdrop-filter: blur(2px);
+        }
+
+        .settings_page h2 {
+            margin-top: 0;
+            color: #32d8f4;
+        }
+
+        .back_btn {
+            margin-bottom: 20px;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 12px;
+            background: #10222f;
+            color: #32d8f4;
+            border: 1px solid #1de3ff55;
+            font-size: 15px;
+        }
+
+        .back_btn:active {
+            transform: scale(.96);
+        }
+
+        .settings_field {
+            display: grid;
+            gap: 8px;
+            margin: 16px 0;
+            color: #9fc7d4;
+            font-size: 13px;
+        }
+
+        .settings_field input {
+            height: 42px;
+            padding: 0 12px;
+            border-radius: 10px;
+            border: 1px solid #1de3ff55;
+            background: #061018;
+            color: #eef;
+            outline: none;
+        }
+
+        .settings_note {
+            margin: 10px 0 18px;
+            color: #9fc7d4;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        /* Settings Panel Styling End */
+
+        @media (orientation: portrait) {
+            main {
+                padding-top: calc(12px + env(safe-area-inset-top));
+                padding-right: calc(12px + env(safe-area-inset-right));
+                padding-bottom: calc(12px + env(safe-area-inset-bottom));
+                padding-left: calc(12px + env(safe-area-inset-left));
+            }
+
+            .ctrl_sec {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .left_ctrls,
+            .right_ctrls,
+            .nav,
+            .nav_bar {
+                width: 100%;
+                max-width: 100%;
+            }
+
+            .right_ctrls {
+                justify-content: space-between;
+                margin-left: 0;
+            }
+
+            .w {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 900px) {
+            :root {
+                --steer-panel-width: min(100%, 420px);
+            }
+
+            .ctrl_sec {
+                justify-content: center;
+            }
+
+            .left_ctrls {
+                max-width: 100%;
+            }
+
+            .right_ctrls {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 720px),
+        (max-height: 520px) and (orientation: landscape) {
+            :root {
+                --panel-gap: clamp(6px, 1.5vw, 10px);
+                --stat-width: clamp(62px, 12vw, 84px);
+                --side-button: clamp(50px, 10vw, 62px);
+                --drive-width: clamp(54px, 11vw, 68px);
+                --drive-height: clamp(102px, 24vh, 138px);
+                --brake-height: clamp(90px, 20vh, 118px);
+                --speed-panel-height: clamp(70px, 13vh, 90px);
+                --steer-panel-width: min(250px, 46vw);
+                --steer-track-height: clamp(54px, 10vh, 64px);
+                --steer-track-thickness: clamp(12px, 2vh, 16px);
+                --steer-thumb-size: clamp(24px, 3.4vh, 30px);
+                --text-lg: clamp(16px, 3vw, 19px);
+                --text-md: clamp(14px, 2.6vw, 18px);
+                --text-sm: clamp(9px, 1.8vw, 11px);
+            }
+
+            .stat_box {
+                min-width: 132px;
+            }
+
+            .p,
+            #db_panel {
+                border-radius: 12px;
+            }
+
+            .v,
+            .w,
+            .a,
+            .y {
+                border-radius: 16px;
+            }
+        }
+
+        @media (max-height: 480px) and (orientation: landscape) {
+            :root {
+                --panel-gap: 6px;
+                --side-button: 46px;
+                --drive-width: 70px;
+                --drive-height: 92px;
+                --brake-height: 82px;
+                --speed-panel-height: 62px;
+                --steer-track-height: 68px;
+                --steer-track-pad-left: 10px;
+                --steer-track-pad-right: 6px;
+                --steer-track-thickness: 58px;
+                --steer-thumb-size: 45px;
+                --text-lg: 15px;
+                --text-md: 13px;
+                --text-sm: 8px;
+            }
+
+            main {
+                padding-top: calc(8px + env(safe-area-inset-top));
+                padding-right: calc(8px + env(safe-area-inset-right));
+                padding-bottom: calc(8px + env(safe-area-inset-bottom));
+                padding-left: calc(8px + env(safe-area-inset-left));
+            }
+
+            .p {
+                padding: 8px 10px;
+            }
+
+            .debug_btn {
+                height: 36px;
+                padding: 0 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <img id="video_feed" src="/stream" alt="" onerror="this.style.display='none'"> -->
+    <img id="video_feed"
+        src="https://preview.redd.it/whats-your-prettiest-rc-pictures-v0-95pxwgk60y4e1.jpeg?width=640&crop=smart&auto=webp&s=ebb69a8fb434c3a520a3deec41a4ade1cfb0ce37"
+        alt="" onerror="this.style.display='none'">
+    <!-- Search for :- lanscape image taken from rc car -->
+    <main>
+        <div class="nav">
+            <div class="nav_bar">
+                <div class="p stat_box">
+                    STATUS
+                    <div class="stat_info">
+                        <span id="stat_led"></span>
+                        <span id="conn_stat">OFFLINE</span>
+                    </div>
+                </div>
+                <div class="p ctrl_box">
+                    STEER
+                    <b id="str_angle_1">90</b>
+                </div>
+                <div class="p ctrl_box">
+                    SPEED
+                    <b id="speed_val_1">128</b>
+                </div>
+            </div>
+            <div class="nav_bar top-tools">
+                <button id="settings_btn" class="debug_btn">⚙ Settings</button>
+                <div id="settings_panel" class="settings_overlay disp_none">
+                    <button id="close_settings" class="close_settings_btn">
+                        ❌
+                    </button>
+                    <div id="settings_home" class="settings_home">
+
+                        <button class="settings_card" data-target="debug_section">
+                            <span>Debug Panel</span>
+                        </button>
+
+                        <button class="settings_card" data-target="controls_section">
+                            <span>Controls HUD</span>
+                        </button>
+
+                        <button class="settings_card" data-target="hardware_section">
+                            <span>Hardware Check</span>
+                        </button>
+
+                        <button class="settings_card" data-target="wifi_section">
+                            <span>Wifi Settings</span>
+                        </button>
+
+                        <button class="settings_card" data-target="updates_section">
+                            <span>Updates</span>
+                        </button>
+                    </div>
+                    <div class="settings_pages">
+
+                        <!-- HARDWARE -->
+                        <div id="hardware_section" class="settings_page disp_none">
+
+                            <button class="back_btn">
+                                ← Back
+                            </button>
+
+                            <h2>Hardware Check</h2>
+
+                            <div class="settings_group">
+                                <button id="servo_test">
+                                    Servo Sweep Test
+                                </button>
+
+                                <button id="motor_test">
+                                    Motor Test
+                                </button>
+
+                                <button id="rear_test">
+                                    Rear Brake Test
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- CONTROLS -->
+                        <div id="controls_section" class="settings_page disp_none">
+
+                            <button class="back_btn">
+                                ← Back
+                            </button>
+
+                            <h2>Controls HUD</h2>
+
+                            <label>
+                                Steering Trim
+                                <input type="range" min="70" max="110">
+                            </label>
+
+                            <label>
+                                Max Speed
+                                <input type="range" min="50" max="255">
+                            </label>
+                        </div>
+
+                        <!-- WIFI -->
+                        <div id="wifi_section" class="settings_page disp_none">
+
+                            <button class="back_btn">
+                                ← Back
+                            </button>
+
+                            <h2>Wifi Settings</h2>
+
+                            <label class="settings_field">
+                                Controller Host
+                                <input id="ws_host" type="text" inputmode="url" placeholder="192.168.4.1 or car.local">
+                            </label>
+
+                            <p class="settings_note">For GitHub Pages testing, enter the car IP or hostname. Browsers may block ws:// from https:// pages, so the most reliable control mode is still opening this page from the car/device network.</p>
+
+                            <button>
+                                Scan Networks
+                            </button>
+
+                            <button>
+                                Reconnect
+                            </button>
+                        </div>
+
+                        <!-- UPDATE -->
+                        <div id="updates_section" class="settings_page disp_none">
+
+                            <button class="back_btn">
+                                ← Back
+                            </button>
+
+                            <h2>System Updates</h2>
+
+                            <button>
+                                Check Firmware
+                            </button>
+
+                            <button>
+                                Install Update
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- Debug Panel -->
+                <!-- <button id="debug_btn" class="debug_btn">Debug</button> -->
+                <div id="db_panel" class="disp_none">
+                    <i><span>Bus</span><span id="debug_conn_stat">READY</span>
+                        <button id="close_debug_btn" class="">
+                            ✕
+                        </button>
+                    </i>
+                    <p id="debug_last_cmd">Idle</p>
+                    <pre id="debug_logs">Idle</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="ctrl_sec">
+            <div class="left_ctrls">
+                <div class="p v">
+                    <div class="u">
+                        SPEED
+                        <b id="p2">128</b>
+                    </div>
+                    <div class="vw">
+                        <input id="speed_bar" type="range" min="0" max="255" value="128">
+                    </div>
+                </div>
+
+                <div class="p w">
+                    <input id="steer_bar" class="steer_bar" type="range" min="30" max="170" value="90">
+                    <div class="u">
+                        <b id="str_angle_2">90</b>
+                        STEER
+                    </div>
+                </div>
+            </div>
+
+            <div class="right_ctrls">
+                <div class="c">
+                    <button id="ct" class="a">
+                        <span>C</span>
+                        <small>center</small>
+                    </button>
+                    <button id="rc" class="a">
+                        <span>R</span>
+                        <small>link</small>
+                    </button>
+                </div>
+
+                <div class="ps">
+                    <button id="br" class="y red"><span>BREAK</span></button>
+                    <div class="pc">
+                        <button id="fw" class="y"><span>RACE</span></button>
+                        <button id="bk" class="y red"><span>BACK</span></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let w, t, P, R, S, D, C, L, P2, S2, pv, sv;
+        let steerFlushTimer = null;
+        let queuedSteerValue = 90;
+        let latestSteerValue = -1;
+        let fullscreenTried = false;
+        const K = {};
+        const WS_HOST_KEY = "fpv_car_ws_host";
+        const $ = (id) => document.getElementById(id);
+
+        const updateAppHeight = () => {
+            const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+            document.documentElement.style.setProperty("--app-height", viewportHeight + "px");
+        };
+
+        const tryFullscreen = async () => {
+            if (fullscreenTried || document.fullscreenElement || !document.documentElement.requestFullscreen) {
+                return;
+            }
+
+            fullscreenTried = true;
+
+            try {
+                await document.documentElement.requestFullscreen({ navigationUI: "hide" });
+            } catch (error) {
+                H("fs>browser");
+            }
+        };
+        // Later on Added
+        // const tryFullscreen = async () => {
+        //     // already fullscreen
+        //     if (document.fullscreenElement) return;
+        //     // unsupported
+        //     if (!document.documentElement.requestFullscreen) return;
+        //     try {
+        //         await document.documentElement.requestFullscreen({ navigationUI: "hide" });
+        //     }
+        //     catch (err) {
+        //         console.log("Fullscreen blocked");
+        //     }
+        // };
+
+        const A = (element, active) => element.classList[active ? "add" : "remove"]("on");
+
+        const U = (status, color) => {
+            S.textContent = status;
+            D.style.background = color;
+            D.style.boxShadow = "0 0 8px " + color;
+            $("debug_conn_stat").textContent = status;
+        };
+
+        const H = (text) => {
+            const logs = L.textContent.split("\n");
+            logs.push(text);
+            L.textContent = logs.slice(-7).join("\n");
+            // L.textContent = (L.textContent + "\n" + text).split("\n").slice(-7).join("\n");
+            L.scrollTop = L.scrollHeight;
+        };
+
+        const M = (command) => {
+            if (w && w.readyState === 1) {
+                w.send(command);
+            }
+            C.textContent = command;
+            H("tx>" + command);
+        };
+
+        const getWsHost = () => {
+            const hostInput = $("ws_host");
+            const savedHost = hostInput ? hostInput.value.trim() : "";
+            return savedHost || location.host;
+        };
+
+        const flushSteer = () => {
+            steerFlushTimer = null;
+            if (queuedSteerValue !== latestSteerValue) {
+                latestSteerValue = queuedSteerValue;
+                M("steer:" + latestSteerValue);
+            }
+        };
+
+        const queueSteer = (value, force = false) => {
+            queuedSteerValue = Number(value);
+            R.value = queuedSteerValue;
+            sv.textContent = queuedSteerValue;
+            S2.textContent = queuedSteerValue;
+
+            if (force) {
+                if (steerFlushTimer) {
+                    clearTimeout(steerFlushTimer);
+                    steerFlushTimer = null;
+                }
+                flushSteer();
+                return;
+            }
+
+            if (!steerFlushTimer) {
+                steerFlushTimer = setTimeout(flushSteer, 25);
+            }
+        };
+
+        const X = () => {
+            if (t) {
+                clearTimeout(t);
+            }
+
+            w = new WebSocket("ws://" + getWsHost() + "/ws");
+            U("CONNECTING", "#ffd55a");
+            H("ws>open");
+
+            w.onopen = () => {
+                U("CONNECTED", "#2cff95");
+                H("ws>ok");
+                M("hello");
+                M("speed:" + P.value);
+                latestSteerValue = -1;
+                queueSteer(R.value, true);
+            };
+
+            w.onmessage = (event) => {
+                U(event.data || "CONNECTED", "#2cff95");
+                H("rx>" + event.data);
+            };
+
+            w.onclose = () => {
+                U("OFFLINE", "#ff4f62");
+                H("ws>off");
+                t = setTimeout(X, 1000);
+            };
+        };
+
+        const V = (value) => {
+            P.value = value;
+            pv.textContent = value;
+            P2.textContent = value;
+            M("speed:" + value);
+        };
+
+        const B = (id, startCommand, stopCommand) => {
+            const element = $(id);
+
+            const press = (event) => {
+                event.preventDefault();
+                element.setPointerCapture(event.pointerId); // Added Later
+                tryFullscreen();
+                A(element, true);
+                M(startCommand);
+            };
+
+            const release = (event) => {
+                event.preventDefault();
+                element.releasePointerCapture(event.pointerId); // Added Later
+                A(element, false);
+                M(stopCommand);
+            };
+
+            element.onpointerdown = press;
+            element.onpointerup = release;
+            element.onpointercancel = release;
+            element.onpointerleave = (event) => {
+                if (event.buttons) {
+                    release(event);
+                }
+            };
+        };
+
+        const Y = (key, down) => {
+            if (down && K[key]) {
+                return;
+            }
+
+            K[key] = down ? 1 : 0;
+
+            if (key === "w" || key === "ArrowUp") {
+                M(down ? "forward_start" : "forward_stop");
+            } else if (key === "s" || key === "ArrowDown") {
+                M(down ? "back_start" : "back_stop");
+            } else if (key === "a" || key === "ArrowLeft") {
+                queueSteer(down ? 30 : 90, true);
+            } else if (key === "d" || key === "ArrowRight") {
+                queueSteer(down ? 170 : 90, true);
+            } else if (key === " ") {
+                M(down ? "rear_break" : "break_stop");
+            }
+        };
+
+        onload = () => {
+            P = $("speed_bar");
+            R = $("steer_bar");
+            S = $("conn_stat");
+            D = $("stat_led");
+            C = $("debug_last_cmd");
+            L = $("debug_logs");
+            P2 = $("p2");
+            S2 = $("str_angle_2");
+            pv = $("speed_val_1");
+            sv = $("str_angle_1");
+
+            const wsHostInput = $("ws_host");
+            wsHostInput.value = localStorage.getItem(WS_HOST_KEY) || "";
+            wsHostInput.onchange = () => {
+                localStorage.setItem(WS_HOST_KEY, wsHostInput.value.trim());
+            };
+
+            updateAppHeight();
+            window.addEventListener("resize", updateAppHeight);
+            if (window.visualViewport) {
+                window.visualViewport.addEventListener("resize", updateAppHeight);
+            }
+
+            P.oninput = () => {
+                tryFullscreen();
+                V(P.value);
+            };
+
+            R.oninput = () => {
+                tryFullscreen();
+                queueSteer(R.value);
+            };
+
+            // Auto-center steering when released
+            R.onpointerup = () => {
+                queueSteer(90, true);
+            };
+
+            R.onpointercancel = () => {
+                queueSteer(90, true);
+            };
+
+            // Settings Panel Logic Start 
+
+            const settingsPanel = $("settings_panel");
+            const closeSettings = $("close_settings");
+            const settingsBtn = $("settings_btn");
+            const settingPages = document.querySelectorAll(".settings_page");
+            const settingsHome = $("settings_home");
+
+            // OPEN
+            settingsBtn.onclick = () => {
+
+                settingsPanel.classList.add("show");
+
+                // show home
+                settingsHome.classList.remove("disp_none");
+
+                // hide pages
+                settingPages.forEach(page => {
+                    page.classList.add("disp_none");
+                });
+            };
+            // CLOSE
+            closeSettings.onclick = () => {
+                settingsPanel.classList.remove("show");
+            };
+            $("close_debug_btn").onclick = () => {
+                $("db_panel").classList.add("disp_none");
+            }
+            // OPEN INTERNAL PAGES
+            // SETTINGS CARDS ACTIONS
+
+            // OPEN PAGE
+            document.querySelectorAll(".settings_card")
+                .forEach(card => {
+
+                    card.onclick = () => {
+
+                        const targetId = card.dataset.target;
+
+                        // DEBUG PANEL
+                        if (targetId === "debug_section") {
+
+                            settingsPanel.classList.remove("show");
+
+                            $("db_panel").classList.remove("disp_none");
+
+                            return;
+                        }
+
+                        const target = $(targetId);
+
+                        // hide home
+                        settingsHome.classList.add("disp_none");
+
+                        // hide all pages
+                        settingPages.forEach(page => {
+                            page.classList.add("disp_none");
+                        });
+
+                        // show selected page
+                        target.classList.remove("disp_none");
+                    };
+                });
+            // BACK BUTTONS
+            document.querySelectorAll(".back_btn")
+                .forEach(btn => {
+
+                    btn.onclick = () => {
+
+                        // hide pages
+                        settingPages.forEach(page => {
+                            page.classList.add("disp_none");
+                        });
+
+                        // show home
+                        settingsHome.classList.remove("disp_none");
+                    };
+                });
+
+            // document.querySelectorAll(".settings_card").forEach(card => {
+            //     card.addEventListener("click", () => {
+            //         const target = card.dataset.target;
+            //         // DEBUG BUTTON
+            //         if (target === "debug_section") {
+            //             // close fullscreen settings
+            //             settingsPanel.classList.remove("show");
+            //             // show floating debug panel
+            //             $("db_panel").classList.remove("disp_none");
+            //         } else {
+            //             // OTHER PAGES
+            //             settingPages.forEach(page => { page.classList.add("disp_none"); });
+            //             $(target).classList.remove("disp_none");
+            //         }
+            //     });
+            // });
+
+
+            // // debug_btn.onclick = () => db_panel.classList.toggle("disp_none");  // Toggle Debug Panel
+            // // settings_btn.onclick = () => settings_panel.classList.toggle("disp_none"); // Toggle Settings Panel
+            // settings_btn.onclick = () => {
+            //     settings_panel.classList.toggle("disp_none");
+            // };
+            // document.querySelectorAll(".settings_tab")
+            //     .forEach(button => {
+            //         button.onclick = () => {
+            //             const group = button.parentElement;
+            //             group.classList.toggle("open");
+            //         };
+            //     });
+            // Settings Panel Logic End
+
+            ct.onclick = () => queueSteer(90, true);
+            rc.onclick = () => (w && w.readyState < 2 ? w.close() : X());
+
+            onkeydown = (event) => Y(event.key, true);
+            onkeyup = (event) => Y(event.key, false);
+
+            document.addEventListener("pointerdown", tryFullscreen, { once: true });
+
+            B("fw", "forward_start", "forward_stop");
+            B("bk", "back_start", "back_stop");
+            B("br", "rear_break", "break_stop");
+            // X();    // Uncomment This 
+        };
+    </script>
+</body>
+
+</html>
