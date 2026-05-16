@@ -34,6 +34,9 @@
             --steer-track-pad-right: clamp(8px, 1.8vw, 14px);
             --steer-track-thickness: clamp(14px, 2.2vh, 18px);
             --steer-thumb-size: clamp(28px, 4vh, 34px);
+            --speed-slider-length: 180px;
+            --speed-slider-track: 28px;
+            --speed-thumb-size: 24px;
             --text-lg: clamp(18px, 4vw, 22px);
             --text-md: clamp(16px, 3vw, 20px);
             --text-sm: clamp(10px, 2vw, 12px);
@@ -246,7 +249,7 @@
 
         .v {
             width: 60px;
-            height: 190px;
+            height: calc(var(--speed-slider-length) + 58px);
             max-height: 100%;
             display: flex;
             flex-direction: column;
@@ -263,7 +266,7 @@
             justify-content: center; */
 
             width: 40px;
-            height: 180px;
+            height: var(--speed-slider-length);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -280,7 +283,7 @@
             appearance: none;
             -webkit-appearance: none;
 
-            width: 180px;
+            width: var(--speed-slider-length);
             height: 18px;
 
             transform: rotate(-90deg);
@@ -290,7 +293,7 @@
 
         /* Track */
         #speed_bar::-webkit-slider-runnable-track {
-            height: 28px;
+            height: var(--speed-slider-track);
             background: #6a6a6a53;
             border-radius: 999px;
             border: 1px solid #95edff33;
@@ -299,9 +302,9 @@
         /* Thumb */
         #speed_bar::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 24px;
-            height: 24px;
-            margin-top: 2px;
+            width: var(--speed-thumb-size);
+            height: var(--speed-thumb-size);
+            margin-top: calc((var(--speed-slider-track) - var(--speed-thumb-size)) / 2);
 
             border-radius: 50%;
             background: #32d8f4;
@@ -628,6 +631,7 @@
                 --drive-height: clamp(102px, 24vh, 138px);
                 --brake-height: clamp(90px, 20vh, 118px);
                 --speed-panel-height: clamp(70px, 13vh, 90px);
+                --speed-slider-length: clamp(118px, 33vh, 160px);
                 --steer-panel-width: min(250px, 46vw);
                 --steer-track-height: clamp(54px, 10vh, 64px);
                 --steer-track-thickness: clamp(12px, 2vh, 16px);
@@ -663,6 +667,7 @@
                 --drive-height: 92px;
                 --brake-height: 82px;
                 --speed-panel-height: 62px;
+                --speed-slider-length: clamp(96px, 28vh, 132px);
                 --steer-track-height: 68px;
                 --steer-track-pad-left: 10px;
                 --steer-track-pad-right: 6px;
@@ -684,22 +689,11 @@
             }
         }
 
-        @media (orientation: landscape) and (max-height: 650px) {
+        /* @media (orientation: landscape) and (max-height: 650px) {
             :root {
-                --panel-gap: clamp(5px, 1.2vw, 8px);
+                --panel-gap: clamp(6px, 1.5vw, 10px);
                 --edge-pad: 6px;
-                --stat-width: clamp(58px, 9vw, 78px);
-                --side-button: clamp(42px, 7vh, 54px);
-                --drive-width: clamp(58px, 9vw, 74px);
-                --drive-height: clamp(82px, 24vh, 122px);
-                --brake-height: clamp(74px, 20vh, 108px);
                 --steer-panel-width: clamp(150px, 28vw, 260px);
-                --steer-track-height: clamp(48px, 12vh, 68px);
-                --steer-track-thickness: clamp(34px, 8vh, 56px);
-                --steer-thumb-size: clamp(32px, 7vh, 44px);
-                --text-lg: clamp(14px, 2.2vw, 18px);
-                --text-md: clamp(12px, 2vw, 16px);
-                --text-sm: clamp(8px, 1.4vw, 10px);
             }
 
             main {
@@ -708,32 +702,6 @@
 
             .nav {
                 align-items: flex-start;
-            }
-
-            .p {
-                padding: 7px 10px;
-            }
-
-            .stat_box {
-                min-width: clamp(108px, 18vw, 140px);
-            }
-
-            .stat_box b,
-            .ctrl_box b {
-                margin-top: 2px;
-            }
-
-            .ctrl_box {
-                min-width: clamp(68px, 11vw, 88px);
-            }
-
-            .stat_info {
-                margin-top: 4px;
-            }
-
-            .debug_btn {
-                height: 34px;
-                padding: 0 10px;
             }
 
             .ctrl_sec {
@@ -751,32 +719,15 @@
 
             .v {
                 width: clamp(48px, 8vw, 60px);
-                height: clamp(128px, 35vh, 174px);
                 gap: 6px;
             }
 
             .vw {
                 width: 34px;
-                height: clamp(104px, 28vh, 152px);
-            }
-
-            #speed_bar {
-                width: clamp(104px, 28vh, 152px);
-                height: 16px;
-            }
-
-            #speed_bar::-webkit-slider-runnable-track {
-                height: 24px;
-            }
-
-            #speed_bar::-webkit-slider-thumb {
-                width: 22px;
-                height: 22px;
-                margin-top: 1px;
             }
 
             .w {
-                padding: 4px 8px 6px;
+                padding: 8px 10px 10px;
             }
 
             .c,
@@ -791,27 +742,8 @@
             .y {
                 border-radius: 16px;
             }
-        }
+        } */
 
-        @media (orientation: landscape) and (max-height: 390px) {
-            :root {
-                --drive-height: clamp(68px, 22vh, 88px);
-                --brake-height: clamp(60px, 18vh, 78px);
-                --steer-track-height: 46px;
-                --steer-track-thickness: 36px;
-                --steer-thumb-size: 32px;
-                --side-button: 40px;
-            }
-
-            .stat_box {
-                min-width: 104px;
-            }
-
-            .stat_info,
-            .a small {
-                display: none;
-            }
-        }
     </style>
 </head>
 
