@@ -1,0 +1,10 @@
+==> Purpose :- 
+      1. Showcase my projects
+
+
+--> Embedded contact and about me page :- 
+         - The (Contact) and (About me) page will be embedded through JS
+
+--> Github Hosting 
+     - Everyone can access every file you used for hosting so chose wisely
+

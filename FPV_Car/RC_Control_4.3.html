@@ -6,20 +6,13 @@
     <meta name="viewport"
         content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#000000">
-    <meta name="application-name" content="JetRay">
-    <meta name="apple-mobile-web-app-title" content="JetRay">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="display" content="fullscreen">
-    <link rel="manifest"
-        href='data:application/manifest+json,%7B%22name%22%3A%22JetRay%20FPV%20Controller%22%2C%22short_name%22%3A%22JetRay%22%2C%22start_url%22%3A%22.%2FRC_Control_4.3.html%22%2C%22scope%22%3A%22.%2F%22%2C%22display%22%3A%22fullscreen%22%2C%22orientation%22%3A%22landscape%22%2C%22background_color%22%3A%22%23000000%22%2C%22theme_color%22%3A%22%23000000%22%7D'>
     <title>JetRay</title>
     <style>
         :root {
             color-scheme: dark;
             --app-height: 100dvh;
-            --app-width: 100vw;
             --panel-gap: clamp(8px, 1.8vw, 14px);
             --stat-width: clamp(72px, 14vw, 96px);
             --side-button: clamp(58px, 12vw, 72px);
@@ -34,13 +27,9 @@
             --steer-track-pad-right: clamp(8px, 1.8vw, 14px);
             --steer-track-thickness: clamp(14px, 2.2vh, 18px);
             --steer-thumb-size: clamp(28px, 4vh, 34px);
-            --speed-slider-length: 180px;
-            --speed-slider-track: 28px;
-            --speed-thumb-size: 24px;
             --text-lg: clamp(18px, 4vw, 22px);
             --text-md: clamp(16px, 3vw, 20px);
             --text-sm: clamp(10px, 2vw, 12px);
-            --edge-pad: 10px;
         }
 
         * {
@@ -83,11 +72,10 @@
             z-index: 1;
             min-height: 100svh;
             height: var(--app-height);
-            padding: calc(var(--edge-pad) + env(safe-area-inset-top)) calc(var(--edge-pad) + env(safe-area-inset-right)) calc(var(--edge-pad) + env(safe-area-inset-bottom)) calc(var(--edge-pad) + env(safe-area-inset-left));
+            padding: calc(10px + env(safe-area-inset-top)) calc(10px + env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) calc(10px + env(safe-area-inset-left));
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            gap: var(--panel-gap);
             background: linear-gradient(rgba(0, 0, 0, .18), rgba(0, 0, 0, .62));
         }
 
@@ -96,7 +84,6 @@
             justify-content: space-between;
             gap: var(--panel-gap);
             flex-wrap: wrap;
-            flex: 0 1 auto;
         }
 
         .nav_bar {
@@ -211,8 +198,6 @@
             gap: var(--panel-gap);
             min-height: 0;
             flex-wrap: wrap;
-            flex: 1 1 auto;
-            align-content: flex-end;
         }
 
         .left_ctrls {
@@ -228,7 +213,7 @@
         .right_ctrls {
             display: flex;
             /* gap: var(--panel-gap); */
-            gap: clamp(12px, 4vw, 40px);
+            gap: 40px;
             align-items: flex-end;
             margin-left: auto;
             margin-right: 5%;
@@ -249,8 +234,7 @@
 
         .v {
             width: 60px;
-            height: calc(var(--speed-slider-length) + 58px);
-            max-height: 100%;
+            height: 190px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -266,7 +250,7 @@
             justify-content: center; */
 
             width: 40px;
-            height: var(--speed-slider-length);
+            height: 180px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -283,7 +267,7 @@
             appearance: none;
             -webkit-appearance: none;
 
-            width: var(--speed-slider-length);
+            width: 180px;
             height: 18px;
 
             transform: rotate(-90deg);
@@ -293,7 +277,7 @@
 
         /* Track */
         #speed_bar::-webkit-slider-runnable-track {
-            height: var(--speed-slider-track);
+            height: 28px;
             background: #6a6a6a53;
             border-radius: 999px;
             border: 1px solid #95edff33;
@@ -302,9 +286,9 @@
         /* Thumb */
         #speed_bar::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: var(--speed-thumb-size);
-            height: var(--speed-thumb-size);
-            margin-top: calc((var(--speed-slider-track) - var(--speed-thumb-size)) / 2);
+            width: 24px;
+            height: 24px;
+            margin-top: 2px;
 
             border-radius: 50%;
             background: #32d8f4;
@@ -404,7 +388,7 @@
         .ps {
             display: flex;
             /* gap: var(--panel-gap); */
-            gap: clamp(10px, 3vw, 25px);
+            gap: 25px;
             align-items: flex-end;
         }
 
@@ -510,7 +494,7 @@
 
         /* BIG BUTTONS */
         .settings_card {
-            width: min(240px, 82vw);
+            width: min(280px, 82vw);
             height: 48px;
             border-radius: 10px;
             border: 1px solid #1de3ff;
@@ -569,6 +553,31 @@
             transform: scale(.96);
         }
 
+        .settings_field {
+            display: grid;
+            gap: 8px;
+            margin: 16px 0;
+            color: #9fc7d4;
+            font-size: 13px;
+        }
+
+        .settings_field input {
+            height: 42px;
+            padding: 0 12px;
+            border-radius: 10px;
+            border: 1px solid #1de3ff55;
+            background: #061018;
+            color: #eef;
+            outline: none;
+        }
+
+        .settings_note {
+            margin: 10px 0 18px;
+            color: #9fc7d4;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
         /* Settings Panel Styling End */
 
         @media (orientation: portrait) {
@@ -595,7 +604,6 @@
             .right_ctrls {
                 justify-content: space-between;
                 margin-left: 0;
-                margin-right: 0;
             }
 
             .w {
@@ -631,7 +639,6 @@
                 --drive-height: clamp(102px, 24vh, 138px);
                 --brake-height: clamp(90px, 20vh, 118px);
                 --speed-panel-height: clamp(70px, 13vh, 90px);
-                --speed-slider-length: clamp(118px, 33vh, 160px);
                 --steer-panel-width: min(250px, 46vw);
                 --steer-track-height: clamp(54px, 10vh, 64px);
                 --steer-track-thickness: clamp(12px, 2vh, 16px);
@@ -639,7 +646,6 @@
                 --text-lg: clamp(16px, 3vw, 19px);
                 --text-md: clamp(14px, 2.6vw, 18px);
                 --text-sm: clamp(9px, 1.8vw, 11px);
-                --edge-pad: 8px;
             }
 
             .stat_box {
@@ -667,7 +673,6 @@
                 --drive-height: 92px;
                 --brake-height: 82px;
                 --speed-panel-height: 62px;
-                --speed-slider-length: clamp(96px, 28vh, 132px);
                 --steer-track-height: 68px;
                 --steer-track-pad-left: 10px;
                 --steer-track-pad-right: 6px;
@@ -676,7 +681,13 @@
                 --text-lg: 15px;
                 --text-md: 13px;
                 --text-sm: 8px;
-                --edge-pad: 6px;
+            }
+
+            main {
+                padding-top: calc(8px + env(safe-area-inset-top));
+                padding-right: calc(8px + env(safe-area-inset-right));
+                padding-bottom: calc(8px + env(safe-area-inset-bottom));
+                padding-left: calc(8px + env(safe-area-inset-left));
             }
 
             .p {
@@ -688,62 +699,6 @@
                 padding: 0 10px;
             }
         }
-
-        /* @media (orientation: landscape) and (max-height: 650px) {
-            :root {
-                --panel-gap: clamp(6px, 1.5vw, 10px);
-                --edge-pad: 6px;
-                --steer-panel-width: clamp(150px, 28vw, 260px);
-            }
-
-            main {
-                justify-content: space-between;
-            }
-
-            .nav {
-                align-items: flex-start;
-            }
-
-            .ctrl_sec {
-                flex-wrap: nowrap;
-            }
-
-            .left_ctrls {
-                flex: 0 1 min(42vw, 330px);
-                max-width: min(42vw, 330px);
-            }
-
-            .right_ctrls {
-                margin-right: 2vw;
-            }
-
-            .v {
-                width: clamp(48px, 8vw, 60px);
-                gap: 6px;
-            }
-
-            .vw {
-                width: 34px;
-            }
-
-            .w {
-                padding: 8px 10px 10px;
-            }
-
-            .c,
-            .pc {
-                gap: 6px;
-            }
-
-            .a {
-                border-radius: 14px;
-            }
-
-            .y {
-                border-radius: 16px;
-            }
-        } */
-
     </style>
 </head>
 
@@ -855,6 +810,13 @@
 
                             <h2>Wifi Settings</h2>
 
+                            <label class="settings_field">
+                                Controller Host
+                                <input id="ws_host" type="text" inputmode="url" placeholder="192.168.4.1 or car.local">
+                            </label>
+
+                            <p class="settings_note">For GitHub Pages testing, enter the car IP or hostname. Browsers may block ws:// from https:// pages, so the most reliable control mode is still opening this page from the car/device network.</p>
+
                             <button>
                                 Scan Networks
                             </button>
@@ -947,33 +909,25 @@
         let steerFlushTimer = null;
         let queuedSteerValue = 90;
         let latestSteerValue = -1;
-        let lastFullscreenTry = 0;
+        let fullscreenTried = false;
         const K = {};
+        const WS_HOST_KEY = "fpv_car_ws_host";
         const $ = (id) => document.getElementById(id);
 
         const updateAppHeight = () => {
             const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-            const viewportWidth = window.visualViewport ? window.visualViewport.width : window.innerWidth;
             document.documentElement.style.setProperty("--app-height", viewportHeight + "px");
-            document.documentElement.style.setProperty("--app-width", viewportWidth + "px");
         };
 
         const tryFullscreen = async () => {
-            if (document.fullscreenElement || !document.documentElement.requestFullscreen) {
+            if (fullscreenTried || document.fullscreenElement || !document.documentElement.requestFullscreen) {
                 return;
             }
 
-            const now = Date.now();
-            if (now - lastFullscreenTry < 650) {
-                return;
-            }
-
-            lastFullscreenTry = now;
+            fullscreenTried = true;
 
             try {
                 await document.documentElement.requestFullscreen({ navigationUI: "hide" });
-                document.documentElement.classList.add("is-fullscreen");
-                updateAppHeight();
             } catch (error) {
                 H("fs>browser");
             }
@@ -1017,6 +971,12 @@
             H("tx>" + command);
         };
 
+        const getWsHost = () => {
+            const hostInput = $("ws_host");
+            const savedHost = hostInput ? hostInput.value.trim() : "";
+            return savedHost || location.host;
+        };
+
         const flushSteer = () => {
             steerFlushTimer = null;
             if (queuedSteerValue !== latestSteerValue) {
@@ -1050,7 +1010,7 @@
                 clearTimeout(t);
             }
 
-            w = new WebSocket("ws://" + location.host + "/ws");
+            w = new WebSocket("ws://" + getWsHost() + "/ws");
             U("CONNECTING", "#ffd55a");
             H("ws>open");
 
@@ -1142,18 +1102,16 @@
             pv = $("speed_val_1");
             sv = $("str_angle_1");
 
+            const wsHostInput = $("ws_host");
+            wsHostInput.value = localStorage.getItem(WS_HOST_KEY) || "";
+            wsHostInput.onchange = () => {
+                localStorage.setItem(WS_HOST_KEY, wsHostInput.value.trim());
+            };
+
             updateAppHeight();
             window.addEventListener("resize", updateAppHeight);
-            window.addEventListener("orientationchange", () => {
-                setTimeout(updateAppHeight, 250);
-            });
-            document.addEventListener("fullscreenchange", () => {
-                document.documentElement.classList.toggle("is-fullscreen", !!document.fullscreenElement);
-                updateAppHeight();
-            });
             if (window.visualViewport) {
                 window.visualViewport.addEventListener("resize", updateAppHeight);
-                window.visualViewport.addEventListener("scroll", updateAppHeight);
             }
 
             P.oninput = () => {
@@ -1292,7 +1250,7 @@
             onkeydown = (event) => Y(event.key, true);
             onkeyup = (event) => Y(event.key, false);
 
-            document.addEventListener("pointerdown", tryFullscreen);
+            document.addEventListener("pointerdown", tryFullscreen, { once: true });
 
             B("fw", "forward_start", "forward_stop");
             B("bk", "back_start", "back_stop");

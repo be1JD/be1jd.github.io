@@ -1,0 +1,2 @@
+==> NEXT TASK :- 
+1. Add responsivity to contact page

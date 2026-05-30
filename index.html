@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JD Web</title>
-    <meta name="description" content="JD Patel's web development and electronics portfolio with projects, experiments, and FPV car controller work.">
+    <meta name="description"
+        content="JD Patel's web development and electronics portfolio with projects, experiments, and FPV car controller work.">
     <link rel="stylesheet" href="CSS/style.css">
     <link rel="stylesheet" href="CSS/utility.css">
     <link rel="stylesheet" href="CSS/media_query.css">
@@ -17,146 +18,202 @@
 </head>
 
 <body>
-    <header>
-        <nav class="flex aligncenter">
-            <div class="logo_container flex aligncenter">JD<img width="64" height="64"
-                    src="Assets/Awakening Spirit.webp" alt="JD Web logo"></div>
-            <div class="nav_btn_container flex justifyevenly">
-                <button id="home" class="nav_btn flex aligncenter">
-                    <div class="icon_container"><img class="icon_setter" src="Assets/Home.png" alt=""></div>
-                    <div class="nav_btn_text">Home</div>
+    <header class="site_header">
+        <nav class="top_nav" aria-label="Primary navigation">
+            <button id="home" class="brand_button" type="button" data-page="home" aria-label="Open home page">
+                <img width="58" height="58" src="Assets/Awakening Spirit.webp" alt="JD Web logo">
+                <span>JD</span>
+            </button>
+
+            <button class="menu_toggle" type="button" aria-label="Open menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="nav_btn_container" id="nav_menu">
+                <button id="myproject" class="nav_btn active_nav" type="button" data-page="projects">
+                    <span class="icon_container"><img class="icon_setter" src="Assets/Projects.svg" alt=""></span>
+                    <span class="nav_btn_text">My Projects</span>
                 </button>
-                <button id="myproject" class="nav_btn flex aligncenter">
-                    <div class="icon_container"><img class="icon_setter" src="Assets/Projects.svg" alt=""></div>
-                    <div class="nav_btn_text">My Project</div>
+                <button id="electronics" class="nav_btn" type="button" data-page="electronics">
+                    <span class="icon_container"><img class="icon_setter" src="Assets/Electronics.svg" alt=""></span>
+                    <span class="nav_btn_text">Electronics</span>
                 </button>
-                <button id="electronics" class="nav_btn flex aligncenter">
-                    <div class="icon_container"><img class="icon_setter" src="Assets/Electronics.svg" alt=""></div>
-                    <div class="nav_btn_text">Electronics</div>
+                <button id="aboutme" class="nav_btn" type="button" data-page="about">
+                    <span class="nav_btn_text">About Me</span>
                 </button>
-                <button id="aboutme" class="nav_btn flex aligncenter">
-                    <div class="nav_btn_text">About Me</div>
+                <button id="contact" class="nav_btn" type="button" data-page="contact">
+                    <span class="icon_container"><img class="icon_setter" src="Assets/Contact.svg" alt=""></span>
+                    <span class="nav_btn_text">Contact</span>
                 </button>
-                <button id="contact" class="nav_btn flex aligncenter">
-                    <div class="icon_container"><img class="icon_setter" src="Assets/Contact.svg" alt=""></div>
-                    <div class="nav_btn_text">Contact</div>
-                </button>
-                <!-- <button id="menu_container"> -->
-                <!-- <div class="menu_icon_container flex aligncenter justifycenter"><img class="menu_icon" -->
-                <!-- src="Assets/Menu_icon.png" alt=""></div> -->
-                <!-- </button> -->
             </div>
         </nav>
     </header>
+
     <main>
-        <div class="hero flex aligncenter">
-            <div class="hero_text">
-                <p>Welcome to JDWeb </p>
-                <p>Explore &nbsp;<span id="type_effect"></span><span class="cursor_blink">|</span></p>
-                <p>Want to know more about programming or electronics, then you can check out my
-                    project and ideas to explore deeper into it</p>
-            </div>
-            <div class="hero_image"><img src="Assets/Mypic.jpg" alt="JD Patel" fetchpriority="high"></div>
-        </div>
-        <section id="projects" class="projects_section flex_column" aria-label="Projects">
-            <div class="show_panel">
-                <div class="leftswipe  flex_column justifycenter">
-                    <div class="left_swipe_container">
+        <section class="page_view home_page active_page" data-view="home">
+            <section class="hero" aria-label="Welcome">
+                <div class="hero_text">
+                    <h1>Welcome to JDWeb</h1>
+                    <p class="hero_kicker">Explore <span id="type_effect"></span><span class="cursor_blink">|</span>
+                    </p>
+                    <p class="hero_intro">I am JD Patel,<br>I am a tech enthusiast and I like to work with technology.
+                    </p>
+                </div>
+                <div class="hero_image">
+                    <img src="Assets/Mypic.jpg" alt="JD Patel" fetchpriority="high">
+                </div>
+            </section>
+
+            <section id="projects" class="projects_section" aria-label="Featured projects">
+                <div class="show_panel">
+                    <div class="leftswipe">
                         <button class="arrow_left" type="button" aria-label="Previous project">
-                            <div class="arrow_text_left">Left</div>
+                            <span>Left</span>
                         </button>
                     </div>
-                </div>
-                <div class="cards_container flex aligncenter justifycenter">
-                    <article class="cards card1 active_card" data-project="0">
-                        <div class="card_tag">Electronics + Web</div>
-                        <h3>FPV Car Web Controller</h3>
-                        <p>Browser-based driving HUD for an FPV RC car with steering, speed, brake, and settings controls.</p>
-                        <a class="card_link" href="FPV_Car/RC_Control_4.3.html">Open Controller</a>
-                    </article>
-                    <article class="cards card2" data-project="1">
-                        <div class="card_tag">Web</div>
-                        <h3>Portfolio Website</h3>
-                        <p>A static GitHub Pages site for web and electronics project experiments.</p>
-                    </article>
-                    <article class="cards card3" data-project="2">
-                        <div class="card_tag">Electronics</div>
-                        <h3>Electronics Lab</h3>
-                        <p>Space for circuit builds, hardware tests, and embedded control ideas.</p>
-                    </article>
-                </div>
-                <div class="rightswipe flex_column justifycenter">
-                    <div class="right_swipe_container">
-                        <button class="arrow_right" type="button" aria-label="Next project">
-                            <div class="arrow_text_right">Right</div>
-                        </button>
-                    </div>
-                </div>
-                <div class="progress_info">
-                    <div class="progress_meter">1 / 3</div>
-                </div>
-                <div class="project_details">
-                    <div class="project_intro flex_column justifybetween">
-                        <div class="prject_name ">
+
+                    <div class="cards_container" aria-live="polite">
+                        <article class="cards active_card" data-project="0">
+                            <div class="card_tag">Electronics + Web</div>
                             <h3>FPV Car Web Controller</h3>
-                            <div class="desctiption">A static, mobile-first controller page for an FPV RC car. It is GitHub Pages friendly and connects to the car over WebSocket when hosted on the device network.</div>
+                            <p>Browser-based driving HUD for an FPV RC car with steering, speed, brake, and settings
+                                controls.</p>
+                            <a class="card_link" href="FPV_Car/RC_Control_4.3.html">Open Controller</a>
+                        </article>
+                        <article class="cards" data-project="1">
+                            <div class="card_tag">Web</div>
+                            <h3>Portfolio Website</h3>
+                            <p>A GitHub Pages portfolio with animated sections, responsive pages, and project details.
+                            </p>
+                        </article>
+                        <article class="cards" data-project="2">
+                            <div class="card_tag">Electronics</div>
+                            <h3>Electronics Lab</h3>
+                            <p>Space for circuit builds, hardware tests, embedded controls, and future experiments.</p>
+                        </article>
+                    </div>
+
+                    <div class="rightswipe">
+                        <button class="arrow_right" type="button" aria-label="Next project">
+                            <span>Right</span>
+                        </button>
+                    </div>
+
+                    <aside class="project_details">
+                        <div class="project_progress" aria-label="Project progress">
+                            <div class="progress_ring" style="--progress: 96">
+                                <span class="progress_value">96%</span>
+                            </div>
                         </div>
-                        <div class="project_feature">
-                            <h4>Features</h4>
-                            <ul>
-                                <li>Touch steering and speed control</li>
-                                <li>Forward, reverse, brake, and center actions</li>
-                                <li>Status and debug panels</li>
-                                <li>Static HTML deployment support</li>
-                            </ul>
+                        <div class="project_intro">
+                            <div>
+                                <h2 class="project_name">FPV Car Web Controller</h2>
+                                <p class="description">A static, mobile-first controller page for an FPV RC car. It is
+                                    GitHub Pages friendly and connects to the car over WebSocket when hosted on the
+                                    device network.</p>
+                            </div>
+                            <div class="project_feature">
+                                <h3>Purpose &amp; features :-</h3>
+                                <ol>
+                                    <li>Touch steering and speed control</li>
+                                    <li>Forward, reverse, brake, and center actions</li>
+                                    <li>Status and debug panels</li>
+                                    <li>Static HTML deployment support</li>
+                                </ol>
+                            </div>
+                            <a class="project_open_link" href="FPV_Car/RC_Control_4.3.html">Launch FPV Controller</a>
                         </div>
-                        <a class="project_open_link" href="FPV_Car/RC_Control_4.3.html">Launch FPV Controller</a>
+                    </aside>
+                </div>
+
+                <div class="Projects_redirect_bar">
+                    <button class="prj_rdrct_btns web_proj_btn" type="button" data-page="projects">My Web Projects</button>
+                    <button class="prj_rdrct_btns Pelec_proj_btn" type="button" data-page="electronics">My Electronics
+                        Projects</button>
+                </div>
+            </section>
+        </section>
+
+        <section class="page_view projects_page" data-view="projects" aria-label="Projects page">
+            <div class="page_shell">
+                <div class="page_heading">
+                    <p>Project Page</p>
+                    <h1>Web Projects</h1>
+                    <span>Project progress values are controlled in <code>JS/script.js</code>.</span>
+                </div>
+                <div class="project_grid" id="web_project_grid"></div>
+            </div>
+        </section>
+
+        <section class="page_view electronics_page" data-view="electronics" aria-label="Electronics page">
+            <div class="page_shell">
+                <div class="page_heading">
+                    <p>Electronics</p>
+                    <h1>Hardware Experiments</h1>
+                    <span>FPV controller forwarding stays as a real link so it will not break.</span>
+                </div>
+                <div class="project_grid" id="electronics_project_grid"></div>
+            </div>
+        </section>
+
+        <section class="page_view about_page" data-view="about" aria-label="About me page">
+            <div class="page_shell about_layout">
+                <div class="about_photo">
+                    <img src="Assets/Mypic.jpg" alt="JD Patel">
+                </div>
+                <div class="about_content">
+                    <p class="section_label">About Me</p>
+                    <h1>I build with code, circuits, and curiosity.</h1>
+                    <p>My name is JD Patel. I enjoy web development, electronics, and turning small ideas into working
+                        projects. This site is a place for my experiments, portfolio work, and technical builds.</p>
+                    <div class="about_stats">
+                        <span>Web Development</span>
+                        <span>Electronics</span>
+                        <span>FPV Control</span>
                     </div>
                 </div>
             </div>
-            <div class="Projects_redirect_bar flex justifybetween aligncenter">
-                <a href="#projects" class="prj_rdrct_btns web_proj_btn">My Web Project</a>
-                <a href="FPV_Car/RC_Control_4.3.html" class="prj_rdrct_btns Pelec_proj_btn">FPV Controller</a>
+        </section>
+
+        <section class="page_view contact_page" data-view="contact" aria-label="Contact page">
+            <div class="page_shell contact_layout">
+                <div class="page_heading">
+                    <p>Contact</p>
+                    <h1>Let us connect</h1>
+                    <span>Copy a contact detail or send a quick inquiry from here.</span>
+                </div>
+                <div class="contact_columns">
+                    <div class="copysection">
+                        <div class="copy_block">
+                            <span class="copy_section_text">Email</span>
+                            <span class="copy_text">jaypatel3000k@gmail.com</span>
+                            <button class="copy_btn" type="button">Copy</button>
+                        </div>
+                        <div class="copy_block">
+                            <span class="copy_section_text">Instagram</span>
+                            <span class="copy_text">@be1jd</span>
+                            <button class="copy_btn" type="button">Copy</button>
+                        </div>
+                        <div class="copy_block">
+                            <span class="copy_section_text">Mobile No.</span>
+                            <span class="copy_text">1234567890</span>
+                            <button class="copy_btn" type="button">Copy</button>
+                        </div>
+                    </div>
+                    <form class="querysection">
+                        <h2>Online Inquiry</h2>
+                        <input class="query_box" type="text" name="name" placeholder="Name">
+                        <input class="query_box" type="text" name="contact_info" placeholder="Email or Mobile No">
+                        <textarea class="query_box query_message" name="message" placeholder="Message..."></textarea>
+                        <button class="submit_btn" type="button">Send Inquiry</button>
+                    </form>
+                </div>
             </div>
         </section>
     </main>
-    <div class="aboutme_page_enable">
-        <div class="aboutme_text flex aligncenter justifycenter">My name is JD Patel and I love to work with electronics.
-            I also work with web technologies and enjoy developing websites.</div>
-    </div>
-    <div class="contact_page_enable">
-        <div class="copysection flex_column aligncenter">
-            <div class="copy_email copy_block">
-                <div class="copy_section_text">Email</div>
-                <div class="copy_text_container">
-                    <div class="copy_text">jaypatel3000k@gmail.com</div>
-                    <div class="copy_btn">copy</div>
-                </div>
-            </div>
-            <div class="copy_insta copy_block">
-                <div class="copy_section_text">Instagram</div>
-                <div class="copy_text_container">
-                    <div class="copy_text">@be1jd</div>
-                    <div class="copy_btn">copy</div>
-                </div>
-            </div>
-            <div class="copy_mobile copy_block">
-                <div class="copy_section_text">Mobile No.</div>
-                <div class="copy_text_container">
-                    <div class="copy_text">1234567890</div>
-                    <div class="copy_btn">copy</div>
-                </div>
-            </div>
-        </div>
-        <div class="querysection flex_column">
-            <h2 class="query_title flex aligncenter justifycenter">ONLINE INQUIRY</h2>
-            <div class="query_box_container">
-                <input class="query_box" type="text" name="name" id="" placeholder="Name">
-                <input class="query_box" type="text" name="contact_info" id="" placeholder="Email or Mobile No">
-                <input class="query_box" type="text" name="message" id="" placeholder="Message...">
-            </div>
-        </div>
-    </div>
+
     <footer></footer>
     <script src="JS/script.js" defer></script>
 </body>
