@@ -1,66 +1,33 @@
-@media only screen and (max-width: 1080px) {
-    .nav_btn_container {
-        gap: 10px;
+@media only screen and (max-width: 900px) {
+    .hero,
+    .featured_project,
+    .about_layout,
+    .contact_columns,
+    .guide_layout {
+        grid-template-columns: 1fr;
     }
 
-    .nav_btn {
-        font-size: 15px;
-        padding: 8px 10px;
+    .hero {
+        min-height: auto;
+        padding-top: 32px;
     }
 
-    .show_panel {
-        grid-template-columns: 58px minmax(240px, 1fr) 58px;
-        grid-template-areas:
-            "left cards right"
-            "details details details";
+    .hero_cutout {
+        min-height: 420px;
     }
 
-    .leftswipe {
-        grid-area: left;
-    }
-
-    .cards_container {
-        grid-area: cards;
-    }
-
-    .rightswipe {
-        grid-area: right;
-    }
-
-    .project_details {
-        grid-area: details;
-        width: min(760px, 100%);
-        justify-self: center;
-        margin-top: 24px;
-    }
-
-    .project_grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+    .buy_panel {
+        position: static;
     }
 }
 
-@media only screen and (max-width: 760px) {
-    body {
-        border-width: 6px;
-    }
-
+@media only screen and (max-width: 720px) {
     .site_header {
-        padding: 10px 8px 8px;
+        padding: 10px 12px;
     }
 
     .top_nav {
-        min-height: 64px;
-        padding: 8px 10px;
-    }
-
-    .brand_button {
-        min-width: auto;
-        gap: 14px;
-    }
-
-    .brand_button img {
-        width: 48px;
-        height: 48px;
+        min-height: 52px;
     }
 
     .menu_toggle {
@@ -69,17 +36,19 @@
 
     .nav_btn_container {
         position: absolute;
-        left: 8px;
-        right: 8px;
+        left: 12px;
+        right: 12px;
         top: calc(100% + 4px);
         display: none;
         flex-direction: column;
         align-items: stretch;
-        gap: 8px;
-        padding: 10px;
-        background: #111111;
+        gap: 6px;
+        padding: 8px;
         border: 1px solid var(--line);
         border-radius: 8px;
+        background: rgba(255, 255, 255, 0.94);
+        backdrop-filter: blur(18px);
+        box-shadow: var(--shadow);
     }
 
     .nav_btn_container.open {
@@ -88,109 +57,81 @@
 
     .nav_btn {
         justify-content: flex-start;
-        min-height: 46px;
     }
 
-    .hero {
-        grid-template-columns: 1fr;
-        min-height: auto;
-        margin: 0 8px;
+    .hero,
+    .home_projects,
+    .page_shell,
+    .project_detail_shell,
+    .site_footer {
+        width: min(100% - 24px, 1120px);
     }
 
-    .hero::after,
-    .hero_avatar {
-        display: none;
+    .hero h1,
+    .section_heading h1,
+    .about_content h1,
+    .guide_main h1 {
+        font-size: clamp(38px, 14vw, 64px);
     }
 
-    .hero_text {
-        padding: 28px 22px;
+    .hero_cutout {
+        min-height: 340px;
+        clip-path: polygon(10% 0, 100% 0, 92% 100%, 0 100%);
     }
 
-    .hero_kicker {
-        display: grid;
-        gap: 4px;
+    .hero_cutout::after {
+        clip-path: polygon(10% 0, 100% 0, 92% 100%, 0 100%);
     }
 
-    #type_effect {
-        margin-left: 0;
+    .project_gallery,
+    .project_gallery img {
+        min-height: 310px;
     }
 
-    .hero_image {
-        min-height: 210px;
-        clip-path: none;
-    }
-
-    .projects_section {
-        padding: 36px 16px 28px;
-    }
-
-    .show_panel {
-        grid-template-columns: 50px minmax(0, 1fr) 50px;
-        gap: 10px;
-    }
-
-    .cards_container {
-        min-height: 300px;
-    }
-
-    .cards {
-        padding: 20px;
-    }
-
-    .arrow_left,
-    .arrow_right {
-        width: 46px;
-        height: 48px;
-        font-size: 14px;
-    }
-
-    .project_details {
-        grid-template-columns: 1fr;
-        justify-items: start;
-    }
-
-    .Projects_redirect_bar {
-        flex-direction: column;
-        margin-top: 42px;
-    }
-
-    .project_grid {
+    .project_row {
         grid-template-columns: 1fr;
     }
 
-    .about_layout,
-    .contact_columns {
-        grid-template-columns: 1fr;
+    .project_row_content {
+        padding: 0;
     }
 
     .copy_block {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr auto;
+    }
+
+    .copy_block span {
+        grid-column: 1 / -1;
+    }
+
+    .site_footer {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .footer_contact {
+        justify-items: start;
     }
 }
 
-@media only screen and (max-width: 430px) {
-    .show_panel {
-        grid-template-columns: 1fr 1fr;
-        grid-template-areas:
-            "cards cards"
-            "left right"
-            "details details";
+@media only screen and (max-width: 440px) {
+    .hero_actions,
+    .summary_actions {
+        align-items: stretch;
+        flex-direction: column;
     }
 
-    .leftswipe,
-    .rightswipe {
-        justify-content: center;
+    .primary_btn,
+    .ghost_btn {
+        width: 100%;
     }
 
-    .cards_container {
-        min-height: 280px;
+    .title_row {
+        grid-template-columns: 1fr;
     }
 
-    .project_details {
-        gap: 18px;
-    }
-
-    .prj_rdrct_btns {
-        min-width: 100%;
+    .project_gallery,
+    .project_gallery img {
+        min-height: 260px;
     }
 }
