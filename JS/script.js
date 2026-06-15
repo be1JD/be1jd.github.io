@@ -1,4 +1,4 @@
-const fallbackImage = "Assets/Awakening Spirit.webp";
+const fallbackImage = "Assets/Mypic.jpg";
 
 const heroImages = [
     "Hero Images/hero-1.jpg",
@@ -28,11 +28,10 @@ const projects = [
         ],
         images: [
             "Projects/Project_1/Images/cover.png",
-            "Projects/Project_1/Images/1.jpg",
+            "Projects/Project_1/Images/1.png",
             "Projects/Project_1/Images/2.jpg",
-            "Projects/Project1/Images/cover.jpg",
-            "Assets/Awakening Spirit.webp"
-        ]
+            "Projects/Project1/Images/cover.jpg",     
+             fallbackImage]
     },
     {
         id: "project-1",
@@ -195,6 +194,12 @@ function moveGallery(direction) {
     updateFeaturedImage();
 }
 
+function moveFeaturedProject(direction) {
+    updateFeaturedProject(
+        activeProjectIndex + direction
+    );
+}
+
 function renderFeaturedPager() {
     featuredPager.replaceChildren(...projects.map((project, index) => {
         const button = document.createElement("button");
@@ -305,6 +310,21 @@ function bindGallery() {
     }, { passive: true });
 }
 
+function bindFeaturedProjectControls() {
+
+    document
+        .getElementById("featured_prev")
+        .addEventListener("click", () => {
+            moveFeaturedProject(-1);
+        });
+
+    document
+        .getElementById("featured_next")
+        .addEventListener("click", () => {
+            moveFeaturedProject(1);
+        });
+}
+
 function bindCopyButtons() {
     document.querySelectorAll(".copy_btn").forEach((button) => {
         button.addEventListener("click", async () => {
@@ -345,6 +365,7 @@ async function startHeroSlideshow() {
 document.addEventListener("DOMContentLoaded", () => {
     bindNavigation();
     bindGallery();
+    bindFeaturedProjectControls();
     bindCopyButtons();
     updateFeaturedProject(0);
     renderProjectList();
