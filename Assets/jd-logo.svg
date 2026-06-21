@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+    <title id="title">JD logo</title>
+    <defs>
+        <linearGradient id="metal" x1="18" y1="12" x2="104" y2="116" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#ffffff"/>
+            <stop offset="0.34" stop-color="#868686"/>
+            <stop offset="0.52" stop-color="#111111"/>
+            <stop offset="1" stop-color="#d7a736"/>
+        </linearGradient>
+    </defs>
+    <rect width="128" height="128" rx="22" fill="#050505"/>
+    <circle cx="64" cy="64" r="49" fill="none" stroke="url(#metal)" stroke-width="8"/>
+    <path d="M38 37h23v39c0 13-8 21-22 21-4 0-8-1-12-2v-15c3 1 6 2 9 2 5 0 8-3 8-9V52h-6V37z" fill="#f5f5f5"/>
+    <path d="M68 37h18c20 0 32 11 32 30s-12 30-32 30H68V37zm17 45c10 0 16-5 16-15s-6-15-16-15h-1v30h1z" fill="#d7a736"/>
+</svg>

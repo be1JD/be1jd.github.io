@@ -1,22 +1,19 @@
-@media only screen and (max-width: 900px) {
+@media only screen and (max-width: 940px) {
     .hero,
     .featured_project,
+    .home_contact_summary,
     .about_layout,
     .contact_columns,
-    .guide_layout {
+    .guide_layout,
+    .project_showcase {
         grid-template-columns: 1fr;
     }
 
     .hero {
         min-height: auto;
-        padding-top: 32px;
     }
 
-    .hero_cutout {
-        min-height: 420px;
-    }
-
-    .buy_panel {
+    .download_panel {
         position: static;
     }
 }
@@ -27,7 +24,7 @@
     }
 
     .top_nav {
-        min-height: 52px;
+        min-height: 58px;
     }
 
     .menu_toggle {
@@ -45,8 +42,8 @@
         gap: 6px;
         padding: 8px;
         border: 1px solid var(--line);
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.94);
+        border-radius: var(--radius);
+        background: rgba(8, 8, 8, 0.94);
         backdrop-filter: blur(18px);
         box-shadow: var(--shadow);
     }
@@ -63,37 +60,39 @@
     .home_projects,
     .page_shell,
     .project_detail_shell,
+    .home_contact_summary,
     .site_footer {
-        width: min(100% - 24px, 1120px);
+        width: min(100% - 24px, var(--container));
     }
 
     .hero h1,
     .section_heading h1,
     .about_content h1,
     .guide_main h1 {
-        font-size: clamp(38px, 14vw, 64px);
+        font-size: clamp(38px, 12vw, 58px);
     }
 
-    .hero_cutout {
+    .hero_stage {
         min-height: 340px;
-        clip-path: polygon(10% 0, 100% 0, 92% 100%, 0 100%);
     }
 
-    .hero_cutout::after {
-        clip-path: polygon(10% 0, 100% 0, 92% 100%, 0 100%);
-    }
-
-    .project_gallery,
-    .project_gallery img {
+    .project_gallery img,
+    .selector_gallery > img,
+    .guide_cover {
         min-height: 310px;
     }
 
-    .project_row {
-        grid-template-columns: 1fr;
+    .projects_header {
+        align-items: stretch;
+        flex-direction: column;
     }
 
-    .project_row_content {
-        padding: 0;
+    .view_toggle {
+        width: 100%;
+    }
+
+    .toggle_btn {
+        flex: 1;
     }
 
     .copy_block {
@@ -102,6 +101,10 @@
 
     .copy_block span {
         grid-column: 1 / -1;
+    }
+
+    .profile_grid {
+        grid-template-columns: 1fr;
     }
 
     .site_footer {
@@ -114,7 +117,11 @@
     }
 }
 
-@media only screen and (max-width: 440px) {
+@media only screen and (max-width: 460px) {
+    .brand_text {
+        display: none;
+    }
+
     .hero_actions,
     .summary_actions {
         align-items: stretch;
@@ -122,7 +129,8 @@
     }
 
     .primary_btn,
-    .ghost_btn {
+    .ghost_btn,
+    .ghost_link {
         width: 100%;
     }
 
@@ -130,8 +138,13 @@
         grid-template-columns: 1fr;
     }
 
-    .project_gallery,
-    .project_gallery img {
+    .project_gallery img,
+    .selector_gallery > img,
+    .guide_cover {
         min-height: 260px;
+    }
+
+    .breathing_space {
+        height: 18vh;
     }
 }

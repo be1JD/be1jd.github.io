@@ -4,24 +4,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JD Web</title>
+    <title>JD | Maker Projects and Embedded Tech</title>
     <meta name="description"
-        content="JD Patel's clean portfolio for web development, electronics, project guides, and browser-based builds.">
-    <link rel="stylesheet" href="CSS/style.css">
-    <link rel="stylesheet" href="CSS/utility.css">
-    <link rel="stylesheet" href="CSS/media_query.css">
+        content="JD's personal maker lab for embedded technology, web-controlled electronics, project guides, downloads, demos, and build resources.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/utility.css">
+    <link rel="stylesheet" href="css/media_query.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
+    <link rel="icon" href="assets/main_jd_logo.png" type="image/svg+xml">
 </head>
 
 <body>
     <header class="site_header">
         <nav class="top_nav" aria-label="Primary navigation">
-            <button id="home" class="brand_button" type="button" data-page="home" aria-label="Open home">
-                <img width="36" height="36" src="Assets/Awakening Spirit.webp" alt="JD logo">
-                <span>JD</span>
+            <button class="brand_button" type="button" data-page="home" aria-label="Open home">
+                <span class="jd_logo" aria-hidden="true">
+                    <img src="assets/main_jd_logo.png" alt="JD Lab logo">
+                </span>
+                <span class="brand_text"></span>
             </button>
 
             <button class="menu_toggle" type="button" aria-label="Open menu" aria-expanded="false">
@@ -33,7 +36,7 @@
             <div class="nav_btn_container" id="nav_menu">
                 <button class="nav_btn active_nav" type="button" data-page="home">Home</button>
                 <button class="nav_btn" type="button" data-page="projects">Projects</button>
-                <button class="nav_btn" type="button" data-page="about">About Me</button>
+                <button class="nav_btn" type="button" data-page="about">About</button>
                 <button class="nav_btn" type="button" data-page="contact">Contact</button>
             </div>
         </nav>
@@ -43,72 +46,140 @@
         <section class="page_view home_page active_page" data-view="home">
             <section class="hero" aria-label="Welcome">
                 <div class="hero_copy">
-                    <p class="eyebrow"> Electronics / Web/ Projects / Builds</p>
-                    <h1>JD Patel</h1>
-                    <p>I build clean browser experiences, electronics projects, and small ideas that actually work.</p>
+                    <p class="eyebrow">Builds &nbsp;&nbsp; | &nbsp;&nbsp; Tools</p>
+                    <h1>Build Guides</h1>
+                    <p>
+                        This is my project space for electronics my electronics and Web Projects. Here you can find build guides,
+                        demos, downloads code and can explore your creativity.
+                    </p>
                     <div class="hero_actions">
-                        <button class="primary_btn" type="button" data-page="projects">View Projects</button>
-                        <button class="ghost_btn" type="button" data-page="contact">Contact</button>
+                        <button class="primary_btn" type="button" data-page="projects">Explore Projects</button>
+                        <a class="ghost_link" href="mailto:jaypatel3000k@gmail.com">Email Me</a>
                     </div>
                 </div>
-                <div class="hero_cutout" aria-label="Hero images">
-                    <img id="hero_image" src="Assets/Mypic.jpg" alt="JD project preview" fetchpriority="high">
+
+                <div class="hero_stage" aria-label="Interactive technology preview">
+                    <img id="hero_image" src="assets/hero/gallery1.png" alt="Maker project preview" fetchpriority="high">
+                    <div class="circuit_overlay" aria-hidden="true">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="hero_readout" aria-hidden="true">
+                        <strong>JD</strong>
+                        <span>Signal online</span>
+                    </div>
                 </div>
             </section>
 
             <section id="featured_projects" class="home_projects" aria-label="Featured projects">
                 <div class="section_heading">
                     <p class="eyebrow">Featured Work</p>
-                    <h2>Projects</h2>
+                    <h2>Current builds</h2>
                 </div>
 
                 <div class="featured_project">
                     <div class="project_gallery" id="home_project_gallery" aria-label="Project image gallery">
                         <button class="gallery_nav prev_gallery" type="button" aria-label="Previous image"></button>
-                        <img id="featured_project_image" src="Projects/Project_1/thumbnail.png" alt="Project preview">
+                        <img id="featured_project_image" src="assets/awakening-spirit.webp" alt="Project preview">
                         <button class="gallery_nav next_gallery" type="button" aria-label="Next image"></button>
                     </div>
 
                     <article class="project_summary">
                         <div class="title_row">
-                            <div class="progress_dot" id="featured_progress" style="--progress: 96">
-                                <span>96%</span>
+                            <div class="progress_dot" id="featured_progress" style="--progress: 0">
+                                <span>0%</span>
                             </div>
                             <div>
-                                <p class="project_meta" id="featured_meta">Electronics + Web</p>
-                                <h3 id="featured_title">FPV Car Web Controller</h3>
+                                <p class="project_meta" id="featured_meta">Embedded System</p>
+                                <h3 id="featured_title">Loading project</h3>
                             </div>
                         </div>
-                        <p id="featured_description">
-                            Browser-based driving HUD for an FPV RC car with steering, speed, brake, and settings
-                            controls.
-                        </p>
+                        <p id="featured_description">Loading the project library.</p>
                         <div class="feature_list" id="featured_features"></div>
                         <div class="summary_actions">
                             <button class="primary_btn" type="button" id="featured_open">Open Project</button>
+                            <a class="ghost_link" id="featured_demo" href="#" target="_blank" rel="noreferrer">Demo</a>
                             <div class="project_pager" id="featured_pager" aria-label="Project carousel"></div>
                         </div>
                     </article>
                 </div>
-                <div class="featured_project_controls">
-                    <button id="featured_prev" class="project_switch_btn">
-                        ← 
-                    </button>
 
-                    <button id="featured_next" class="project_switch_btn">
-                         →
+                <div class="featured_project_controls" aria-label="Featured project controls">
+                    <button id="featured_prev" class="project_switch_btn" type="button" aria-label="Previous project">
+                        <span aria-hidden="true">&larr;</span>
                     </button>
+                    <button id="featured_next" class="project_switch_btn" type="button" aria-label="Next project">
+                        <span aria-hidden="true">&rarr;</span>
+                    </button>
+                </div>
+            </section>
+
+            <div class="breathing_space" aria-hidden="true"></div>
+
+            <section class="home_contact_summary" aria-label="About and contact summary">
+                <div>
+                    <p class="eyebrow">About JD</p>
+                    <h2>I Build</h2>
+                    <p>
+                        I am focused on building things that excites me and can say make anyone do.
+                    </p>
+                </div>
+                <div class="quick_facts">
+                    <div>
+                        <span>Email</span>
+                        <strong>jaypatel3000k@gmail.com</strong>
+                    </div>
+                    <div>
+                        <span>Location</span>
+                        <strong>India</strong>
+                    </div>
+                    <div>
+                        <span>Field</span>
+                        <strong>Embedded tech, electronics, web tools</strong>
+                    </div>
+                    <div>
+                        <span>Experience</span>
+                        <strong>Student maker and project builder</strong>
+                    </div>
                 </div>
             </section>
         </section>
 
         <section class="page_view projects_page" data-view="projects" aria-label="Projects">
             <div class="page_shell">
-                <div class="section_heading">
-                    <p class="eyebrow">All Builds</p>
-                    <h1>Projects</h1>
+                <div class="projects_header">
+                    <div class="section_heading">
+                        <p class="eyebrow">All Builds</p>
+                    </div>
+                    <div class="view_toggle" role="group" aria-label="Project view mode">
+                        <button class="toggle_btn active" type="button" data-project-mode="showcase">Showcase</button>
+                        <button class="toggle_btn" type="button" data-project-mode="cards">Cards</button>
+                    </div>
                 </div>
-                <div class="video_project_list" id="project_list"></div>
+
+                <section class="project_showcase active_project_mode" data-project-view="showcase">
+                    <div class="selector_gallery" id="selector_gallery">
+                        <img id="selector_image" src="assets/" alt="Selected project preview">
+                        <div class="selector_thumbs" id="selector_thumbs" aria-label="Project images"></div>
+                    </div>
+                    <article class="selector_details">
+                        <p class="project_meta" id="selector_meta">Select a project</p>
+                        <h2 id="selector_title">Project Library</h2>
+                        <p id="selector_description">Choose a project to preview its resources, guide, and demo.</p>
+                        <div class="feature_list" id="selector_features"></div>
+                        <div class="resource_strip" id="selector_resources"></div>
+                        <div class="summary_actions">
+                            <button class="primary_btn" id="selector_open" type="button">Open Full Guide</button>
+                            <a class="ghost_link" id="selector_demo" href="#" target="_blank" rel="noreferrer">Demo</a>
+                        </div>
+                    </article>
+                    <div class="project_queue" id="project_queue" aria-label="Project selection"></div>
+                </section>
+
+                <section class="project_cards" id="project_cards" data-project-view="cards" aria-label="Project cards">
+                </section>
             </div>
         </section>
 
@@ -117,8 +188,11 @@
                 <button class="back_btn" type="button" data-page="projects">Back to projects</button>
                 <article class="guide_layout">
                     <div class="guide_main">
-                        <img id="detail_image" class="guide_cover" src="Assets/Awakening Spirit.webp"
-                            alt="Project cover">
+                        <div class="detail_media">
+                            <img id="detail_image" class="guide_cover" src="assets/awakening-spirit.webp"
+                                alt="Project cover">
+                            <div class="detail_thumbs" id="detail_thumbs" aria-label="Project image controls"></div>
+                        </div>
                         <p class="eyebrow" id="detail_meta">Project Guide</p>
                         <h1 id="detail_title">Project Title</h1>
                         <p id="detail_description" class="guide_intro"></p>
@@ -129,20 +203,27 @@
                         </section>
 
                         <section class="guide_section">
-                            <h2>Steps</h2>
+                            <h2>What this page provides</h2>
+                            <div class="resource_grid" id="detail_resources"></div>
+                        </section>
+
+                        <section class="guide_section">
+                            <h2>Build Flow</h2>
                             <ol id="detail_steps" class="step_list"></ol>
                         </section>
                     </div>
 
-                    <aside class="buy_panel">
+                    <aside class="download_panel">
                         <div class="progress_dot large" id="detail_progress" style="--progress: 0">
                             <span>0%</span>
                         </div>
-                        <h2>Build / Buy</h2>
-                        <p id="detail_price">Custom quote</p>
-                        <button class="primary_btn full_width" type="button" data-page="contact">Request This
-                            Project</button>
-                        <a class="ghost_link full_width" id="detail_live_link" href="#">Open Project Page</a>
+                        <h2>Project Hub</h2>
+                        <p id="detail_price">Open resources</p>
+                        <a class="primary_btn full_width" id="detail_demo_link" href="#" target="_blank"
+                            rel="noreferrer">Open Demo</a>
+                        <a class="ghost_link full_width" id="detail_live_link" href="#" target="_blank"
+                            rel="noreferrer">Project Page</a>
+                        <button class="back_btn full_width" type="button" data-page="contact">Ask About Build</button>
                     </aside>
                 </article>
             </div>
@@ -151,17 +232,20 @@
         <section class="page_view about_page" data-view="about" aria-label="About me">
             <div class="page_shell about_layout">
                 <div class="about_photo">
-                    <img src="Assets/Mypic.jpg" alt="JD Patel">
+                    <img src="assets/awakening-spirit.webp" alt="JD Patel">
                 </div>
                 <div class="about_content">
                     <p class="eyebrow">About Me</p>
                     <h1>I build with code, circuits, and curiosity.</h1>
-                    <p>My name is JD Patel. I enjoy web development, electronics, and turning small ideas into working
-                        projects. This site is a place for my experiments, portfolio work, and technical builds.</p>
+                    <p>
+                        My name is JD Patel. I use this site as a personal brand and project hub for embedded
+                        electronics, tech experiments, web interfaces, and maker documentation.
+                    </p>
                     <div class="about_stats">
-                        <span>Web Development</span>
+                        <span>Embedded Systems</span>
                         <span>Electronics</span>
-                        <span>FPV Control</span>
+                        <span>Web Control</span>
+                        <span>Project Guides</span>
                     </div>
                 </div>
             </div>
@@ -187,19 +271,25 @@
                             <button class="copy_btn" type="button">Copy</button>
                         </div>
                         <div class="copy_block">
-                            <span>Mobile</span>
-                            <strong class="copy_text">1234567890</strong>
+                            <span>Address</span>
+                            <strong class="copy_text">India</strong>
                             <button class="copy_btn" type="button">Copy</button>
                         </div>
                     </div>
 
-                    <form class="contact_card inquiry_form">
-                        <h2>Online inquiry</h2>
-                        <input class="query_box" type="text" name="name" placeholder="Name" autocomplete="name">
-                        <input class="query_box" type="text" name="contact_info" placeholder="Email or mobile number">
-                        <textarea class="query_box query_message" name="message" placeholder="Message"></textarea>
-                        <button class="primary_btn" type="button">Send Inquiry</button>
-                    </form>
+                    <div class="contact_card">
+                        <h2>Maker profile</h2>
+                        <div class="profile_grid">
+                            <span>Field</span>
+                            <strong>Embedded technology and electronics</strong>
+                            <span>Focus</span>
+                            <strong>Interactive project guides and web tools</strong>
+                            <span>Experience</span>
+                            <strong>Student maker, builder, and experimenter</strong>
+                            <span>Availability</span>
+                            <strong>Project questions, collaborations, and demos</strong>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -207,16 +297,16 @@
 
     <footer class="site_footer">
         <div>
-            <strong>JD Web</strong>
-            <span>Web projects, electronics builds, and browser-based tools.</span>
+            <strong>be1JD</strong>
+            <span>Maker guides, embedded experiments, project downloads, and demos.</span>
         </div>
         <div class="footer_contact">
             <a href="mailto:jaypatel3000k@gmail.com">jaypatel3000k@gmail.com</a>
-            <a href="#contact" data-page="contact">Contact</a>
+            <button type="button" data-page="projects">Projects</button>
         </div>
     </footer>
 
-    <script src="JS/script.js" defer></script>
+    <script src="js/script.js" defer></script>
 </body>
 
 </html>

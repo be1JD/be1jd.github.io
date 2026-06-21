@@ -1,92 +1,19 @@
-const fallbackImage = "Assets/Mypic.jpg";
+const fallbackImage = "assets/awakening-spirit.webp";
 
 const heroImages = [
-    "Hero Images/hero-1.jpg",
-    "Hero Images/hero-2.jpg",
-    "Hero Images/hero-3.jpg",
-    "Hero Images/1.jpg",
-    "Hero Images/2.jpg",
-    "Assets/Mypic.jpg"
+    "assets/hero/gallery1.png",
+    fallbackImage,
 ];
 
-const projects = [
-    {
-        id: "fpv-car",
-        name: "FPV Car Web Controller",
-        tag: "Electronics + Web",
-        progress: 96,
-        price: "Custom quote",
-        folder: "FPV_Car",
-        liveLink: "FPV_Car/RC_Control_4.3.html",
-        description: "Browser-based driving HUD for an FPV RC car with steering, speed, brake, and settings controls.",
-        overview: "This project is designed as a static browser interface, so it can run from GitHub Pages or from a device-hosted page without server-side processing.",
-        features: ["Touch controls", "WebSocket ready", "Mobile-first HUD", "Static deployment"],
-        steps: [
-            "Open the controller page in the same browser tab.",
-            "Connect to the car network or controller endpoint.",
-            "Use the touch controls to steer, brake, and tune the drive behavior."
-        ],
-        images: [
-            "Projects/Project_1/Images/cover.png",
-            "Projects/Project_1/Images/1.png",
-            "Projects/Project_1/Images/2.jpg",
-            "Projects/Project1/Images/cover.jpg",     
-             fallbackImage]
-    },
-    {
-        id: "project-1",
-        name: "Project 1",
-        tag: "Project Build",
-        progress: 70,
-        price: "Available on request",
-        folder: "Projects/Project_1",
-        liveLink: "Projects/Project_1/index.html",
-        description: "A project slot connected to Projects/Project_1 with a swipeable image gallery and guide-style detail page.",
-        overview: "Add images inside Projects/Project_1/Images and update this project entry with your final name, description, price, and steps.",
-        features: ["Swipe gallery", "Guide layout", "Buy request", "GitHub Pages ready"],
-        steps: [
-            "Place project images in Projects/Project_1/Images.",
-            "Add the project HTML page at Projects/Project_1/index.html if this build has its own code.",
-            "Update the manifest in JS/script.js with final project details."
-        ],
-        images: [
-            "Projects/Project_1/Images/cover.jpg",
-            "Projects/Project_1/Images/1.jpg",
-            "Projects/Project_1/Images/2.jpg",
-            "Projects/Project1/Images/cover.jpg",
-            fallbackImage
-        ]
-    },
-    {
-        id: "project-2",
-        name: "Project 2",
-        tag: "Project Build",
-        progress: 35,
-        price: "Available on request",
-        folder: "Projects/Project_2",
-        liveLink: "Projects/Project_2/index.html",
-        description: "A second project slot connected to Projects/Project_2 with the same clean gallery, guide, and purchase flow.",
-        overview: "This entry is ready for the next project folder. Keep everything static and browser-side for GitHub Pages hosting.",
-        features: ["Project manifest", "Responsive layout", "Detail page", "Contact CTA"],
-        steps: [
-            "Place images in Projects/Project_2/Images.",
-            "Add the project page at Projects/Project_2/index.html when needed.",
-            "Replace this placeholder content with your project details."
-        ],
-        images: [
-            "Projects/Project_2/Images/cover.jpg",
-            "Projects/Project_2/Images/1.jpg",
-            "Projects/Project_2/Images/2.jpg",
-            "Projects/Project2/Images/cover.jpg",
-            fallbackImage
-        ]
-    }
-];
-
-let activeProjectIndex = 0;
+let projects = [];
+let featuredProjectIndex = 0;
+let selectedProjectIndex = 0;
 let activeGalleryIndex = 0;
+let selectorImageIndex = 0;
+let detailImageIndex = 0;
 let heroIndex = 0;
 let touchStartX = 0;
+let galleryTimer = 0;
 
 const pageViews = document.querySelectorAll(".page_view");
 const navMenu = document.querySelector("#nav_menu");
@@ -99,9 +26,30 @@ const featuredTitle = document.querySelector("#featured_title");
 const featuredDescription = document.querySelector("#featured_description");
 const featuredFeatures = document.querySelector("#featured_features");
 const featuredOpen = document.querySelector("#featured_open");
+const featuredDemo = document.querySelector("#featured_demo");
 const featuredPager = document.querySelector("#featured_pager");
-const projectList = document.querySelector("#project_list");
 const gallery = document.querySelector("#home_project_gallery");
+const projectQueue = document.querySelector("#project_queue");
+const projectCards = document.querySelector("#project_cards");
+
+async function loadProjects() {
+    try {
+        const response = await fetch("projects/projects.json");
+        const manifest = await response.json();
+
+        projects = await Promise.all(manifest.map(async (project) => {
+            const dataResponse = await fetch(`projects/${project.folder}/data.json`);
+            const data = await dataResponse.json();
+            return { ...data, folder: project.folder };
+        }));
+
+        updateFeaturedProject(0);
+        renderProjectModes();
+        updateSelectorProject(0);
+    } catch (error) {
+        console.error("Failed to load projects", error);
+    }
+}
 
 function closeMenu() {
     navMenu.classList.remove("open");
@@ -131,25 +79,63 @@ function imageExists(src) {
 }
 
 async function setImageFromCandidates(imageElement, candidates, altText) {
-    const sources = [...new Set([...candidates, fallbackImage])];
+    if (!imageElement) {
+        return "";
+    }
+
+    const sources = [...new Set([...(candidates || []), fallbackImage])];
+    imageElement.classList.add("image_switching");
 
     for (const source of sources) {
         const loaded = await imageExists(source);
         if (loaded) {
             imageElement.src = loaded;
             imageElement.alt = altText;
+            imageElement.classList.remove("image_switching");
             return loaded;
         }
     }
 
-    imageElement.src = fallbackImage;
-    imageElement.alt = altText;
-    return fallbackImage;
+    imageElement.classList.remove("image_switching");
+    return "";
 }
 
-function setProgress(element, progress) {
+function setProgress(element, progress = 0) {
     element.style.setProperty("--progress", progress);
     element.querySelector("span").textContent = `${progress}%`;
+}
+
+function setLinkState(link, url, label) {
+    if (!link) {
+        return;
+    }
+
+    if (url) {
+        link.href = url;
+        link.textContent = label;
+        link.style.display = "inline-flex";
+    } else {
+        link.style.display = "none";
+    }
+}
+
+function renderTags(container, items = []) {
+    container.replaceChildren(...items.map((item) => {
+        const tag = document.createElement("span");
+        tag.textContent = item;
+        return tag;
+    }));
+}
+
+function renderResources(container, resources = []) {
+    container.replaceChildren(...resources.map((resource) => {
+        const link = document.createElement("a");
+        link.href = resource.href;
+        link.textContent = resource.label;
+        link.target = "_blank";
+        link.rel = "noreferrer";
+        return link;
+    }));
 }
 
 function openProject(project) {
@@ -158,28 +144,29 @@ function openProject(project) {
 }
 
 function updateFeaturedProject(index) {
-    activeProjectIndex = (index + projects.length) % projects.length;
+    if (!projects.length) {
+        return;
+    }
+
+    featuredProjectIndex = (index + projects.length) % projects.length;
     activeGalleryIndex = 0;
 
-    const project = projects[activeProjectIndex];
+    const project = projects[featuredProjectIndex];
     featuredMeta.textContent = project.tag;
     featuredTitle.textContent = project.name;
     featuredDescription.textContent = project.description;
     setProgress(featuredProgress, project.progress);
-
-    featuredFeatures.replaceChildren(...project.features.map((feature) => {
-        const item = document.createElement("span");
-        item.textContent = feature;
-        return item;
-    }));
+    renderTags(featuredFeatures, project.features);
+    setLinkState(featuredDemo, project.demoLink || project.liveLink, "Demo");
 
     featuredOpen.onclick = () => openProject(project);
     renderFeaturedPager();
     updateFeaturedImage();
+    restartGalleryTimer();
 }
 
 function updateFeaturedImage() {
-    const project = projects[activeProjectIndex];
+    const project = projects[featuredProjectIndex];
     const orderedImages = [
         project.images[activeGalleryIndex],
         ...project.images.filter((_, index) => index !== activeGalleryIndex)
@@ -189,48 +176,74 @@ function updateFeaturedImage() {
 }
 
 function moveGallery(direction) {
-    const imageCount = projects[activeProjectIndex].images.length;
+    if (!projects.length) {
+        return;
+    }
+
+    const imageCount = projects[featuredProjectIndex].images.length;
     activeGalleryIndex = (activeGalleryIndex + direction + imageCount) % imageCount;
     updateFeaturedImage();
+    restartGalleryTimer();
+}
+
+function restartGalleryTimer() {
+    window.clearInterval(galleryTimer);
+    galleryTimer = window.setInterval(() => {
+        if (projects.length) {
+            const imageCount = projects[featuredProjectIndex].images.length;
+            activeGalleryIndex = (activeGalleryIndex + 1) % imageCount;
+            updateFeaturedImage();
+        }
+    }, 1800);
 }
 
 function moveFeaturedProject(direction) {
-    updateFeaturedProject(
-        activeProjectIndex + direction
-    );
+    updateFeaturedProject(featuredProjectIndex + direction);
 }
 
 function renderFeaturedPager() {
     featuredPager.replaceChildren(...projects.map((project, index) => {
         const button = document.createElement("button");
         button.type = "button";
-        button.className = index === activeProjectIndex ? "active" : "";
+        button.className = index === featuredProjectIndex ? "active" : "";
         button.setAttribute("aria-label", `Show ${project.name}`);
         button.addEventListener("click", () => updateFeaturedProject(index));
         return button;
     }));
 }
 
-async function createProjectRow(project, index) {
-    const row = document.createElement("button");
-    row.className = "project_row";
-    row.type = "button";
-    row.addEventListener("click", () => openProject(project));
-
-    const imageWrap = document.createElement("div");
-    imageWrap.className = "project_row_image";
+function createProjectQueueItem(project, index) {
+    const button = document.createElement("button");
+    button.className = `queue_item${index === selectedProjectIndex ? " active" : ""}`;
+    button.type = "button";
+    button.addEventListener("click", () => updateSelectorProject(index));
 
     const image = document.createElement("img");
     image.alt = `${project.name} thumbnail`;
-    imageWrap.append(image);
     setImageFromCandidates(image, project.images, `${project.name} thumbnail`);
-
-    const content = document.createElement("div");
-    content.className = "project_row_content";
 
     const meta = document.createElement("p");
     meta.className = "project_meta";
-    meta.textContent = `${project.tag} / ${project.progress}% complete`;
+    meta.textContent = `${project.tag} / ${project.progress}%`;
+
+    const title = document.createElement("h3");
+    title.textContent = project.name;
+
+    button.append(image, meta, title);
+    return button;
+}
+
+function createProjectCard(project) {
+    const card = document.createElement("article");
+    card.className = "project_card";
+
+    const image = document.createElement("img");
+    image.alt = `${project.name} thumbnail`;
+    setImageFromCandidates(image, project.images, `${project.name} thumbnail`);
+
+    const meta = document.createElement("p");
+    meta.className = "project_meta";
+    meta.textContent = project.tag;
 
     const title = document.createElement("h2");
     title.textContent = project.name;
@@ -238,41 +251,110 @@ async function createProjectRow(project, index) {
     const description = document.createElement("p");
     description.textContent = project.description;
 
-    content.append(meta, title, description);
-    row.append(imageWrap, content);
+    const button = document.createElement("button");
+    button.className = "primary_btn";
+    button.type = "button";
+    button.textContent = "Open Guide";
+    button.addEventListener("click", () => openProject(project));
 
-    row.style.animationDelay = `${index * 60}ms`;
-    return row;
+    card.append(image, meta, title, description, button);
+    return card;
 }
 
-async function renderProjectList() {
-    const rows = await Promise.all(projects.map(createProjectRow));
-    projectList.replaceChildren(...rows);
+function renderProjectModes() {
+    projectQueue.replaceChildren(...projects.map(createProjectQueueItem));
+    projectCards.replaceChildren(...projects.map(createProjectCard));
+}
+
+function renderThumbs(container, project, selectedIndex, onSelect) {
+    container.replaceChildren(...project.images.map((src, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `thumb_btn${index === selectedIndex ? " active" : ""}`;
+        button.setAttribute("aria-label", `Show image ${index + 1}`);
+        button.addEventListener("click", () => onSelect(index));
+
+        const image = document.createElement("img");
+        image.src = src;
+        image.alt = "";
+        button.append(image);
+        return button;
+    }));
+}
+
+function updateSelectorProject(index) {
+    if (!projects.length) {
+        return;
+    }
+
+    selectedProjectIndex = (index + projects.length) % projects.length;
+    selectorImageIndex = 0;
+    const project = projects[selectedProjectIndex];
+
+    document.querySelector("#selector_meta").textContent = `${project.tag} / ${project.progress}% complete`;
+    document.querySelector("#selector_title").textContent = project.name;
+    document.querySelector("#selector_description").textContent = project.description;
+    renderTags(document.querySelector("#selector_features"), project.features);
+    renderResources(document.querySelector("#selector_resources"), project.resources);
+    setLinkState(document.querySelector("#selector_demo"), project.demoLink || project.liveLink, "Demo");
+    document.querySelector("#selector_open").onclick = () => openProject(project);
+
+    const renderSelectorThumbs = () => {
+        renderThumbs(document.querySelector("#selector_thumbs"), project, selectorImageIndex, (thumbIndex) => {
+            selectorImageIndex = thumbIndex;
+            setImageFromCandidates(document.querySelector("#selector_image"), [
+                project.images[selectorImageIndex],
+                ...project.images
+            ], `${project.name} preview`);
+            renderSelectorThumbs();
+        });
+    };
+
+    setImageFromCandidates(document.querySelector("#selector_image"), project.images, `${project.name} preview`);
+    renderSelectorThumbs();
+
+    document.querySelectorAll(".queue_item").forEach((item, itemIndex) => {
+        item.classList.toggle("active", itemIndex === selectedProjectIndex);
+    });
+}
+
+function updateDetailImage(project, thumbIndex) {
+    detailImageIndex = thumbIndex;
+    setImageFromCandidates(document.querySelector("#detail_image"), [
+        project.images[detailImageIndex],
+        ...project.images
+    ], `${project.name} cover`);
+}
+
+function renderDetailThumbs(project) {
+    renderThumbs(document.querySelector("#detail_thumbs"), project, detailImageIndex, (thumbIndex) => {
+        updateDetailImage(project, thumbIndex);
+        renderDetailThumbs(project);
+    });
 }
 
 function renderProjectDetail(project) {
+    detailImageIndex = 0;
     document.querySelector("#detail_meta").textContent = `${project.tag} / ${project.folder}`;
     document.querySelector("#detail_title").textContent = project.name;
     document.querySelector("#detail_description").textContent = project.description;
     document.querySelector("#detail_overview").textContent = project.overview;
-    document.querySelector("#detail_price").textContent = project.price;
+    document.querySelector("#detail_price").textContent = project.price || "Open resources";
     setProgress(document.querySelector("#detail_progress"), project.progress);
     setImageFromCandidates(document.querySelector("#detail_image"), project.images, `${project.name} cover`);
+    renderResources(document.querySelector("#detail_resources"), project.resources);
 
-    const steps = project.steps.map((step) => {
+    const steps = (project.steps || []).map((step) => {
         const item = document.createElement("li");
         item.textContent = step;
         return item;
     });
     document.querySelector("#detail_steps").replaceChildren(...steps);
 
-    const liveLink = document.querySelector("#detail_live_link");
-    if (project.liveLink) {
-        liveLink.href = project.liveLink;
-        liveLink.style.display = "inline-flex";
-    } else {
-        liveLink.style.display = "none";
-    }
+    setLinkState(document.querySelector("#detail_demo_link"), project.demoLink || project.liveLink, "Open Demo");
+    setLinkState(document.querySelector("#detail_live_link"), project.liveLink, "Project Page");
+
+    renderDetailThumbs(project);
 }
 
 function bindNavigation() {
@@ -311,18 +393,22 @@ function bindGallery() {
 }
 
 function bindFeaturedProjectControls() {
+    document.getElementById("featured_prev").addEventListener("click", () => moveFeaturedProject(-1));
+    document.getElementById("featured_next").addEventListener("click", () => moveFeaturedProject(1));
+}
 
-    document
-        .getElementById("featured_prev")
-        .addEventListener("click", () => {
-            moveFeaturedProject(-1);
+function bindProjectViewToggle() {
+    document.querySelectorAll("[data-project-mode]").forEach((button) => {
+        button.addEventListener("click", () => {
+            const mode = button.dataset.projectMode;
+            document.querySelectorAll("[data-project-mode]").forEach((toggle) => {
+                toggle.classList.toggle("active", toggle === button);
+            });
+            document.querySelectorAll("[data-project-view]").forEach((view) => {
+                view.classList.toggle("active_project_mode", view.dataset.projectView === mode);
+            });
         });
-
-    document
-        .getElementById("featured_next")
-        .addEventListener("click", () => {
-            moveFeaturedProject(1);
-        });
+    });
 }
 
 function bindCopyButtons() {
@@ -359,15 +445,15 @@ async function startHeroSlideshow() {
             ...heroImages.filter((_, index) => index !== heroIndex)
         ], "JD hero preview");
         heroImage.classList.remove("is_switching");
-    }, 1600);
+    }, 2200);
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
     bindNavigation();
     bindGallery();
     bindFeaturedProjectControls();
+    bindProjectViewToggle();
     bindCopyButtons();
-    updateFeaturedProject(0);
-    renderProjectList();
+    await loadProjects();
     startHeroSlideshow();
 });
