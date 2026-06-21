@@ -1,7 +1,7 @@
-const fallbackImage = "assets/awakening-spirit.webp";
+const fallbackImage = "Assets/awakening-spirit.webp";
 
 const heroImages = [
-    "assets/hero/gallery1.png",
+    "Assets/hero/gallery1.png",
     fallbackImage,
 ];
 
