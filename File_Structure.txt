@@ -1,0 +1,47 @@
+project-name/
+│
+├── index.html
+│
+├── css/
+│   ├── style.css
+│   ├── media_query.css
+│   └── utility.css
+│
+├── js/
+│   ├── script.js
+│   └── projects.js
+│
+├── assets/
+│   │
+│   ├── hero/
+│   │   └── hero.jpg
+│   │       
+│   ├── favicon.ico
+│   ├── awakening_spirit.webp
+│   ├── mypic.jpg
+│   ├── contact.svg
+│   ├── electronics.svg
+│   ├── home.png
+│   ├── menu_icon.png
+│   └── projects.svg
+│
+├── projects/
+│   │
+│   ├── projects.json
+│   │
+│   ├── fpv_car/
+│   │   ├── index.html
+│   │   ├── data.json
+│   │   └── images/
+│   │       ├── thumbnail.png
+│   │       ├── gallery1.png
+│   │       ├── gallery2.png
+│   │       └── gallery3.png
+│   │
+│   └── bmms/
+│       ├── data.json
+│       └── images/
+│           ├── thumbnail.png
+│           └── gallery1.png
+│
+└── README.md

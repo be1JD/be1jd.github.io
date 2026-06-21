@@ -1,0 +1,34 @@
+==> Current TASK :- 
+
+    1. Make FPV Project page ( Containing Copiable Code, Donwload PDF, Web Controller Demo )
+    2. 
+
+
+==> Not Now :- 
+
+- Add cool Images, videos or better animation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------- Doned -----------------------------------
+
+- Clean and accessible UI & UX 
+- It should Look good on both phone and PC

@@ -1,0 +1,41 @@
+{
+    "id": "fpv_car",
+    "name": "FPV Car with Phone Controller",
+    "tag": "Electronics + Web",
+    "progress": 96,
+    "price": "Guide, code, and demo resources",
+    "liveLink": "",
+    "demoLink": "FPV_Car/RC_Control_4.3.html",
+    "description": "Browser-based Controller for an FPV RC car with Live video feed,steering, speed and customizable settings.",
+    "overview": "An ESP32-focused FPV RC platform concept that uses a web interface as the control surface. The project hub is prepared for the Instructables guide, source files, wiring notes, control UI, and demo access.",
+    "features": [
+        "Live video feed",
+        "Customizable settings",
+        "Web based Controller",
+        "Real-time control",
+        "ESP32-based"
+    ],
+    "resources": [
+        {
+            "label": "Control Demo",
+            "href": "FPV_Car/RC_Control_4.3.html"
+        },
+        {
+            "label": "Guide Draft",
+            "href": "projects/fpv_car/guide.md"
+        }
+    ],
+    "steps": [
+        "Review the build guide and parts list.",
+        "Upload the controller firmware to the ESP32 hardware.",
+        "Connect to the car network or configured access point.",
+        "Open the browser control page on a phone or laptop.",
+        "Test steering, throttle, brake, and camera workflow before driving."
+    ],
+    "images": [
+        "projects/fpv_car/images/thumbnail.png",
+        "projects/fpv_car/images/gallery1.jpg",
+        "projects/fpv_car/images/gallery2.png",
+        "projects/fpv_car/images/gallery3.jpg"
+    ]
+}

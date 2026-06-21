@@ -1,0 +1,33 @@
+====================== Core Features =================
+    - Copiable Code Access and Build Guide Download As PDF.     ( copy Code, Download PDF, Demo )
+    - Strong Presence of creative technological enthusiasm      ( Reflection of your creativity )
+    - Reflection of your techonological personality             ( Your Personal Reflection )
+
+====================== Features ======================
+    - Multiple Project page             ( Room to add More projects )
+    - Clean and simple Home page        ( User Get Idea what the website is about )
+    - 
+
+====================== Features Not now ==============
+    - Personal Domain Name              ( Helps creating More trust )
+
+
+===================== Absolutely NO ==================
+
+- Ads in the Main Content Page          ( It breaks the whole vibe )
+
+
+
+
+
+
+
+
+
+
+
+1. Circle percentage meter for project progress
+-- To show how much project is completed
+
+2. Design for phone first in most of the cases
+
