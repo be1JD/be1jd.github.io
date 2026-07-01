@@ -1,676 +1,312 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="theme-color" content="#05070b">
-    <title>Gyro Dev</title>
-    <style>
-        :root {
-            --bg: #05070b;
-            --surface: #101820;
-            --surface-2: #17232d;
-            --line: #2e4352;
-            --text: #eef7fb;
-            --muted: #94aeba;
-            --accent: #27d4ff;
-            --accent-2: #7affb2;
-            --warn: #ffd166;
-            --danger: #ff5c7a;
-            --shadow: rgba(39, 212, 255, .18);
-            --radius: 8px;
-            --gap: 14px;
-            color-scheme: dark;
-        }
-
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html,
-        body {
-            margin: 0;
-            min-height: 100%;
-            background: var(--bg);
-            color: var(--text);
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            min-height: 100svh;
-            padding: 14px;
-        }
-
-        main {
-            display: grid;
-            grid-template-columns: minmax(0, 1.1fr) minmax(300px, .9fr);
-            gap: var(--gap);
-            max-width: 1180px;
-            margin: 0 auto;
-        }
-
-        header {
-            grid-column: 1 / -1;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: var(--gap);
-            padding: 10px 0;
-        }
-
-        h1 {
-            margin: 0;
-            font-size: clamp(24px, 5vw, 40px);
-            letter-spacing: 0;
-        }
-
-        .pill {
-            display: inline-flex;
-            align-items: center;
-            min-height: 34px;
-            padding: 0 12px;
-            border: 1px solid var(--line);
-            border-radius: 999px;
-            background: var(--surface);
-            color: var(--muted);
-            font-size: 13px;
-            white-space: nowrap;
-        }
-
-        .panel {
-            border: 1px solid var(--line);
-            border-radius: var(--radius);
-            background: var(--surface);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, .28);
-            overflow: hidden;
-        }
-
-        .panel_head {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            padding: 12px 14px;
-            border-bottom: 1px solid var(--line);
-            background: var(--surface-2);
-        }
-
-        .panel_head h2 {
-            margin: 0;
-            font-size: 16px;
-            letter-spacing: 0;
-        }
-
-        .panel_body {
-            padding: 14px;
-        }
-
-        .controls {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        button {
-            min-height: 42px;
-            padding: 0 16px;
-            border: 1px solid var(--accent);
-            border-radius: var(--radius);
-            background: #0d2a35;
-            color: var(--text);
-            font: 700 14px Arial, sans-serif;
-            box-shadow: 0 0 0 1px var(--shadow) inset;
-            cursor: pointer;
-        }
-
-        button:disabled {
-            cursor: not-allowed;
-            opacity: .55;
-        }
-
-        button.secondary {
-            border-color: var(--line);
-            background: #111b23;
-            color: var(--muted);
-        }
-
-        .status {
-            display: grid;
-            gap: 8px;
-            margin-top: 14px;
-        }
-
-        .status_item {
-            display: grid;
-            grid-template-columns: 120px minmax(0, 1fr);
-            gap: 10px;
-            align-items: start;
-            padding: 10px;
-            border: 1px solid var(--line);
-            border-radius: var(--radius);
-            background: rgba(255, 255, 255, .025);
-        }
-
-        .status_item b {
-            color: var(--muted);
-            font-size: 12px;
-            text-transform: uppercase;
-        }
-
-        .status_item span {
-            color: var(--text);
-            line-height: 1.35;
-            word-break: break-word;
-        }
-
-        .ok {
-            color: var(--accent-2) !important;
-        }
-
-        .warn {
-            color: var(--warn) !important;
-        }
-
-        .bad {
-            color: var(--danger) !important;
-        }
-
-        .values {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 10px;
-        }
-
-        .value_card {
-            min-height: 104px;
-            padding: 12px;
-            border: 1px solid var(--line);
-            border-radius: var(--radius);
-            background: rgba(255, 255, 255, .025);
-        }
-
-        .value_card small {
-            display: block;
-            color: var(--muted);
-            font-size: 12px;
-            margin-bottom: 10px;
-        }
-
-        .value_card strong {
-            display: block;
-            font-size: clamp(28px, 7vw, 44px);
-            line-height: 1;
-            color: var(--accent);
-            font-variant-numeric: tabular-nums;
-        }
-
-        .value_card em {
-            display: block;
-            margin-top: 8px;
-            color: var(--muted);
-            font-size: 12px;
-            font-style: normal;
-        }
-
-        .scene {
-            height: min(48vh, 420px);
-            min-height: 300px;
-            display: grid;
-            place-items: center;
-            perspective: 850px;
-            overflow: hidden;
-        }
-
-        .phone {
-            width: min(180px, 42vw);
-            aspect-ratio: 9 / 18.8;
-            position: relative;
-            border: 3px solid #435866;
-            border-radius: 26px;
-            background:
-                radial-gradient(circle at 50% 8%, #2b3b45 0 5px, transparent 6px),
-                linear-gradient(160deg, #15242d, #0b1117);
-            box-shadow: 0 24px 48px rgba(0, 0, 0, .45), 0 0 34px var(--shadow);
-            transform-style: preserve-3d;
-            transition: transform .06s linear;
-        }
-
-        .phone::before {
-            content: "";
-            position: absolute;
-            inset: 12px;
-            border-radius: 18px;
-            border: 1px solid rgba(255, 255, 255, .08);
-            background:
-                linear-gradient(90deg, rgba(39, 212, 255, .18), transparent 34%, rgba(122, 255, 178, .12)),
-                repeating-linear-gradient(0deg, transparent 0 22px, rgba(255, 255, 255, .035) 23px);
-        }
-
-        .phone::after {
-            content: "TOP";
-            position: absolute;
-            top: 28px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: var(--muted);
-            font-size: 11px;
-            letter-spacing: 0;
-        }
-
-        pre {
-            height: 280px;
-            margin: 0;
-            padding: 12px;
-            overflow: auto;
-            white-space: pre-wrap;
-            word-break: break-word;
-            background: #070c11;
-            color: #9be7ff;
-            font: 12px/1.45 Consolas, monospace;
-        }
-
-        .note {
-            margin: 12px 0 0;
-            color: var(--muted);
-            font-size: 12px;
-            line-height: 1.45;
-        }
-
-        @media (max-width: 820px) {
-            body {
-                padding: 10px;
-            }
-
-            main {
-                grid-template-columns: 1fr;
-            }
-
-            header {
-                align-items: flex-start;
-                flex-direction: column;
-            }
-
-            .values {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JD | Maker Projects and Embedded Tech</title>
+    <meta name="description"
+        content="JD's personal maker lab for embedded technology, web-controlled electronics, project guides, downloads, demos, and build resources.">
+    <link rel="stylesheet" href="CSS/style.css">
+    <link rel="stylesheet" href="CSS/utility.css">
+    <link rel="stylesheet" href="CSS/media_query.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="icon" href="Assets/main_jd_logo.png" type="image/svg+xml">
 </head>
 
 <body>
+    <header class="site_header">
+        <nav class="top_nav" aria-label="Primary navigation">
+            <button class="brand_button" type="button" data-page="home" aria-label="Open home">
+                <span class="jd_logo" aria-hidden="true">
+                    <img src="Assets/main_jd_logo.png" alt="JD Lab logo">
+                </span>
+                <span class="brand_text"></span>
+            </button>
+
+            <button class="menu_toggle" type="button" aria-label="Open menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="nav_btn_container" id="nav_menu">
+                <button class="nav_btn active_nav" type="button" data-page="home">Home</button>
+                <button class="nav_btn" type="button" data-page="projects">Projects</button>
+                <button class="nav_btn" type="button" data-page="about">About</button>
+                <button class="nav_btn" type="button" data-page="contact">Contact</button>
+            </div>
+        </nav>
+    </header>
+
     <main>
-        <header>
-            <h1>Gyro Dev</h1>
-            <span id="top_status" class="pill">Not started</span>
-        </header>
-
-        <section class="panel">
-            <div class="panel_head">
-                <h2>Sensor Access</h2>
-                <span id="event_rate" class="pill">0 Hz</span>
-            </div>
-            <div class="panel_body">
-                <div class="controls">
-                    <button id="start_btn">Start sensors</button>
-                    <button id="stop_btn" class="secondary" disabled>Stop</button>
-                    <button id="clear_btn" class="secondary">Clear log</button>
-                </div>
-
-                <div class="status">
-                    <div class="status_item">
-                        <b>Connection</b>
-                        <span id="secure_status">Checking...</span>
-                    </div>
-                    <div class="status_item">
-                        <b>Support</b>
-                        <span id="support_status">Checking...</span>
-                    </div>
-                    <div class="status_item">
-                        <b>Permission</b>
-                        <span id="permission_status">Not requested</span>
-                    </div>
-                    <div class="status_item">
-                        <b>Events</b>
-                        <span id="event_status">Waiting for start</span>
+        <section class="page_view home_page active_page" data-view="home">
+            <section class="hero" aria-label="Welcome">
+                <div class="hero_copy">
+                    <p class="eyebrow">Builds &nbsp;&nbsp; | &nbsp;&nbsp; Tools</p>
+                    <h1>Build Guides</h1>
+                    <p>
+                        This is my project space for electronics my electronics and Web Projects. Here you can find build guides,
+                        demos, downloads code and can explore your creativity.
+                    </p>
+                    <div class="hero_actions">
+                        <button class="primary_btn" type="button" data-page="projects">Explore Projects</button>
+                        <a class="ghost_link" href="mailto:jaypatel3000k@gmail.com">Email Me</a>
                     </div>
                 </div>
 
-                <p class="note">
-                    Chrome on phones usually requires HTTPS or localhost for motion sensors. iPhone browsers also
-                    require a user tap and an explicit permission prompt.
-                </p>
+                <div class="hero_stage" aria-label="Interactive technology preview">
+                    <img id="hero_image" src="Assets/hero/gallery1.png" alt="Maker project preview" fetchpriority="high">
+                    <div class="circuit_overlay" aria-hidden="true">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="hero_readout" aria-hidden="true">
+                        <strong>JD</strong>
+                        <span>Signal online</span>
+                    </div>
+                </div>
+            </section>
+
+            <section id="featured_projects" class="home_projects" aria-label="Featured projects">
+                <div class="section_heading">
+                    <p class="eyebrow">Featured Work</p>
+                    <h2>Current builds</h2>
+                </div>
+
+                <div class="featured_project">
+                    <div class="project_gallery" id="home_project_gallery" aria-label="Project image gallery">
+                        <button class="gallery_nav prev_gallery" type="button" aria-label="Previous image"></button>
+                        <img id="featured_project_image" src="Assets/awakening-spirit.webp" alt="Project preview">
+                        <button class="gallery_nav next_gallery" type="button" aria-label="Next image"></button>
+                    </div>
+
+                    <article class="project_summary">
+                        <div class="title_row">
+                            <div class="progress_dot" id="featured_progress" style="--progress: 0">
+                                <span>0%</span>
+                            </div>
+                            <div>
+                                <p class="project_meta" id="featured_meta">Embedded System</p>
+                                <h3 id="featured_title">Loading project</h3>
+                            </div>
+                        </div>
+                        <p id="featured_description">Loading the project library.</p>
+                        <div class="feature_list" id="featured_features"></div>
+                        <div class="summary_actions">
+                            <button class="primary_btn" type="button" id="featured_open">Open Project</button>
+                            <a class="ghost_link" id="featured_demo" href="#" target="_blank" rel="noreferrer">Demo</a>
+                            <div class="project_pager" id="featured_pager" aria-label="Project carousel"></div>
+                        </div>
+                    </article>
+                </div>
+
+                <div class="featured_project_controls" aria-label="Featured project controls">
+                    <button id="featured_prev" class="project_switch_btn" type="button" aria-label="Previous project">
+                        <span aria-hidden="true">&larr;</span>
+                    </button>
+                    <button id="featured_next" class="project_switch_btn" type="button" aria-label="Next project">
+                        <span aria-hidden="true">&rarr;</span>
+                    </button>
+                </div>
+            </section>
+
+            <div class="breathing_space" aria-hidden="true"></div>
+
+            <section class="home_contact_summary" aria-label="About and contact summary">
+                <div>
+                    <p class="eyebrow">About JD</p>
+                    <h2>I Build</h2>
+                    <p>
+                        I am focused on building things that excites me and can say make anyone do.
+                    </p>
+                </div>
+                <div class="quick_facts">
+                    <div>
+                        <span>Email</span>
+                        <strong>jaypatel3000k@gmail.com</strong>
+                    </div>
+                    <div>
+                        <span>Location</span>
+                        <strong>India</strong>
+                    </div>
+                    <div>
+                        <span>Field</span>
+                        <strong>Embedded tech, electronics, web tools</strong>
+                    </div>
+                    <div>
+                        <span>Experience</span>
+                        <strong>Student maker and project builder</strong>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <section class="page_view projects_page" data-view="projects" aria-label="Projects">
+            <div class="page_shell">
+                <div class="projects_header">
+                    <div class="section_heading">
+                        <p class="eyebrow">All Builds</p>
+                    </div>
+                    <div class="view_toggle" role="group" aria-label="Project view mode">
+                        <button class="toggle_btn active" type="button" data-project-mode="showcase">Showcase</button>
+                        <button class="toggle_btn" type="button" data-project-mode="cards">Cards</button>
+                    </div>
+                </div>
+
+                <section class="project_showcase active_project_mode" data-project-view="showcase">
+                    <div class="selector_gallery" id="selector_gallery">
+                        <img id="selector_image" src="Assets/" alt="Selected project preview">
+                        <div class="selector_thumbs" id="selector_thumbs" aria-label="Project images"></div>
+                    </div>
+                    <article class="selector_details">
+                        <p class="project_meta" id="selector_meta">Select a project</p>
+                        <h2 id="selector_title">Project Library</h2>
+                        <p id="selector_description">Choose a project to preview its resources, guide, and demo.</p>
+                        <div class="feature_list" id="selector_features"></div>
+                        <div class="resource_strip" id="selector_resources"></div>
+                        <div class="summary_actions">
+                            <button class="primary_btn" id="selector_open" type="button">Open Full Guide</button>
+                            <a class="ghost_link" id="selector_demo" href="#" target="_blank" rel="noreferrer">Demo</a>
+                        </div>
+                    </article>
+                    <div class="project_queue" id="project_queue" aria-label="Project selection"></div>
+                </section>
+
+                <section class="project_cards" id="project_cards" data-project-view="cards" aria-label="Project cards">
+                </section>
             </div>
         </section>
 
-        <section class="panel">
-            <div class="panel_head">
-                <h2>Phone Preview</h2>
-                <span id="preview_status" class="pill">Idle</span>
-            </div>
-            <div class="scene">
-                <div id="phone" class="phone"></div>
+        <section class="page_view project_detail_page" data-view="project-detail" aria-label="Project detail">
+            <div class="project_detail_shell">
+                <button class="back_btn" type="button" data-page="projects">Back to projects</button>
+                <article class="guide_layout">
+                    <div class="guide_main">
+                        <div class="detail_media">
+                            <img id="detail_image" class="guide_cover" src="Assets/awakening-spirit.webp"
+                                alt="Project cover">
+                            <div class="detail_thumbs" id="detail_thumbs" aria-label="Project image controls"></div>
+                        </div>
+                        <p class="eyebrow" id="detail_meta">Project Guide</p>
+                        <h1 id="detail_title">Project Title</h1>
+                        <p id="detail_description" class="guide_intro"></p>
+
+                        <section class="guide_section">
+                            <h2>Overview</h2>
+                            <p id="detail_overview"></p>
+                        </section>
+
+                        <section class="guide_section">
+                            <h2>What this page provides</h2>
+                            <div class="resource_grid" id="detail_resources"></div>
+                        </section>
+
+                        <section class="guide_section">
+                            <h2>Build Flow</h2>
+                            <ol id="detail_steps" class="step_list"></ol>
+                        </section>
+                    </div>
+
+                    <aside class="download_panel">
+                        <div class="progress_dot large" id="detail_progress" style="--progress: 0">
+                            <span>0%</span>
+                        </div>
+                        <h2>Project Hub</h2>
+                        <p id="detail_price">Open resources</p>
+                        <a class="primary_btn full_width" id="detail_demo_link" href="#" target="_blank"
+                            rel="noreferrer">Open Demo</a>
+                        <a class="ghost_link full_width" id="detail_live_link" href="#" target="_blank"
+                            rel="noreferrer">Project Page</a>
+                        <button class="back_btn full_width" type="button" data-page="contact">Ask About Build</button>
+                    </aside>
+                </article>
             </div>
         </section>
 
-        <section class="panel">
-            <div class="panel_head">
-                <h2>Orientation</h2>
-                <span class="pill">degrees</span>
-            </div>
-            <div class="panel_body">
-                <div class="values">
-                    <div class="value_card">
-                        <small>Alpha / compass</small>
-                        <strong id="alpha">--</strong>
-                        <em>0 to 360</em>
-                    </div>
-                    <div class="value_card">
-                        <small>Beta / front-back tilt</small>
-                        <strong id="beta">--</strong>
-                        <em>-180 to 180</em>
-                    </div>
-                    <div class="value_card">
-                        <small>Gamma / left-right tilt</small>
-                        <strong id="gamma">--</strong>
-                        <em>-90 to 90</em>
+        <section class="page_view about_page" data-view="about" aria-label="About me">
+            <div class="page_shell about_layout">
+                <div class="about_photo">
+                    <img src="Assets/awakening-spirit.webp" alt="JD Patel">
+                </div>
+                <div class="about_content">
+                    <p class="eyebrow">About Me</p>
+                    <h1>I build with code, circuits, and curiosity.</h1>
+                    <p>
+                        My name is JD Patel. I use this site as a personal brand and project hub for embedded
+                        electronics, tech experiments, web interfaces, and maker documentation.
+                    </p>
+                    <div class="about_stats">
+                        <span>Embedded Systems</span>
+                        <span>Electronics</span>
+                        <span>Web Control</span>
+                        <span>Project Guides</span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section class="panel">
-            <div class="panel_head">
-                <h2>Gyroscope</h2>
-                <span class="pill">deg/s</span>
-            </div>
-            <div class="panel_body">
-                <div class="values">
-                    <div class="value_card">
-                        <small>Rotation alpha</small>
-                        <strong id="rot_alpha">--</strong>
-                        <em>Z axis</em>
+        <section class="page_view contact_page" data-view="contact" aria-label="Contact">
+            <div class="page_shell contact_layout">
+                <div class="section_heading">
+                    <p class="eyebrow">Contact</p>
+                    <h1>Let us build something useful.</h1>
+                </div>
+                <div class="contact_columns">
+                    <div class="contact_card">
+                        <h2>Contact details</h2>
+                        <div class="copy_block">
+                            <span>Email</span>
+                            <strong class="copy_text">jaypatel3000k@gmail.com</strong>
+                            <button class="copy_btn" type="button">Copy</button>
+                        </div>
+                        <div class="copy_block">
+                            <span>Instagram</span>
+                            <strong class="copy_text">@be1jd</strong>
+                            <button class="copy_btn" type="button">Copy</button>
+                        </div>
+                        <div class="copy_block">
+                            <span>Address</span>
+                            <strong class="copy_text">India</strong>
+                            <button class="copy_btn" type="button">Copy</button>
+                        </div>
                     </div>
-                    <div class="value_card">
-                        <small>Rotation beta</small>
-                        <strong id="rot_beta">--</strong>
-                        <em>X axis</em>
-                    </div>
-                    <div class="value_card">
-                        <small>Rotation gamma</small>
-                        <strong id="rot_gamma">--</strong>
-                        <em>Y axis</em>
+
+                    <div class="contact_card">
+                        <h2>Maker profile</h2>
+                        <div class="profile_grid">
+                            <span>Field</span>
+                            <strong>Embedded technology and electronics</strong>
+                            <span>Focus</span>
+                            <strong>Interactive project guides and web tools</strong>
+                            <span>Experience</span>
+                            <strong>Student maker, builder, and experimenter</strong>
+                            <span>Availability</span>
+                            <strong>Project questions, collaborations, and demos</strong>
+                        </div>
                     </div>
                 </div>
             </div>
-        </section>
-
-        <section class="panel">
-            <div class="panel_head">
-                <h2>Debug Log</h2>
-                <span id="sample_count" class="pill">0 samples</span>
-            </div>
-            <pre id="log"></pre>
         </section>
     </main>
 
-    <script>
-        const $ = (id) => document.getElementById(id);
+    <footer class="site_footer">
+        <div>
+            <strong>be1JD</strong>
+            <span>Maker guides, embedded experiments, project downloads, and demos.</span>
+        </div>
+        <div class="footer_contact">
+            <a href="mailto:jaypatel3000k@gmail.com">jaypatel3000k@gmail.com</a>
+            <button type="button" data-page="projects">Projects</button>
+        </div>
+    </footer>
 
-        const ui = {
-            topStatus: $("top_status"),
-            eventRate: $("event_rate"),
-            secureStatus: $("secure_status"),
-            supportStatus: $("support_status"),
-            permissionStatus: $("permission_status"),
-            eventStatus: $("event_status"),
-            previewStatus: $("preview_status"),
-            startBtn: $("start_btn"),
-            stopBtn: $("stop_btn"),
-            clearBtn: $("clear_btn"),
-            log: $("log"),
-            sampleCount: $("sample_count"),
-            phone: $("phone"),
-            alpha: $("alpha"),
-            beta: $("beta"),
-            gamma: $("gamma"),
-            rotAlpha: $("rot_alpha"),
-            rotBeta: $("rot_beta"),
-            rotGamma: $("rot_gamma")
-        };
-
-        const state = {
-            started: false,
-            orientationSamples: 0,
-            motionSamples: 0,
-            eventWindowSamples: 0,
-            lastRateAt: performance.now(),
-            noEventTimer: null,
-            nullValueTimer: null
-        };
-
-        const format = (value, digits = 1) => Number.isFinite(value) ? value.toFixed(digits) : "--";
-
-        const setText = (element, text, type = "") => {
-            element.textContent = text;
-            element.className = type;
-        };
-
-        const log = (message, type = "info") => {
-            const time = new Date().toLocaleTimeString();
-            ui.log.textContent = `[${time}] ${type.toUpperCase()}: ${message}\n` + ui.log.textContent;
-        };
-
-        const isLocal = ["localhost", "127.0.0.1", "::1"].includes(location.hostname);
-
-        const getSupportReport = () => {
-            const hasOrientation = "DeviceOrientationEvent" in window;
-            const hasMotion = "DeviceMotionEvent" in window;
-            const canAskOrientation = hasOrientation && typeof DeviceOrientationEvent.requestPermission === "function";
-            const canAskMotion = hasMotion && typeof DeviceMotionEvent.requestPermission === "function";
-
-            return { hasOrientation, hasMotion, canAskOrientation, canAskMotion };
-        };
-
-        const runStartupChecks = () => {
-            const secureMessage = window.isSecureContext
-                ? "Secure context is OK. Sensor APIs are allowed to run here."
-                : isLocal
-                    ? "Localhost is usually allowed, but this page is not reporting a secure context."
-                    : "Not secure. Open this page with HTTPS. Chrome can block gyroscope access on plain HTTP.";
-            setText(ui.secureStatus, secureMessage, window.isSecureContext ? "ok" : "bad");
-
-            const support = getSupportReport();
-            const supportParts = [
-                `DeviceOrientationEvent: ${support.hasOrientation ? "supported" : "not supported"}`,
-                `DeviceMotionEvent: ${support.hasMotion ? "supported" : "not supported"}`,
-                `permission prompt: ${support.canAskOrientation || support.canAskMotion ? "required/available" : "not exposed"}`
-            ];
-            setText(ui.supportStatus, supportParts.join(". "), support.hasOrientation || support.hasMotion ? "ok" : "bad");
-
-            if (!support.hasOrientation && !support.hasMotion) {
-                setText(ui.topStatus, "Unsupported browser", "bad");
-                ui.startBtn.disabled = true;
-                log("This browser does not expose DeviceOrientationEvent or DeviceMotionEvent.", "error");
-            } else if (!window.isSecureContext && !isLocal) {
-                setText(ui.topStatus, "HTTPS required", "bad");
-                log("The page is not running in a secure context. Use HTTPS or localhost.", "error");
-            } else {
-                setText(ui.topStatus, "Ready", "ok");
-                log("Startup checks completed. Tap Start sensors on the phone.", "info");
-            }
-        };
-
-        const requestPermissionIfNeeded = async () => {
-            const support = getSupportReport();
-            const results = [];
-
-            if (support.canAskOrientation) {
-                const result = await DeviceOrientationEvent.requestPermission();
-                results.push(`orientation: ${result}`);
-                if (result !== "granted") {
-                    throw new Error("Device orientation permission was denied by the browser/user.");
-                }
-            }
-
-            if (support.canAskMotion) {
-                const result = await DeviceMotionEvent.requestPermission();
-                results.push(`motion: ${result}`);
-                if (result !== "granted") {
-                    throw new Error("Device motion permission was denied by the browser/user.");
-                }
-            }
-
-            if (!results.length) {
-                results.push("no explicit browser permission prompt was exposed");
-            }
-
-            setText(ui.permissionStatus, results.join(", "), "ok");
-            log(`Permission check: ${results.join(", ")}.`, "info");
-        };
-
-        const markWaitingForEvents = () => {
-            clearTimeout(state.noEventTimer);
-            clearTimeout(state.nullValueTimer);
-
-            setText(ui.eventStatus, "Listening. Move or tilt the phone now.", "warn");
-            state.noEventTimer = setTimeout(() => {
-                if (!state.orientationSamples && !state.motionSamples) {
-                    setText(ui.eventStatus, "No sensor events received. Possible causes: HTTPS is required, browser setting is blocking motion sensors, this is not a phone, or the hardware has no gyro.", "bad");
-                    setText(ui.topStatus, "No events", "bad");
-                    log("No deviceorientation/devicemotion events arrived after starting.", "error");
-                }
-            }, 2500);
-
-            state.nullValueTimer = setTimeout(() => {
-                if (state.orientationSamples && ui.alpha.textContent === "--" && ui.beta.textContent === "--" && ui.gamma.textContent === "--") {
-                    setText(ui.eventStatus, "Events are arriving, but values are null. Browser or OS privacy settings may be hiding sensor data.", "bad");
-                    log("Orientation events arrived with null alpha/beta/gamma values.", "warn");
-                }
-            }, 3500);
-        };
-
-        const updateRate = () => {
-            const now = performance.now();
-            const elapsed = now - state.lastRateAt;
-            if (elapsed < 800) {
-                return;
-            }
-
-            const hz = Math.round((state.eventWindowSamples * 1000) / elapsed);
-            ui.eventRate.textContent = `${hz} Hz`;
-            state.eventWindowSamples = 0;
-            state.lastRateAt = now;
-        };
-
-        const updatePhonePreview = (alpha, beta, gamma) => {
-            const x = Number.isFinite(beta) ? beta : 0;
-            const y = Number.isFinite(gamma) ? gamma : 0;
-            const z = Number.isFinite(alpha) ? alpha : 0;
-            ui.phone.style.transform = `rotateX(${x}deg) rotateY(${y}deg) rotateZ(${-z}deg)`;
-            ui.previewStatus.textContent = "Live";
-        };
-
-        const onOrientation = (event) => {
-            state.orientationSamples += 1;
-            state.eventWindowSamples += 1;
-            clearTimeout(state.noEventTimer);
-
-            const alpha = event.alpha;
-            const beta = event.beta;
-            const gamma = event.gamma;
-
-            ui.alpha.textContent = format(alpha);
-            ui.beta.textContent = format(beta);
-            ui.gamma.textContent = format(gamma);
-            ui.sampleCount.textContent = `${state.orientationSamples + state.motionSamples} samples`;
-            setText(ui.eventStatus, "Orientation data is live.", "ok");
-            setText(ui.topStatus, "Live", "ok");
-            updatePhonePreview(alpha, beta, gamma);
-            updateRate();
-        };
-
-        const onMotion = (event) => {
-            state.motionSamples += 1;
-            state.eventWindowSamples += 1;
-            clearTimeout(state.noEventTimer);
-
-            const rotation = event.rotationRate || {};
-            ui.rotAlpha.textContent = format(rotation.alpha);
-            ui.rotBeta.textContent = format(rotation.beta);
-            ui.rotGamma.textContent = format(rotation.gamma);
-            ui.sampleCount.textContent = `${state.orientationSamples + state.motionSamples} samples`;
-
-            if (!Number.isFinite(rotation.alpha) && !Number.isFinite(rotation.beta) && !Number.isFinite(rotation.gamma)) {
-                log("DeviceMotionEvent is firing, but rotationRate is empty/null.", "warn");
-            }
-            updateRate();
-        };
-
-        const startSensors = async () => {
-            if (state.started) {
-                return;
-            }
-
-            runStartupChecks();
-
-            try {
-                await requestPermissionIfNeeded();
-            } catch (error) {
-                setText(ui.permissionStatus, error.message, "bad");
-                setText(ui.topStatus, "Permission blocked", "bad");
-                log(error.message, "error");
-                return;
-            }
-
-            state.started = true;
-            state.orientationSamples = 0;
-            state.motionSamples = 0;
-            state.eventWindowSamples = 0;
-            state.lastRateAt = performance.now();
-
-            window.addEventListener("deviceorientation", onOrientation);
-            window.addEventListener("devicemotion", onMotion);
-            ui.startBtn.disabled = true;
-            ui.stopBtn.disabled = false;
-            setText(ui.topStatus, "Listening", "warn");
-            markWaitingForEvents();
-            log("Sensor listeners attached: deviceorientation and devicemotion.", "info");
-        };
-
-        const stopSensors = () => {
-            window.removeEventListener("deviceorientation", onOrientation);
-            window.removeEventListener("devicemotion", onMotion);
-            clearTimeout(state.noEventTimer);
-            clearTimeout(state.nullValueTimer);
-            state.started = false;
-            ui.startBtn.disabled = false;
-            ui.stopBtn.disabled = true;
-            ui.eventRate.textContent = "0 Hz";
-            ui.previewStatus.textContent = "Idle";
-            setText(ui.topStatus, "Stopped", "warn");
-            setText(ui.eventStatus, "Stopped by user.", "warn");
-            log("Sensor listeners removed.", "info");
-        };
-
-        ui.startBtn.addEventListener("click", startSensors);
-        ui.stopBtn.addEventListener("click", stopSensors);
-        ui.clearBtn.addEventListener("click", () => {
-            ui.log.textContent = "";
-            log("Log cleared.", "info");
-        });
-
-        window.addEventListener("error", (event) => {
-            log(`${event.message} at ${event.filename}:${event.lineno}`, "error");
-        });
-
-        document.addEventListener("visibilitychange", () => {
-            log(`Page visibility changed to ${document.visibilityState}.`, "info");
-        });
-
-        runStartupChecks();
-    </script>
+    <script src="JS/script.js" defer></script>
 </body>
 
 </html>
