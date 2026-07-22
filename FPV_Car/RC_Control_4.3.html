@@ -17,15 +17,32 @@
     <title>JetRay</title>
     <style>
         :root {
-            /* main page variables */
-            /* --theme-color-1: #1de3ff; */
-            --theme-color-1: #949494;
-            --theme-color-2: #32d8f4;
-            --theme-color-3: #6a6a6a;
-            --theme-color-4: #ffd66f;
-            --button-border: 1px solid var(--theme-color-1);
+            /* Theme colors: edit this block to reskin the controller. */
+            --theme-accent: #32d8f4;
+            --theme-accent-soft: #95edff33;
+            --theme-warning: #ffd66f;
+            --theme-danger: #ff4f62;
+            --theme-success: #2cff95;
+            --theme-text: #eef;
+            --theme-muted: #9fc7d4;
+            --theme-surface: #06101866;
+            --theme-surface-strong: #061018e8;
+            --theme-input: #061018aa;
+            --theme-control: #10222f;
+            --theme-control-soft: #10222fc7;
+            --theme-track: #6a6a6a53;
+            --theme-border-color: #949494;
+            --theme-shadow: #1de3ff33;
+            --theme-page-overlay: rgba(0, 0, 0, .1);
+            --theme-screen-gradient: linear-gradient(rgba(0, 0, 0, .18), rgba(0, 0, 0, .62));
+            --theme-bg: #000;
+            --button-border: 1px solid var(--theme-border-color);
             --speed-bar-color: var(--theme-color-2);
             --steer-bar-color: var(--theme-color-2);
+            --theme-color-1: var(--theme-border-color);
+            --theme-color-2: var(--theme-accent);
+            --theme-color-3: var(--theme-track);
+            --theme-color-4: var(--theme-warning);
             color-scheme: dark;
             --app-height: 100dvh;
             --app-width: 100vw;
@@ -51,8 +68,8 @@
             --text-sm: clamp(10px, 2vw, 12px);
             --edge-pad: 10px;
             /* settings panel variables */
-            --settings-bg: #06101866;
-            --settings-border: 1px solid #949494;
+            --settings-bg: var(--theme-surface);
+            --settings-border: var(--button-border);
         }
 
         * {
@@ -66,9 +83,9 @@
             min-height: 100svh;
             height: var(--app-height);
             overflow: hidden;
-            background: #000;
+            background: var(--theme-bg);
             font: 14px Arial, sans-serif;
-            color: #eef;
+            color: var(--theme-text);
         }
 
         body {
@@ -84,7 +101,7 @@
             transform: rotate(90deg);
             position: fixed;
             inset: 0;
-            width: 100vh; 
+            width: 100vh;
             /* width: 100%; */
             /* height: 100%;  */
             justify-self: center;
@@ -104,7 +121,7 @@
             flex-direction: column;
             justify-content: space-between;
             gap: var(--panel-gap);
-            background: linear-gradient(rgba(0, 0, 0, .18), rgba(0, 0, 0, .62));
+            background: var(--theme-screen-gradient);
         }
 
         .nav {
@@ -124,8 +141,8 @@
         .p {
             /* border: 1px solid #1de3ff8a; */
             border: var(--button-border);
-            background: #06101866;
-            box-shadow: 0 0 0 1px #1de3ff33 inset, 0 0 16px #1de3ff22;
+            background: var(--theme-surface);
+            box-shadow: 0 0 0 1px var(--theme-shadow) inset, 0 0 16px #1de3ff22;
             border-radius: 14px;
             backdrop-filter: blur(6px);
             padding: 10px 12px;
@@ -564,18 +581,20 @@
         }
 
         .settings_page {
-            width: 100%;
-            min-height: 420px;
+            width: 80%;
+            min-height: 360px;
             padding: 24px;
             border-radius: 24px;
-            background: rgba(0, 0, 0, .1);
-            border: var(--button-border);
+            background: var(--theme-page-overlay);
+            border: var(--settings-border);
             backdrop-filter: blur(2px);
+            position: absolute;
+            z-index: 1002;
         }
 
         .settings_page h2 {
             margin-top: 0;
-            color: #32d8f4;
+            color: var(--theme-accent);
         }
 
         .settings_grid {
@@ -588,7 +607,7 @@
             display: grid;
             gap: 6px;
             min-width: 0;
-            color: #9fc7d4;
+            color: var(--theme-muted);
             font-size: 12px;
         }
 
@@ -599,7 +618,7 @@
         }
 
         .setting_item b {
-            color: #eef;
+            color: var(--theme-text);
             font-weight: 700;
         }
 
@@ -610,14 +629,46 @@
 
         .setting_item input[type="number"],
         .setting_item input[type="text"],
-        .setting_item input[type="password"] {
+        .setting_item input[type="password"],
+        .setting_item select {
             height: 36px;
             padding: 0 10px;
-            color: #eef;
-            background: #061018aa;
+            color: var(--theme-text);
+            background: var(--theme-input);
             border: var(--button-border);
             border-radius: 8px;
             outline: none;
+        }
+
+        .setting_item select {
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            padding-right: 38px;
+            background-color: var(--theme-control-soft);
+            background-image:
+                linear-gradient(45deg, transparent 50%, var(--theme-accent) 50%),
+                linear-gradient(135deg, var(--theme-accent) 50%, transparent 50%),
+                linear-gradient(to right, var(--theme-accent-soft), var(--theme-accent-soft));
+            background-position:
+                calc(100% - 20px) 15px,
+                calc(100% - 14px) 15px,
+                calc(100% - 34px) 8px;
+            background-size: 6px 6px, 6px 6px, 1px 20px;
+            background-repeat: no-repeat;
+            box-shadow: 0 0 0 1px var(--theme-shadow) inset;
+            transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+        }
+
+        .setting_item select:hover,
+        .setting_item select:focus {
+            border-color: var(--theme-accent);
+            box-shadow: 0 0 0 1px var(--theme-accent-soft) inset, 0 0 14px var(--theme-shadow);
+        }
+
+        .setting_item select option {
+            color: var(--theme-text);
+            background: var(--theme-control);
         }
 
         .settings_group,
@@ -633,15 +684,29 @@
         .save_dirty_btn {
             min-height: 38px;
             padding: 0 14px;
-            color: #eef;
-            background: #10222f;
+            color: var(--theme-text);
+            background: var(--theme-control);
             border: var(--button-border);
             border-radius: 8px;
         }
 
+        .settings_group button:disabled,
+        .settings_actions button:disabled,
+        .save_dirty_btn:disabled {
+            cursor: wait;
+            opacity: .62;
+            filter: saturate(.7);
+        }
+
+        .settings_group button.on {
+            border-color: var(--theme-accent);
+            color: var(--theme-accent);
+            box-shadow: 0 0 0 1px var(--theme-accent-soft) inset, 0 0 14px var(--theme-shadow);
+        }
+
         .settings_note {
             margin: 12px 0 0;
-            color: #9fc7d4;
+            color: var(--theme-muted);
             font-size: 12px;
             line-height: 1.35;
         }
@@ -657,9 +722,9 @@
             padding: 8px 10px;
             border: var(--button-border);
             border-radius: 10px;
-            background: #061018e8;
-            box-shadow: 0 0 16px #1de3ff33;
-            color: #eef;
+            background: var(--theme-surface-strong);
+            box-shadow: 0 0 16px var(--theme-shadow);
+            color: var(--theme-text);
             font-size: 12px;
         }
 
@@ -668,8 +733,8 @@
             padding: 10px 18px;
             border: none;
             border-radius: 12px;
-            background: #10222f;
-            color: #32d8f4;
+            background: var(--theme-control);
+            color: var(--theme-accent);
             border: var(--button-border);
             font-size: 15px;
         }
@@ -680,7 +745,199 @@
 
         /* Settings Panel Styling End */
 
+        .rotate_prompt,
+        .fullscreen_hint {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            display: none;
+            place-items: center;
+            padding: calc(20px + env(safe-area-inset-top)) calc(18px + env(safe-area-inset-right)) calc(20px + env(safe-area-inset-bottom)) calc(18px + env(safe-area-inset-left));
+            pointer-events: none;
+            background:
+                radial-gradient(circle at 50% 50%, rgba(50, 216, 244, .18), transparent 34%),
+                rgba(0, 0, 0, .18);
+            color: var(--theme-text);
+            text-align: center;
+            opacity: .76;
+            filter: blur(.15px);
+        }
+
+        .rotate_prompt_card,
+        .fullscreen_hint_card {
+            display: grid;
+            justify-items: center;
+            gap: 10px;
+            max-width: min(320px, 86vw);
+            padding: 18px;
+            border: 1px solid rgba(255, 255, 255, .12);
+            border-radius: 18px;
+            background: rgba(0, 0, 0, .2);
+            box-shadow: 0 0 42px rgba(50, 216, 244, .18);
+            backdrop-filter: blur(4px);
+            animation: notice_float 2.4s ease-in-out infinite;
+        }
+
+        .rotate_prompt h2,
+        .fullscreen_hint h2 {
+            margin: 0;
+            color: var(--theme-text);
+            font-size: clamp(18px, 5vw, 28px);
+            letter-spacing: 0;
+        }
+
+        .rotate_prompt p,
+        .fullscreen_hint p {
+            margin: 0;
+            color: var(--theme-muted);
+            font-size: clamp(12px, 3.3vw, 15px);
+            line-height: 1.45;
+        }
+
+        .rotate_art {
+            position: relative;
+            width: 124px;
+            height: 168px;
+            margin: 0;
+            opacity: .9;
+            animation: notice_pulse 1.8s ease-in-out infinite;
+        }
+
+        .rotate_phone {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 72px;
+            height: 128px;
+            transform: translate(-50%, -50%);
+            border: 4px solid #fff;
+            border-radius: 13px;
+            box-shadow: 0 0 24px rgba(255, 255, 255, .18);
+        }
+
+        .rotate_phone::before,
+        .rotate_phone::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+        }
+
+        .rotate_phone::before {
+            top: 8px;
+            width: 20px;
+            height: 3px;
+            border-radius: 999px;
+        }
+
+        .rotate_phone::after {
+            bottom: 8px;
+            width: 30px;
+            height: 3px;
+            border-radius: 999px;
+        }
+
+        .rotate_arrow {
+            position: absolute;
+            width: 56px;
+            height: 56px;
+            border: 5px solid #fff;
+            border-left-color: transparent;
+            border-bottom-color: transparent;
+            border-radius: 50%;
+        }
+
+        .rotate_arrow::after {
+            content: "";
+            position: absolute;
+            width: 0;
+            height: 0;
+            border: 10px solid transparent;
+        }
+
+        .rotate_arrow.top {
+            left: 6px;
+            top: 8px;
+            transform: rotate(-20deg);
+        }
+
+        .rotate_arrow.top::after {
+            right: -9px;
+            top: -13px;
+            border-left-color: #fff;
+            transform: rotate(42deg);
+        }
+
+        .rotate_arrow.bottom {
+            right: 4px;
+            bottom: 9px;
+            transform: rotate(160deg);
+        }
+
+        .rotate_arrow.bottom::after {
+            right: -9px;
+            top: -13px;
+            border-left-color: #fff;
+            transform: rotate(42deg);
+        }
+
+        .fullscreen_hint {
+            align-items: end;
+            padding-bottom: max(22px, env(safe-area-inset-bottom));
+            background:
+                radial-gradient(circle at 50% 82%, rgba(50, 216, 244, .2), transparent 26%),
+                rgba(0, 0, 0, .06);
+            opacity: .7;
+        }
+
+        .fullscreen_hint.show {
+            display: grid;
+        }
+
+        .tap_icon {
+            width: 60px;
+            height: 60px;
+            display: grid;
+            place-items: center;
+            border: 2px solid var(--theme-accent);
+            border-radius: 50%;
+            color: var(--theme-accent);
+            box-shadow: 0 0 28px var(--theme-shadow);
+            font-size: 22px;
+            font-weight: 700;
+            animation: notice_pulse 1.8s ease-in-out infinite;
+        }
+
+        @keyframes notice_float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        @keyframes notice_pulse {
+            0%,
+            100% {
+                opacity: .62;
+                transform: scale(.96);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
         @media (orientation: portrait) {
+            .rotate_prompt {
+                display: grid;
+            }
+
             main {
                 padding-top: calc(12px + env(safe-area-inset-top));
                 padding-right: calc(12px + env(safe-area-inset-right));
@@ -725,9 +982,9 @@
                 max-width: 100%;
             }
 
-            .settings_grid {
-                grid-template-columns: 1fr;
-            }
+            /* .settings_grid {
+                grid-template-columns: 2fr;
+            } */
 
             .right_ctrls {
                 margin-left: 0;
@@ -810,6 +1067,26 @@
         src="https://preview.redd.it/whats-your-prettiest-rc-pictures-v0-95pxwgk60y4e1.jpeg?width=640&crop=smart&auto=webp&s=ebb69a8fb434c3a520a3deec41a4ade1cfb0ce37"
         alt="" onerror="this.style.display='none'"> -->
     <!-- Search for :- lanscape image taken from rc car -->
+    <div id="rotate_prompt" class="rotate_prompt" aria-live="polite">
+        <div class="rotate_prompt_card">
+            <div class="rotate_art" aria-hidden="true">
+                <span class="rotate_arrow top"></span>
+                <span class="rotate_phone"></span>
+                <span class="rotate_arrow bottom"></span>
+            </div>
+            <h2>Landscape works best</h2>
+            <p>Rotate your phone for a wider driving layout.</p>
+        </div>
+    </div>
+
+    <div id="fullscreen_hint" class="fullscreen_hint" aria-live="polite">
+        <div class="fullscreen_hint_card">
+            <div class="tap_icon" aria-hidden="true">TAP</div>
+            <h2>Tap for fullscreen</h2>
+            <p>Chrome needs one touch before fullscreen can start.</p>
+        </div>
+    </div>
+
     <main>
         <div class="nav">
             <div class="nav_bar">
@@ -892,7 +1169,7 @@
 
                             <h2>Controls HUD</h2>
 
-                            <div class="settings_grid">
+                            <div id="controls_normal_settings" class="settings_grid">
                                 <label class="setting_item">
                                     <span>Speed <b id="cfg_speed_out">128</b></span>
                                     <input id="cfg_speed" type="range" min="0" max="255" value="128">
@@ -909,6 +1186,15 @@
                                     <span>Steer Max <b id="cfg_stmax_out">170</b></span>
                                     <input id="cfg_stmax" type="range" min="0" max="180" value="170">
                                 </label>
+                                <label class="setting_item">
+                                    Motor Driver
+                                    <select id="cfg_motor_driver">
+                                        <option value="0">DIY Motor Driver</option>
+                                        <option value="1">Commercial Motor Driver</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div id="controls_advanced_settings" class="disp_none">
                                 <label class="setting_item">
                                     <span>Servo Min us <b id="cfg_servo_min_out">1000</b></span>
                                     <input id="cfg_servo_min" type="range" min="500" max="2500" value="1000">
@@ -931,6 +1217,7 @@
                                 </label>
                             </div>
                             <div class="settings_actions">
+                                <button id="controls_advanced_btn">Advanced</button>
                                 <button id="toggle_steering_btn">Steering: NORMAL</button>
                                 <button id="cfg_load_btn">Load Saved</button>
                                 <button id="cfg_factory_btn">Factory Reset</button>
@@ -956,7 +1243,8 @@
                                     <input id="cfg_pass" type="password" minlength="8" maxlength="63" value="JD232323">
                                 </label>
                             </div>
-                            <p class="settings_note">WiFi name and password are saved to NVS only after Save. They apply after the ESP32 reboots.</p>
+                            <p class="settings_note">WiFi name and password are saved to NVS only after Save. They apply
+                                after the ESP32 reboots.</p>
                         </div>
 
                         <!-- UPDATE -->
@@ -1050,14 +1338,16 @@
         let queuedSteerValue = 90;
         let latestSteerValue = -1;
         let lastFullscreenTry = 0;
+        let activeHardwareTest = null;
         const K = {};
         const $ = (id) => document.getElementById(id);
-        const cfgKeys = ["speed", "center", "stmin", "stmax", "servo_min", "servo_max", "jsval", "jsduty", "jstime", "reverse", "ssid", "pass"];
+        const cfgKeys = ["speed", "center", "stmin", "stmax", "motor_driver", "servo_min", "servo_max", "jsval", "jsduty", "jstime", "reverse", "ssid", "pass"];
         const cfgMap = {
             speed: "cfg_speed",
             center: "cfg_center",
             stmin: "cfg_stmin",
             stmax: "cfg_stmax",
+            motor_driver: "cfg_motor_driver",
             servo_min: "cfg_servo_min",
             servo_max: "cfg_servo_max",
             jsval: "cfg_jsval",
@@ -1071,6 +1361,7 @@
             center: 90,
             stmin: 30,
             stmax: 170,
+            motor_driver: 0,
             servo_min: 1000,
             servo_max: 2000,
             jsval: 130,
@@ -1089,8 +1380,19 @@
             document.documentElement.style.setProperty("--app-width", viewportWidth + "px");
         };
 
+        const updateFullscreenHint = () => {
+            const hint = $("fullscreen_hint");
+            if (!hint) {
+                return;
+            }
+            const isLandscape = window.matchMedia("(orientation: landscape)").matches;
+            const canFullscreen = !!document.documentElement.requestFullscreen;
+            hint.classList.toggle("show", canFullscreen && isLandscape && !document.fullscreenElement);
+        };
+
         const tryFullscreen = async () => {
             if (document.fullscreenElement || !document.documentElement.requestFullscreen) {
+                updateFullscreenHint();
                 return;
             }
 
@@ -1107,6 +1409,8 @@
                 updateAppHeight();
             } catch (error) {
                 H("fs>browser");
+            } finally {
+                updateFullscreenHint();
             }
         };
         // Later on Added
@@ -1169,6 +1473,7 @@
         };
 
         const cfgValue = (key) => key === "ssid" || key === "pass" ? String(cfgDraft[key]).replace(/[\r\n,]/g, "") : Number(cfgDraft[key]);
+        const liveCfgKeys = new Set(["speed", "center", "stmin", "stmax", "motor_driver", "servo_min", "servo_max", "jsval", "jsduty", "jstime", "reverse"]);
 
         const cfgDirty = () => cfgKeys.some(key => String(cfgDraft[key]) !== String(cfgSaved[key]));
 
@@ -1210,11 +1515,28 @@
             setDirtyBanner();
         };
 
-        const markCfg = (key, value) => {
+        const sendLiveConfig = (key) => {
+            if (liveCfgKeys.has(key)) {
+                M("cfg_" + key + ":" + cfgValue(key));
+            }
+        };
+
+        const markCfg = (key, value, live = true) => {
             cfgDraft[key] = key === "ssid" || key === "pass" ? String(value).replace(/[\r\n,]/g, "") : Number(value);
             setCfgControl(key);
+            P.value = cfgDraft.speed;
+            pv.textContent = cfgDraft.speed;
+            P2.textContent = cfgDraft.speed;
+            R.min = cfgDraft.stmin;
+            R.max = cfgDraft.stmax;
             if (key === "reverse") {
                 applySteerReverseUi();
+            }
+            if (key === "center" || key === "stmin" || key === "stmax") {
+                queueSteer(cfgDraft.center, true);
+            }
+            if (live) {
+                sendLiveConfig(key);
             }
             setDirtyBanner();
         };
@@ -1252,7 +1574,6 @@
             cfgKeys.forEach(key => {
                 const next = cfgValue(key);
                 if (String(next) !== String(cfgSaved[key])) {
-                    M("cfg_" + key + ":" + next);
                     cfgSaved[key] = next;
                     cfgDraft[key] = next;
                 }
@@ -1287,6 +1608,50 @@
             if (!steerFlushTimer) {
                 steerFlushTimer = setTimeout(flushSteer, 25);
             }
+        };
+
+        const finishHardwareTest = (test) => {
+            if (!test || activeHardwareTest !== test) {
+                return;
+            }
+            if (test.timer) {
+                clearTimeout(test.timer);
+            }
+            test.cleanup();
+            test.button.disabled = false;
+            A(test.button, false);
+            activeHardwareTest = null;
+        };
+
+        const runHardwareTest = (buttonId, duration, interval, tick, cleanup) => {
+            const button = $(buttonId);
+            if (activeHardwareTest) {
+                if (activeHardwareTest.button === button) {
+                    return;
+                }
+                finishHardwareTest(activeHardwareTest);
+            }
+
+            const test = { button, cleanup, timer: null };
+            const startedAt = Date.now();
+            activeHardwareTest = test;
+            button.disabled = true;
+            A(button, true);
+
+            const step = () => {
+                if (activeHardwareTest !== test) {
+                    return;
+                }
+                const elapsed = Date.now() - startedAt;
+                if (elapsed >= duration) {
+                    finishHardwareTest(test);
+                    return;
+                }
+                tick(elapsed);
+                test.timer = setTimeout(step, interval);
+            };
+
+            step();
         };
 
         const X = () => {
@@ -1391,24 +1756,49 @@
             pv = $("speed_val_1");
             sv = $("str_angle_1");
             const steeringToggleBtn = $("toggle_steering_btn");
+            const controlsAdvancedBtn = $("controls_advanced_btn");
+            let controlsAdvancedMode = false;
 
             steeringToggleBtn.onclick = () => {
                 markCfg("reverse", cfgDraft.reverse ? 0 : 1);
                 H("steer>" + (steeringReversed ? "reversed" : "normal"));
             };
 
+            controlsAdvancedBtn.onclick = () => {
+                controlsAdvancedMode = !controlsAdvancedMode;
+                $("controls_normal_settings").classList.toggle("disp_none", controlsAdvancedMode);
+                $("controls_normal_settings").classList.toggle("settings_grid");
+                $("controls_advanced_settings").classList.toggle("disp_none", !controlsAdvancedMode);
+                $("controls_advanced_settings").classList.toggle("settings_grid");
+                controlsAdvancedBtn.textContent = controlsAdvancedMode ? "Normal" : "Advanced";
+            };
+
             updateAppHeight();
-            window.addEventListener("resize", updateAppHeight);
+            updateFullscreenHint();
+            window.addEventListener("resize", () => {
+                updateAppHeight();
+                updateFullscreenHint();
+            });
             window.addEventListener("orientationchange", () => {
-                setTimeout(updateAppHeight, 250);
+                setTimeout(() => {
+                    updateAppHeight();
+                    updateFullscreenHint();
+                }, 250);
             });
             document.addEventListener("fullscreenchange", () => {
                 document.documentElement.classList.toggle("is-fullscreen", !!document.fullscreenElement);
                 updateAppHeight();
+                updateFullscreenHint();
             });
             if (window.visualViewport) {
-                window.visualViewport.addEventListener("resize", updateAppHeight);
-                window.visualViewport.addEventListener("scroll", updateAppHeight);
+                window.visualViewport.addEventListener("resize", () => {
+                    updateAppHeight();
+                    updateFullscreenHint();
+                });
+                window.visualViewport.addEventListener("scroll", () => {
+                    updateAppHeight();
+                    updateFullscreenHint();
+                });
             }
 
             P.oninput = () => {
@@ -1548,6 +1938,38 @@
                 if (confirm("Factory reset saved settings and reboot the ESP32?")) {
                     M("cfg_factory");
                 }
+            };
+            $("servo_test").onclick = () => {
+                runHardwareTest("servo_test", 4000, 60, (elapsed) => {
+                    const phase = (elapsed % 1600) / 1600;
+                    const min = Number(cfgDraft.stmin);
+                    const max = Number(cfgDraft.stmax);
+                    const angle = phase < .5 ? min + ((max - min) * phase * 2) : max - ((max - min) * (phase - .5) * 2);
+                    queueSteer(Math.round(angle), true);
+                }, () => {
+                    queueSteer(cfgDraft.center, true);
+                });
+            };
+            $("motor_test").onclick = () => {
+                runHardwareTest("motor_test", 5000, 140, (elapsed) => {
+                    const forward = elapsed < 2500;
+                    const phaseElapsed = forward ? elapsed : elapsed - 2500;
+                    const phase = (phaseElapsed % 1250) / 1250;
+                    const duty = Math.round(90 + (140 * (phase < .5 ? phase * 2 : (1 - phase) * 2)));
+                    M(forward ? "forward_start" : "back_start");
+                    V(duty);
+                }, () => {
+                    M("forward_stop");
+                    M("back_stop");
+                    V(cfgDraft.speed);
+                });
+            };
+            $("rear_test").onclick = () => {
+                runHardwareTest("rear_test", 1600, 140, () => {
+                    M("rear_break");
+                }, () => {
+                    M("break_stop");
+                });
             };
             applyConfigUi();
 
