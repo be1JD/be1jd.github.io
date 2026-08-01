@@ -10,7 +10,7 @@
     }
 
     .hero {
-        min-height: auto;
+        min-height: 100svh;
     }
 
     .download_panel {
@@ -56,7 +56,6 @@
         justify-content: flex-start;
     }
 
-    .hero,
     .home_projects,
     .page_shell,
     .project_detail_shell,
@@ -72,8 +71,15 @@
         font-size: clamp(38px, 12vw, 58px);
     }
 
-    .hero_stage {
-        min-height: 340px;
+    .hero_stage img {
+        object-fit: contain;
+        object-position: center bottom;
+    }
+
+    .hero_stage::after {
+        background:
+            linear-gradient(180deg, rgba(5, 5, 5, 0.76) 0%, rgba(5, 5, 5, 0.58) 36%, rgba(5, 5, 5, 0.72) 100%),
+            linear-gradient(90deg, rgba(5, 5, 5, 0.48), rgba(5, 5, 5, 0.28));
     }
 
     .project_gallery img,

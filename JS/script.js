@@ -1,8 +1,8 @@
 const fallbackImage = "Assets/awakening-spirit.webp";
 
 const heroImages = [
-    "Assets/hero/gallery1.png",
-    fallbackImage,
+    "Assets/hero/rc_car_0.webp",
+    "Assets/hero/rc_car_1.webp",
 ];
 
 let projects = [];
@@ -430,22 +430,73 @@ function bindCopyButtons() {
     });
 }
 
+async function resolveImageSource(candidates) {
+    const sources = [...new Set([...(candidates || []), fallbackImage])];
+
+    for (const source of sources) {
+        const loaded = await imageExists(source);
+        if (loaded) {
+            return loaded;
+        }
+    }
+
+    return "";
+}
+
+function wait(ms) {
+    return new Promise((resolve) => window.setTimeout(resolve, ms));
+}
+
 async function startHeroSlideshow() {
     if (!heroImage) {
         return;
     }
 
-    await setImageFromCandidates(heroImage, heroImages, "JD hero preview");
+    const holdDuration = 2200;
+    const transitionDuration = 1000;
+    const heroStage = heroImage.parentElement;
+    const firstImage = await resolveImageSource(heroImages);
 
-    setInterval(async () => {
+    if (!firstImage || !heroStage) {
+        return;
+    }
+
+    heroImage.src = firstImage;
+    heroImage.alt = "JD hero preview";
+    heroImage.classList.add("active_hero_image");
+
+    while (heroImages.length > 1) {
+        await wait(holdDuration);
+
         heroIndex = (heroIndex + 1) % heroImages.length;
-        heroImage.classList.add("is_switching");
-        await setImageFromCandidates(heroImage, [
+        const nextSource = await resolveImageSource([
             heroImages[heroIndex],
             ...heroImages.filter((_, index) => index !== heroIndex)
-        ], "JD hero preview");
-        heroImage.classList.remove("is_switching");
-    }, 2200);
+        ]);
+
+        const nextSourceUrl = new URL(nextSource, window.location.href).href;
+        if (!nextSource || nextSourceUrl === heroImage.currentSrc) {
+            continue;
+        }
+
+        const nextImage = heroImage.cloneNode(false);
+        nextImage.src = nextSource;
+        nextImage.alt = "JD hero preview";
+        nextImage.classList.remove("active_hero_image", "leaving_hero_image", "image_switching");
+        heroStage.insertBefore(nextImage, heroImage.nextSibling);
+
+        window.requestAnimationFrame(() => {
+            heroImage.classList.add("leaving_hero_image");
+            heroImage.classList.remove("active_hero_image");
+            nextImage.classList.add("active_hero_image");
+        });
+
+        await wait(transitionDuration);
+        heroImage.src = nextSource;
+        heroImage.classList.remove("leaving_hero_image");
+        heroImage.classList.add("active_hero_image");
+        nextImage.remove();
+    }
 }
 
 document.addEventListener("DOMContentLoaded", async () => {

@@ -35,7 +35,6 @@
     "images": [
         "projects/fpv_car/images/thumbnail.png",
         "projects/fpv_car/images/gallery1.jpg",
-        "projects/fpv_car/images/gallery2.png",
-        "projects/fpv_car/images/gallery3.jpg"
+        "projects/fpv_car/images/gallery2.png"
     ]
 }
