@@ -1,0 +1,252 @@
+{
+  "title": "FPV Car Build Guide",
+  "source": "FPV Car Build Guide.docx",
+  "intro": [
+    "FPV Car Build Guide",
+    "Build your own smartphone controlled FPV RC Car with live video streaming. No app required. Just connect to WiFi and drive from your browser.",
+    "It has a Video Game like Control panel and Live video feed from ESP32-CAM.",
+    "The Car creates its own Wifi Network and by connecting to wifi you can open the Remote Controller from the browser.",
+    "It uses Websocket connection on top of HTTP for Low Latency Connection over Wifi."
+  ],
+  "highlights": [
+    {
+      "title": "Key features",
+      "items": [
+        "Wifi Control using any phone",
+        "Live Video Feed",
+        "Real-Time Controls over Websocket"
+      ]
+    },
+    {
+      "title": "You’ll Learn",
+      "items": [
+        "Web Integration - Iot",
+        "WebSocket & Wifi communication",
+        "Servo Control",
+        "H-Bridge Motor Driver",
+        "ESP32 Camera Streaming",
+        "Modular Embedded System Design"
+      ]
+    },
+    {
+      "title": "Time Required",
+      "items": [
+        "Hardware : 5-8 Hours",
+        "Software : 20 Minutes"
+      ]
+    },
+    {
+      "title": "Estimated Cost",
+      "items": [
+        "$30-45 USD",
+        "1500-2000 INR"
+      ]
+    }
+  ],
+  "supplies": [
+    "ESP32-CAM AI Thinker - 1",
+    "Toy RC Car Chassis - 1",
+    "ESP32 Dev Board - 1",
+    "SG90 Servo Motor - 1",
+    "5v Boost Converter - 1",
+    "3.7v Li-ion Battery - 1",
+    "Charging Module - 1",
+    "Power Switch - 1",
+    "BD139 Transistor - 2",
+    "BD140 Transistor - 2",
+    "BC547 Transistor - 2",
+    "BC557 Transistor - 2",
+    "60 Female Header Pins - 1",
+    "60 Male Header Pins - 1",
+    "JST Connector (Male & Female)",
+    "USB Data Cable for programming",
+    "Four 33 ohm, Four 1k resistors & two 470 ohm",
+    "General Purpose PCB",
+    "Single Strand Wires",
+    "Soldering Iron, Soldering Wire & flux"
+  ],
+  "sections": [
+    {
+      "title": "Step 1. Remove Cover",
+      "items": [
+        "Remove the four screws from the bottom of the RC car keeping the top plastic cover in place, and put the screws aside for later reassembly.",
+        "Remove the top cover. You will be exposed to the Inner electronics of the car as shown in the image."
+      ]
+    },
+    {
+      "title": "Step 2. Remove the Electronics",
+      "items": [
+        "Remove all the electronics except for the power switch and the rear motor.",
+        "After trying multiple toy RC cars I found that most steering motors consumed too much power and were difficult to control precisely. That's why I replaced it with a servo for more control and power efficiency.",
+        "After removing the steering motor place servo motor such that its rotating shaft center matches the wheels rotating gear center.",
+        "Fix the servo in place with two side taps or adhesive. We will check the servo using the Web Controller later on."
+      ]
+    },
+    {
+      "title": "Step 3. Making Main PCB Board",
+      "items": [
+        "I am making a Modular PCB but you can connect these things directly with esp32 if you want to. Just that the modular PCB is more convenient.",
+        "Cut General PCB Board such that it can easily be fitted on the Car body. Once you cut the appropriate part then start placing the components & connectors as per the Block diagram of Main PCB.",
+        "{ Block Diagram Of Main PCB }",
+        "{ Circuit Diagram Of Main PCB }",
+        "{ Servo Motor Pinout }",
+        "Overall Connectors and their purpose :",
+        "- 3 Male Header Pins for Servo Motor",
+        "- 4 Male Header Pins for Rear Motor",
+        "- 1 Screw Terminal for 5v Power input",
+        "- 1 Screw Terminal for Direct Battery Power Input",
+        "- 1 Screw Terminal for Powering Motor",
+        "- 1 JST connector for Powering Motor Driver",
+        "- 2 Header Pins for Powering ESP32-CAM",
+        "- 1 Power Switch",
+        "{ ESP32 Pinout }",
+        "ESP Pinouts for Reference",
+        "Pin 26  :- Servo Motor PWM Pin",
+        "Pin 19  :-  Q1 : BD140 (PNP) transistor for backward direction",
+        "Pin 18  :-  Q2 : BD140 (PNP) transistor for forward direction",
+        "Pin 5    :-  Q3 : BD139 (NPN) transistor for forward direction",
+        "Pin 21  :-  Q4 : BD139 (NPN) transistor for backward direction",
+        "Pin 34 :- Battery Voltage Monitoring If you want to add it.",
+        "Steps :",
+        "First Solder Two parallel 40 pin Female Header for ESP32 & then Place ESP32 for correct pin referencing of other components.",
+        "Place the 3 Male Header Pins for Servo motor on PCB such that Servo’s PWM pin   aligns with ESP32 Steer Out Pin ( GPIO 26 ). Solder Header Pin in place.",
+        "Now take 4 Male Header pins for Rear Motor control and place them parallely to the GPIO 19, 18, 5 & 21. Also solder them in place.",
+        "Now Solder all three Screw Terminals as shown in image for 5v Input, Battery input & Motor Driver Power. you can place them as per your convenience.",
+        "Also Solder JST Connector or Header Pin for Powering ESP CAM & If you’re not using it then you can skip this step.",
+        "You can Place Switch on the PCB or Extend it through Wire up to your choice. I have used it between the Charging Module Output & Volt booster.",
+        "Now Take Single Strand Wires and connect components with the Help of Circuit Diagram.",
+        "{  Main PCB Layout}",
+        "After soldering Connect Battery and Check if the ESP 32 is powering up."
+      ]
+    },
+    {
+      "title": "Step 4. Making Custom Motor Driver",
+      "items": [
+        "{ Picture of Motor Driver }",
+        "If you are using a ready made Motor Driver module You can Ignore this step and directly connect the motor driver using the pinout diagram shown above.",
+        "{ Main Motor Driver Block Diagram }",
+        "{ Main Motor Driver Circuit Diagram }",
+        "{ BD139 & BD140 Pinout }",
+        "Take a small PCB & Place two BD139 NPN transistors and two BD140 PNP transistors & Solder Them on PCB as shown in the reference Image. Both BD139 and BD140 have the same Pinouts. Correct Pin Polarity is Important.",
+        "Once you are confident about Transistor Placement, Solder them in place and interconnect them according to the Circuit Diagram. You can Use Screw Terminals for Connecting Motor if You want.",
+        "{ Current Amplifier Circuit Diagram }",
+        "{ BC547 & BC557 Pinout }",
+        "Now take another small piece of small PCB & Place the BC547 & BC557 Transistors by following the Circuit Diagram. Also the Pinout for BC547 & BC557 are the same. Once Placing the Transistors Place Its time to Place resistors.",
+        "Put the 33 ohm resistor in series with all the pins going from the current Amplifier to the Main Motor Driver and Put 1k ohm resistor in series with all the pins that are coming from esp32 to motor driver.",
+        "It's important to place correct value resistors otherwise your esp32 or other components may damage so double check the values and connections.",
+        "{ Motor Driver Layout }"
+      ]
+    },
+    {
+      "title": "Step 5. Connect Everything Together",
+      "items": [
+        "{ Image of Everything connected together }",
+        "You can use Jumper Wire or directly solder Female Header pins for Motor driver connection. Make sure that the correct pins are connected to the correct Transistors.",
+        "Now Connect the Servo Motor Pins. Turn on the Main Switch and check if everything is working as intended."
+      ]
+    },
+    {
+      "title": "Step 6. Setting Up the Software",
+      "items": [
+        "Install Arduino IDE if you don't have it already.",
+        "{ ESP32 Connected to PC }",
+        "Connect ESP32 Dev Board with the PC using Micro USB cable.",
+        "{ Image 1x Installing Board Supports }",
+        "Add ESP32 Board in ESP32 by going into",
+        "File -> Preferences -> Additional Board Manager URLs Paste following URL here : “https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json”",
+        "Then Click \"Ok\".",
+        "{ Image 2x Installing Board Supports }",
+        "Now Add Board support Tools -> Board -> Boards Manager, Search for esp32 and install esp32 by Espressif Systems & Install It.",
+        "{ Image 3x Installing Drivers }",
+        "Search for CP210x driver install on google and Install CP210x VCP Windows Driver from the silicon labs website.",
+        "https://www.silabs.com/software-and-tools/usb-to-uart-bridge-vcp-drivers?tab=downloads",
+        "If this Driver doesn't Work your board may have different chips so Install CP340 Driver.",
+        "https://sparks.gogo.co.nz/ch340.html?srsltid=AfmBOoqFrgVHV3i_JpFbHGfBbBkL_CMcwzBjEJOwl8L5Ie6VV0qmCTNt",
+        "Download Zip file -> Extract file -> Run Setup -> Install it.",
+        "{ Image 4x ESP Board Port detection }",
+        "Now Open Arduino IDE and select Board as ESP32 Dev Module. Select available COM ports and check if any ports show connected status.",
+        "Upload Code into the ESP32 Board.",
+        "Wait for : Hard resetting via RTS pin...",
+        "Once You see it the Code is Uploaded Successfully."
+      ]
+    },
+    {
+      "title": "Step 7. Programming the ESP32",
+      "items": [
+        "In order to Download Software Search for be1jd.github.io webpage.",
+        "Here You can also preview what the Web Controller will look like in your Mobile phone by Clicking on Preview Web Controller Button.",
+        "Now to Download the code go into Projects -> FPV Car -> Copy Code or Download Code.",
+        "{ Upload Logs }",
+        "After Pasting the Code Hit Upload Button. This may take some time to compile and upload the code.",
+        "{ Image of Serial Monitor Output }",
+        "Now press Ctrl+Shift+M ( Serial Monitor shortcut ) to open Serial Monitor. You should see the IP and other Logs as shown in the Image."
+      ]
+    },
+    {
+      "title": "Step 8. Connecting to Car’s Wifi",
+      "items": [
+        "{ Image of Connecting Wifi and Opening Web_controller }",
+        "Turn On wifi and Open Wifi Settings. You should see 192.168.4.1 as your Wifi Connect to it with the Password 12345678.",
+        "{ Image of Searching for 192.168.4.1 in Browser }",
+        "Once the Wifi is connected successfully Open Your Browser and Search for 192.168.4.1.",
+        "{ Image of Web Controller on mobile Browser }",
+        "If you see The Status on the Upper Left corner is green and say connected means you are connected to a car. And if you don’t see Connected Try turning off your Internet and only connected to Car’s wifi.",
+        "Upper Left Corner -> Status -> Green Light -> Connected.",
+        "Status -> Red Light or yellow light -> Turn off mobile Internet."
+      ]
+    },
+    {
+      "title": "Step 9. Hardware Check Mode",
+      "items": [
+        "At the Upper Right Corner There a Setting, Go to Settings -> Hardware Test -> All Test",
+        "This will Run Hardware Checks One by One, Check if every Functionality is working properly.",
+        "If Any Tests Fail There's possible Solutions in the Troubleshoot Section. And you can also directly contact me."
+      ]
+    },
+    {
+      "title": "Step 10. Troubleshoot",
+      "items": [
+        "If Everything is Working For You you Can Ignore This Step.",
+        "Power Supply Debug",
+        "Motor Driver Debug",
+        "Servo Motor Debug",
+        "Main PCB Debug",
+        "Software Debug"
+      ]
+    },
+    {
+      "title": "Step 11. Control Guide",
+      "items": [
+        "{ Image of Control Panel with Arrow Pointer info  }",
+        "Status Bar :",
+        "Status -> Shows Connection Status with Car (Adding manual Connect button)",
+        "Speed -> Shows Current Set Speed (Live speed would be cooler)",
+        "Steer   -> Shows Current Steering angle",
+        "Setting Menu :",
+        "Hardware Test -> Test Hardware Functionalities (All Test, Servo Test, Rear",
+        "Motor Test, Speed Test, Lights Test)",
+        "Debug Log       -> Let you See what Commands are being Send",
+        "Controls    -> You can Set position of the Buttons",
+        "Wifi Settings ->",
+        "Rename Wifi, Reset Password",
+        "Left Side Controls :",
+        "Speed Bar -> Let you select speed",
+        "Steer Bar   -> Let you Choose Steering angle (On Finger Up -> Center the steering)",
+        "Right Side Controls :",
+        "Race         -> Accelerate the Car",
+        "Backward -> Reverse Accelerate the Car",
+        "Brake        -> Apply Brakes ( Dynamic Motor Breaks )",
+        "Background Live Video Feed :",
+        "If ESP CAM is connected then It will show up automatically"
+      ]
+    },
+    {
+      "title": "Step 12. Thank You",
+      "items": [
+        "Hope you have made the complete Car & enjoy it as much as I enjoyed it when I first made it.",
+        "If you have any suggestions, Doubts or want to talk to me about Electronics or any other topics contact me.",
+        "{ Contacts }"
+      ]
+    }
+  ]
+}

@@ -153,34 +153,11 @@
                 <div class="projects_header">
                     <div class="section_heading">
                         <p class="eyebrow">All Builds</p>
-                    </div>
-                    <div class="view_toggle" role="group" aria-label="Project view mode">
-                        <button class="toggle_btn active" type="button" data-project-mode="showcase">Showcase</button>
-                        <button class="toggle_btn" type="button" data-project-mode="cards">Cards</button>
+                        <h1>Projects</h1>
                     </div>
                 </div>
 
-                <section class="project_showcase active_project_mode" data-project-view="showcase">
-                    <div class="selector_gallery" id="selector_gallery">
-                        <img id="selector_image" src="Assets/" alt="Selected project preview">
-                        <div class="selector_thumbs" id="selector_thumbs" aria-label="Project images"></div>
-                    </div>
-                    <article class="selector_details">
-                        <p class="project_meta" id="selector_meta">Select a project</p>
-                        <h2 id="selector_title">Project Library</h2>
-                        <p id="selector_description">Choose a project to preview its resources, guide, and demo.</p>
-                        <div class="feature_list" id="selector_features"></div>
-                        <div class="resource_strip" id="selector_resources"></div>
-                        <div class="summary_actions">
-                            <button class="primary_btn" id="selector_open" type="button">Open Full Guide</button>
-                            <a class="ghost_link" id="selector_demo" href="#" target="_blank" rel="noreferrer">Demo</a>
-                        </div>
-                    </article>
-                    <div class="project_queue" id="project_queue" aria-label="Project selection"></div>
-                </section>
-
-                <section class="project_cards" id="project_cards" data-project-view="cards" aria-label="Project cards">
-                </section>
+                <section class="project_list" id="project_list" aria-label="Project list"></section>
             </div>
         </section>
 
@@ -212,6 +189,19 @@
                             <h2>Build Flow</h2>
                             <ol id="detail_steps" class="step_list"></ol>
                         </section>
+
+                        <section class="guide_section" id="detail_doc_section">
+                            <h2>Full Build Guide</h2>
+                            <div class="guide_doc_content" id="detail_guide_content"></div>
+                        </section>
+
+                        <section class="guide_section code_section" id="firmware_code_section">
+                            <div class="code_header">
+                                <h2>Firmware Code</h2>
+                                <button class="copy_code_btn" id="copy_firmware_code" type="button">Copy</button>
+                            </div>
+                            <pre class="firmware_code_block"><code id="firmware_code"></code></pre>
+                        </section>
                     </div>
 
                     <aside class="download_panel">
@@ -224,6 +214,7 @@
                             rel="noreferrer">Open Demo</a>
                         <a class="ghost_link full_width" id="detail_live_link" href="#" target="_blank"
                             rel="noreferrer">Project Page</a>
+                        <button class="ghost_link full_width" id="detail_code_button" type="button">Code</button>
                         <button class="back_btn full_width" type="button" data-page="contact">Ask About Build</button>
                     </aside>
                 </article>
@@ -297,13 +288,61 @@
     </main>
 
     <footer class="site_footer">
-        <div>
-            <strong>be1JD</strong>
-            <span>Maker guides, embedded experiments, project downloads, and demos.</span>
+        <div class="footer_top">
+            <div class="footer_brand">
+                <span class="footer_mark" aria-hidden="true">JD</span>
+                <div>
+                    <strong>be1JD</strong>
+                    <p>Embedded builds, web-controlled electronics, project guides, demos, and download resources.</p>
+                </div>
+            </div>
+
+            <div class="footer_socials" aria-label="Social links">
+                <span>Follow / connect</span>
+                <div>
+                    <a href="mailto:jaypatel3000k@gmail.com" aria-label="Email JD">Mail</a>
+                    <a href="https://www.instagram.com/be1jd" target="_blank" rel="noreferrer" aria-label="Instagram">IG</a>
+                    <button type="button" data-page="contact">Contact</button>
+                </div>
+            </div>
         </div>
-        <div class="footer_contact">
-            <a href="mailto:jaypatel3000k@gmail.com">jaypatel3000k@gmail.com</a>
-            <button type="button" data-page="projects">Projects</button>
+
+        <div class="footer_grid">
+            <section>
+                <h2>Contact Info</h2>
+                <p>Email: <a href="mailto:jaypatel3000k@gmail.com">jaypatel3000k@gmail.com</a></p>
+                <p>Location: India</p>
+                <p>For project questions, demos, collaborations, and build guidance.</p>
+            </section>
+
+            <section>
+                <h2>Website</h2>
+                <button type="button" data-page="home">Home</button>
+                <button type="button" data-page="projects">Projects</button>
+                <button type="button" data-page="about">About</button>
+                <button type="button" data-page="contact">Contact</button>
+            </section>
+
+            <section>
+                <h2>Builds</h2>
+                <button type="button" data-page="projects">FPV Controller</button>
+                <button type="button" data-page="projects">Electronics Guides</button>
+                <button type="button" data-page="projects">Web Tools</button>
+                <button type="button" data-page="projects">Downloads</button>
+            </section>
+
+            <section>
+                <h2>Reach Out</h2>
+                <a href="mailto:jaypatel3000k@gmail.com">Ask about a build</a>
+                <button type="button" data-page="contact">Collaboration</button>
+                <button type="button" data-page="projects">View demos</button>
+            </section>
+        </div>
+
+        <div class="footer_bottom">
+            <span>2026 © be1JD. All rights reserved.</span>
+            <span>Personal maker lab and project documentation hub.</span>
+            <button type="button" data-page="contact">Contact JD</button>
         </div>
     </footer>
 

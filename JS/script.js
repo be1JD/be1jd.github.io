@@ -29,8 +29,7 @@ const featuredOpen = document.querySelector("#featured_open");
 const featuredDemo = document.querySelector("#featured_demo");
 const featuredPager = document.querySelector("#featured_pager");
 const gallery = document.querySelector("#home_project_gallery");
-const projectQueue = document.querySelector("#project_queue");
-const projectCards = document.querySelector("#project_cards");
+const projectList = document.querySelector("#project_list");
 
 async function loadProjects() {
     try {
@@ -44,8 +43,7 @@ async function loadProjects() {
         }));
 
         updateFeaturedProject(0);
-        renderProjectModes();
-        updateSelectorProject(0);
+        renderProjectList();
     } catch (error) {
         console.error("Failed to load projects", error);
     }
@@ -138,9 +136,13 @@ function renderResources(container, resources = []) {
     }));
 }
 
-function openProject(project) {
-    renderProjectDetail(project);
+async function openProject(project, target = "guide") {
+    await renderProjectDetail(project);
     showPage("project-detail");
+
+    if (target === "code") {
+        window.requestAnimationFrame(scrollToFirmwareCode);
+    }
 }
 
 function updateFeaturedProject(index) {
@@ -212,38 +214,29 @@ function renderFeaturedPager() {
     }));
 }
 
-function createProjectQueueItem(project, index) {
-    const button = document.createElement("button");
-    button.className = `queue_item${index === selectedProjectIndex ? " active" : ""}`;
-    button.type = "button";
-    button.addEventListener("click", () => updateSelectorProject(index));
+function createProjectListItem(project) {
+    const row = document.createElement("article");
+    row.className = "project_list_item";
+    row.addEventListener("click", (event) => {
+        if (!event.target.closest("a, button")) {
+            openProject(project);
+        }
+    });
+
+    const thumbWrap = document.createElement("div");
+    thumbWrap.className = "project_list_thumb";
 
     const image = document.createElement("img");
     image.alt = `${project.name} thumbnail`;
     setImageFromCandidates(image, project.images, `${project.name} thumbnail`);
+    thumbWrap.append(image);
+
+    const body = document.createElement("div");
+    body.className = "project_list_body";
 
     const meta = document.createElement("p");
     meta.className = "project_meta";
-    meta.textContent = `${project.tag} / ${project.progress}%`;
-
-    const title = document.createElement("h3");
-    title.textContent = project.name;
-
-    button.append(image, meta, title);
-    return button;
-}
-
-function createProjectCard(project) {
-    const card = document.createElement("article");
-    card.className = "project_card";
-
-    const image = document.createElement("img");
-    image.alt = `${project.name} thumbnail`;
-    setImageFromCandidates(image, project.images, `${project.name} thumbnail`);
-
-    const meta = document.createElement("p");
-    meta.className = "project_meta";
-    meta.textContent = project.tag;
+    meta.textContent = `${project.tag} / ${project.progress}% complete`;
 
     const title = document.createElement("h2");
     title.textContent = project.name;
@@ -251,73 +244,148 @@ function createProjectCard(project) {
     const description = document.createElement("p");
     description.textContent = project.description;
 
-    const button = document.createElement("button");
-    button.className = "primary_btn";
-    button.type = "button";
-    button.textContent = "Open Guide";
-    button.addEventListener("click", () => openProject(project));
+    const actions = document.createElement("div");
+    actions.className = "project_list_actions";
 
-    card.append(image, meta, title, description, button);
-    return card;
+    const guideButton = document.createElement("button");
+    guideButton.className = "primary_btn";
+    guideButton.type = "button";
+    guideButton.textContent = "Open Full Guide";
+    guideButton.addEventListener("click", () => openProject(project));
+    actions.append(guideButton);
+
+    if (project.codeHref) {
+        const codeButton = document.createElement("button");
+        codeButton.className = "ghost_link";
+        codeButton.type = "button";
+        codeButton.textContent = "Code";
+        codeButton.addEventListener("click", () => openProject(project, "code"));
+        actions.append(codeButton);
+    }
+
+    if (project.demoLink || project.liveLink) {
+        const demo = document.createElement("a");
+        demo.className = "ghost_link";
+        demo.href = project.demoLink || project.liveLink;
+        demo.target = "_blank";
+        demo.rel = "noreferrer";
+        demo.textContent = "Demo";
+        actions.append(demo);
+    }
+
+    body.append(meta, title, description, actions);
+    row.append(thumbWrap, body);
+    return row;
 }
 
-function renderProjectModes() {
-    projectQueue.replaceChildren(...projects.map(createProjectQueueItem));
-    projectCards.replaceChildren(...projects.map(createProjectCard));
-}
-
-function renderThumbs(container, project, selectedIndex, onSelect) {
-    container.replaceChildren(...project.images.map((src, index) => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.className = `thumb_btn${index === selectedIndex ? " active" : ""}`;
-        button.setAttribute("aria-label", `Show image ${index + 1}`);
-        button.addEventListener("click", () => onSelect(index));
-
-        const image = document.createElement("img");
-        image.src = src;
-        image.alt = "";
-        button.append(image);
-        return button;
-    }));
-}
-
-function updateSelectorProject(index) {
-    if (!projects.length) {
+function renderProjectList() {
+    if (!projectList) {
         return;
     }
 
-    selectedProjectIndex = (index + projects.length) % projects.length;
-    selectorImageIndex = 0;
-    const project = projects[selectedProjectIndex];
-
-    document.querySelector("#selector_meta").textContent = `${project.tag} / ${project.progress}% complete`;
-    document.querySelector("#selector_title").textContent = project.name;
-    document.querySelector("#selector_description").textContent = project.description;
-    renderTags(document.querySelector("#selector_features"), project.features);
-    renderResources(document.querySelector("#selector_resources"), project.resources);
-    setLinkState(document.querySelector("#selector_demo"), project.demoLink || project.liveLink, "Demo");
-    document.querySelector("#selector_open").onclick = () => openProject(project);
-
-    const renderSelectorThumbs = () => {
-        renderThumbs(document.querySelector("#selector_thumbs"), project, selectorImageIndex, (thumbIndex) => {
-            selectorImageIndex = thumbIndex;
-            setImageFromCandidates(document.querySelector("#selector_image"), [
-                project.images[selectorImageIndex],
-                ...project.images
-            ], `${project.name} preview`);
-            renderSelectorThumbs();
-        });
-    };
-
-    setImageFromCandidates(document.querySelector("#selector_image"), project.images, `${project.name} preview`);
-    renderSelectorThumbs();
-
-    document.querySelectorAll(".queue_item").forEach((item, itemIndex) => {
-        item.classList.toggle("active", itemIndex === selectedProjectIndex);
-    });
+    projectList.replaceChildren(...projects.map(createProjectListItem));
 }
 
+async function loadProjectGuide(project) {
+    if (!project.guideHref) {
+        return null;
+    }
+
+    try {
+        const response = await fetch(project.guideHref);
+        if (!response.ok) {
+            throw new Error(`Guide request failed: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Failed to load project guide", error);
+        return null;
+    }
+}
+
+async function loadProjectCode(project) {
+    if (!project.codeHref) {
+        return "";
+    }
+
+    try {
+        const response = await fetch(project.codeHref);
+        if (!response.ok) {
+            throw new Error(`Code request failed: ${response.status}`);
+        }
+        return await response.text();
+    } catch (error) {
+        console.error("Failed to load project code", error);
+        return "";
+    }
+}
+
+function createGuideGroup(title, items, ordered = false) {
+    const group = document.createElement("section");
+    group.className = "guide_doc_group";
+
+    const heading = document.createElement("h3");
+    heading.textContent = title;
+    group.append(heading);
+
+    if (!items || !items.length) {
+        return group;
+    }
+
+    if (items.length === 1) {
+        const paragraph = document.createElement("p");
+        paragraph.textContent = items[0];
+        group.append(paragraph);
+        return group;
+    }
+
+    const list = document.createElement(ordered ? "ol" : "ul");
+    items.forEach((text) => {
+        const item = document.createElement("li");
+        item.textContent = text;
+        list.append(item);
+    });
+    group.append(list);
+    return group;
+}
+
+function renderGuideContent(guide) {
+    const container = document.querySelector("#detail_guide_content");
+    const docSection = document.querySelector("#detail_doc_section");
+
+    if (!container || !docSection) {
+        return;
+    }
+
+    if (!guide) {
+        docSection.style.display = "none";
+        container.replaceChildren();
+        return;
+    }
+
+    docSection.style.display = "grid";
+    const blocks = [];
+    blocks.push(createGuideGroup("Introduction", guide.intro || []));
+
+    (guide.highlights || []).forEach((group) => {
+        blocks.push(createGuideGroup(group.title, group.items || []));
+    });
+
+    blocks.push(createGuideGroup("Supplies", guide.supplies || []));
+
+    (guide.sections || []).forEach((section) => {
+        blocks.push(createGuideGroup(section.title, section.items || [], true));
+    });
+
+    container.replaceChildren(...blocks);
+}
+
+function scrollToFirmwareCode() {
+    const section = document.querySelector("#firmware_code_section");
+    if (section && section.style.display !== "none") {
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+}
 function updateDetailImage(project, thumbIndex) {
     detailImageIndex = thumbIndex;
     setImageFromCandidates(document.querySelector("#detail_image"), [
@@ -333,7 +401,7 @@ function renderDetailThumbs(project) {
     });
 }
 
-function renderProjectDetail(project) {
+async function renderProjectDetail(project) {
     detailImageIndex = 0;
     document.querySelector("#detail_meta").textContent = `${project.tag} / ${project.folder}`;
     document.querySelector("#detail_title").textContent = project.name;
@@ -350,6 +418,45 @@ function renderProjectDetail(project) {
         return item;
     });
     document.querySelector("#detail_steps").replaceChildren(...steps);
+
+    const [guide, code] = await Promise.all([
+        loadProjectGuide(project),
+        loadProjectCode(project)
+    ]);
+    renderGuideContent(guide);
+
+    const codeSection = document.querySelector("#firmware_code_section");
+    const codeElement = document.querySelector("#firmware_code");
+    const copyButton = document.querySelector("#copy_firmware_code");
+    const codeButton = document.querySelector("#detail_code_button");
+
+    if (code && codeElement && codeSection && codeButton) {
+        codeElement.textContent = code;
+        codeSection.style.display = "grid";
+        codeButton.style.display = "inline-flex";
+        codeButton.onclick = scrollToFirmwareCode;
+        copyButton.onclick = async () => {
+            try {
+                await navigator.clipboard.writeText(code);
+                copyButton.textContent = "Copied";
+            } catch (error) {
+                copyButton.textContent = "Select";
+            }
+            window.setTimeout(() => {
+                copyButton.textContent = "Copy";
+            }, 1300);
+        };
+    } else {
+        if (codeElement) {
+            codeElement.textContent = "";
+        }
+        if (codeSection) {
+            codeSection.style.display = "none";
+        }
+        if (codeButton) {
+            codeButton.style.display = "none";
+        }
+    }
 
     setLinkState(document.querySelector("#detail_demo_link"), project.demoLink || project.liveLink, "Open Demo");
     setLinkState(document.querySelector("#detail_live_link"), project.liveLink, "Project Page");

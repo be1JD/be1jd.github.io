@@ -23,6 +23,14 @@
         {
             "label": "Guide Draft",
             "href": "projects/fpv_car/guide.md"
+        },
+        {
+            "label": "Build Guide",
+            "href": "projects/fpv_car/guide.json"
+        },
+        {
+            "label": "Firmware Code",
+            "href": "projects/fpv_car/firmware.ino"
         }
     ],
     "steps": [
@@ -36,5 +44,7 @@
         "projects/fpv_car/images/thumbnail.png",
         "projects/fpv_car/images/gallery1.jpg",
         "projects/fpv_car/images/gallery2.png"
-    ]
+    ],
+    "guideHref": "projects/fpv_car/guide.json",
+    "codeHref": "projects/fpv_car/firmware.ino"
 }

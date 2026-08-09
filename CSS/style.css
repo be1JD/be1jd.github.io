@@ -215,7 +215,7 @@ main {
 .section_heading h1,
 .about_content h1,
 .guide_main h1 {
-    font-size: clamp(42px, 7.2vw, 76px);
+    font-size: clamp(36px, 6.3vw, 64px);
     line-height: 1;
     letter-spacing: 0;
 }
@@ -225,7 +225,7 @@ main {
 .home_contact_summary p {
     max-width: 660px;
     color: var(--muted);
-    font-size: clamp(16px, 1.6vw, 20px);
+    font-size: clamp(14px, 1.35vw, 18px);
     line-height: 1.75;
 }
 
@@ -368,7 +368,7 @@ main {
 
 .section_heading h2,
 .home_contact_summary h2 {
-    font-size: clamp(30px, 5vw, 56px);
+    font-size: clamp(26px, 4.2vw, 44px);
     line-height: 1.06;
 }
 
@@ -394,7 +394,7 @@ main {
     border: 1px solid var(--line);
     background: rgba(255, 255, 255, 0.06);
     color: var(--text);
-    font-size: 20px;
+    font-size: 18px;
     transition: 0.2s;
 }
 
@@ -483,7 +483,7 @@ main {
 .project_summary h3,
 .selector_details h2 {
     margin-top: 4px;
-    font-size: clamp(28px, 4vw, 48px);
+    font-size: clamp(24px, 3.4vw, 38px);
     line-height: 1.05;
 }
 
@@ -623,39 +623,17 @@ main {
     align-items: start;
 }
 
-.view_toggle {
-    display: inline-flex;
-    gap: 4px;
-    padding: 4px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: rgba(255, 255, 255, 0.04);
-}
-
-.project_showcase {
-    display: none;
-    grid-template-columns: minmax(0, 0.92fr) minmax(310px, 0.78fr);
-    gap: 24px;
-    align-items: start;
-}
-
-.project_showcase.active_project_mode,
-.project_cards.active_project_mode {
+.project_list {
     display: grid;
+    gap: 16px;
 }
 
-.project_queue {
-    grid-column: 1 / -1;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 12px;
-}
-
-.queue_item,
-.project_card {
+.project_list_item {
     width: 100%;
     display: grid;
-    gap: 10px;
+    grid-template-columns: minmax(220px, 34%) minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
     padding: 12px;
     border: 1px solid var(--line);
     border-radius: var(--radius);
@@ -665,28 +643,55 @@ main {
     transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
 }
 
-.queue_item:hover,
-.queue_item.active,
-.project_card:hover {
+.project_list_item:hover {
     border-color: var(--accent);
     background: rgba(255, 255, 255, 0.08);
     transform: translateY(-1px);
 }
 
-.queue_item img,
-.project_card img {
+.project_list_thumb {
     width: 100%;
     aspect-ratio: 16 / 9;
-    display: block;
-    object-fit: cover;
+    overflow: hidden;
     border-radius: 6px;
     background: #101010;
 }
 
-.queue_item h3,
-.project_card h2 {
-    font-size: 18px;
-    line-height: 1.2;
+.project_list_thumb img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+}
+
+.project_list_body {
+    display: grid;
+    gap: 10px;
+    padding: 2px 4px 2px 0;
+}
+
+.project_list_body h2 {
+    font-size: clamp(20px, 2.6vw, 30px);
+    line-height: 1.18;
+}
+
+.project_list_body p:not(.project_meta) {
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.project_list_actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+}
+
+.project_list_actions .primary_btn,
+.project_list_actions .ghost_link {
+    min-height: 38px;
+    padding: 8px 12px;
+    font-size: 13px;
 }
 
 .selector_thumbs,
@@ -721,11 +726,6 @@ main {
     object-fit: cover;
 }
 
-.project_cards {
-    display: none;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 16px;
-}
 
 .project_detail_shell {
     padding-top: 32px;
@@ -754,7 +754,7 @@ main {
 .guide_section h2,
 .download_panel h2,
 .contact_card h2 {
-    font-size: 22px;
+    font-size: 20px;
 }
 
 .guide_section p,
@@ -766,6 +766,74 @@ main {
 
 .step_list {
     padding-left: 22px;
+}
+
+.guide_doc_content {
+    display: grid;
+    gap: 22px;
+}
+
+.guide_doc_group {
+    display: grid;
+    gap: 10px;
+}
+
+.guide_doc_group h3 {
+    color: var(--text);
+    font-size: 18px;
+}
+
+.guide_doc_group ul,
+.guide_doc_group ol {
+    display: grid;
+    gap: 7px;
+    padding-left: 22px;
+    color: var(--muted);
+    line-height: 1.65;
+}
+
+.guide_doc_group p {
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.code_section {
+    scroll-margin-top: 100px;
+}
+
+.code_header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.copy_code_btn {
+    min-height: 34px;
+    padding: 7px 12px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.firmware_code_block {
+    max-height: 560px;
+    overflow: auto;
+    padding: 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: #050505;
+    color: #e9edf0;
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.firmware_code_block code {
+    font-family: Consolas, "Courier New", monospace;
+    white-space: pre;
 }
 
 .resource_grid {
@@ -871,31 +939,138 @@ main {
 }
 
 .site_footer {
-    width: min(var(--container), calc(100% - 32px));
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 20px;
+    width: 100%;
+    display: grid;
+    gap: clamp(38px, 6vw, 70px);
     margin: 0 auto;
-    padding: 28px 0 38px;
+    padding: clamp(52px, 8vw, 92px) max(5vw, calc((100vw - var(--container)) / 2)) 34px;
     border-top: 1px solid var(--line);
+    background: #070707;
     color: var(--muted);
 }
 
-.site_footer div {
+.footer_top {
     display: grid;
-    gap: 5px;
+    grid-template-columns: minmax(260px, 0.9fr) minmax(260px, 1fr);
+    gap: clamp(28px, 8vw, 110px);
+    align-items: center;
+}
+
+.footer_brand {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.footer_mark {
+    width: 64px;
+    height: 64px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    background: linear-gradient(145deg, #313131, #050505);
+    color: var(--text);
+    font-size: 20px;
+    font-weight: 800;
 }
 
 .site_footer strong {
     color: var(--text);
+    font-size: clamp(26px, 4vw, 42px);
+    line-height: 1;
 }
 
-.footer_contact {
-    justify-items: end;
+.footer_brand p,
+.site_footer p,
+.footer_bottom {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.65;
 }
 
-.footer_contact a,
-.footer_contact button {
+.footer_socials {
+    display: grid;
+    gap: 18px;
+    justify-items: start;
+}
+
+.footer_socials > span {
+    color: var(--text);
     font-weight: 800;
+}
+
+.footer_socials div {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.footer_socials a,
+.footer_socials button {
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 800;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.footer_socials a:hover,
+.footer_socials button:hover {
+    color: var(--text);
+    border-color: var(--accent);
+    background: rgba(215, 167, 54, 0.10);
+}
+
+.footer_grid {
+    display: grid;
+    grid-template-columns: 1.35fr repeat(3, minmax(150px, 1fr));
+    gap: clamp(26px, 5vw, 70px);
+    align-items: start;
+}
+
+.footer_grid section {
+    display: grid;
+    gap: 16px;
+}
+
+.footer_grid h2 {
+    color: var(--text);
+    font-size: 16px;
+    font-weight: 800;
+}
+
+.footer_grid a,
+.footer_grid button,
+.footer_bottom button {
+    width: fit-content;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+}
+
+.footer_grid a:hover,
+.footer_grid button:hover,
+.footer_bottom button:hover {
+    color: var(--accent-strong);
+}
+
+.footer_bottom {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) minmax(220px, 1fr) auto;
+    gap: 18px;
+    align-items: center;
+    padding-top: 26px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
