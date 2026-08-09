@@ -137,11 +137,15 @@ function renderResources(container, resources = []) {
 }
 
 async function openProject(project, target = "guide") {
-    await renderProjectDetail(project);
-    showPage("project-detail");
+    try {
+        await renderProjectDetail(project);
+        showPage("project-detail");
 
-    if (target === "code") {
-        window.requestAnimationFrame(scrollToFirmwareCode);
+        if (target === "code") {
+            window.requestAnimationFrame(scrollToFirmwareCode);
+        }
+    } catch (error) {
+        console.error("Failed to open project detail", error);
     }
 }
 
@@ -218,7 +222,8 @@ function createProjectListItem(project) {
     const row = document.createElement("article");
     row.className = "project_list_item";
     row.addEventListener("click", (event) => {
-        if (!event.target.closest("a, button")) {
+        const target = event.target instanceof Element ? event.target.closest("a, button") : null;
+        if (!target) {
             openProject(project);
         }
     });
@@ -251,7 +256,11 @@ function createProjectListItem(project) {
     guideButton.className = "primary_btn";
     guideButton.type = "button";
     guideButton.textContent = "Open Full Guide";
-    guideButton.addEventListener("click", () => openProject(project));
+    guideButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        openProject(project);
+    });
     actions.append(guideButton);
 
     if (project.codeHref) {
@@ -259,7 +268,11 @@ function createProjectListItem(project) {
         codeButton.className = "ghost_link";
         codeButton.type = "button";
         codeButton.textContent = "Code";
-        codeButton.addEventListener("click", () => openProject(project, "code"));
+        codeButton.addEventListener("click", (event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            openProject(project, "code");
+        });
         actions.append(codeButton);
     }
 
@@ -394,6 +407,27 @@ function updateDetailImage(project, thumbIndex) {
     ], `${project.name} cover`);
 }
 
+function renderThumbs(container, project, activeIndex, onSelect) {
+    if (!container || !project || !Array.isArray(project.images)) {
+        return;
+    }
+
+    const thumbs = project.images.map((source, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `thumb_btn${index === activeIndex ? " active" : ""}`;
+        button.addEventListener("click", () => onSelect(index));
+
+        const image = document.createElement("img");
+        image.src = source;
+        image.alt = `${project.name} thumbnail ${index + 1}`;
+        button.append(image);
+        return button;
+    });
+
+    container.replaceChildren(...thumbs);
+}
+
 function renderDetailThumbs(project) {
     renderThumbs(document.querySelector("#detail_thumbs"), project, detailImageIndex, (thumbIndex) => {
         updateDetailImage(project, thumbIndex);
@@ -434,18 +468,31 @@ async function renderProjectDetail(project) {
         codeElement.textContent = code;
         codeSection.style.display = "grid";
         codeButton.style.display = "inline-flex";
-        codeButton.onclick = scrollToFirmwareCode;
-        copyButton.onclick = async () => {
-            try {
-                await navigator.clipboard.writeText(code);
-                copyButton.textContent = "Copied";
-            } catch (error) {
-                copyButton.textContent = "Select";
-            }
-            window.setTimeout(() => {
-                copyButton.textContent = "Copy";
-            }, 1300);
-        };
+        codeButton.replaceWith(codeButton.cloneNode(true));
+        const newCodeButton = document.querySelector("#detail_code_button");
+        if (newCodeButton) {
+            newCodeButton.addEventListener("click", (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                openProject(project, "code");
+            });
+        }
+
+        copyButton.replaceWith(copyButton.cloneNode(true));
+        const newCopyButton = document.querySelector("#copy_firmware_code");
+        if (newCopyButton) {
+            newCopyButton.addEventListener("click", async () => {
+                try {
+                    await navigator.clipboard.writeText(code);
+                    newCopyButton.textContent = "Copied";
+                } catch (error) {
+                    newCopyButton.textContent = "Select";
+                }
+                window.setTimeout(() => {
+                    newCopyButton.textContent = "Copy";
+                }, 1300);
+            });
+        }
     } else {
         if (codeElement) {
             codeElement.textContent = "";

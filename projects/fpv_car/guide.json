@@ -10,6 +10,16 @@
   ],
   "highlights": [
     {
+      "title": "Guide Philosophy",
+      "items": [
+        "Why Different Product Levels?",
+        "The average person wants a complete working product, not just a manual or guide without parts.",
+        "This build guide is designed for DIY makers, students, and hobbyists with hands-on electronics.",
+        "It focuses on modular wiring, browser control, and practical FPV car systems.",
+        "The content shows both hardware setup and firmware code for a full project experience."
+      ]
+    },
+    {
       "title": "Key features",
       "items": [
         "Wifi Control using any phone",
@@ -41,6 +51,16 @@
         "$30-45 USD",
         "1500-2000 INR"
       ]
+    },
+    {
+      "title": "Build Guide Focus",
+      "items": [
+        "Why Different Product Levels? The average person wants a complete working product, not just a manual or a build guide without parts.",
+        "Levels: Kids, DIY/Makers, Students, Professionals.",
+        "This guide is made for DIY makers, students, and hobbyists who want a practical electronics build experience.",
+        "Core priority is build guide first, then STEM kit + guide, then a finished product.",
+        "Core features include Smart RC Car wifi/web control, live video feed, and hardware config via web controller."
+      ]
     }
   ],
   "supplies": [
@@ -66,6 +86,34 @@
     "Soldering Iron, Soldering Wire & flux"
   ],
   "sections": [
+    {
+      "title": "Guide Document Overview",
+      "items": [
+        "Why Different Product Levels?",
+        "Note: The average person wants a complete working product, not just a manual or a build guide without parts & the maker wants an enjoyable Building Experience.",
+        "Levels: 1 - Kids, 2 - DIY/Makers, 3 - Students, 4 - Professionals.",
+        "STEM Kits are hands-on learning packages designed to teach Science, Technology, Engineering, and Mathematics through practical, interactive projects.",
+        "DIY Maker Kits need a build guide with modular components and minimal trouble.",
+        "Build manuals for professionals reduce abstraction and focus on complete product outcomes.",
+        "JetRay is the FPV Car concept with smart RC web control, live video feed, and hardware config using a web controller.",
+        "Core priority: build guide first, STEM kit + build guide second, full finished product third."
+      ]
+    },
+    {
+      "title": "Extra Notes and Advanced Guide",
+      "items": [
+        "Step 4. Building Motor Driver (optional)",
+        "Make your own motor driver using transistors, resistors & diodes.",
+        "Step 5. Connect all modules.",
+        "Connect all modules like battery, ESP32, motor driver, servo, and sensors.",
+        "Step 6. Setup Arduino for Programming.",
+        "How to include all the dependencies for ESP32 programming.",
+        "Step 7. Program Uploading.",
+        "Download and upload instructions for the firmware.",
+        "Step 8. Troubleshooting.",
+        "Check hardware instructions and check software instructions if needed."
+      ]
+    },
     {
       "title": "Step 1. Remove Cover",
       "items": [
