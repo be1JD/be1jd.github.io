@@ -13,6 +13,9 @@
     --accent: #d7a736;
     --accent-strong: #f1c75b;
     --accent-cool: #7aa8ff;
+    --accent-pink: #ec6fa8;
+    --accent-pink-strong: #ff8fbe;
+    --focus-ring: #7aa8ff;
     --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
     --radius: 8px;
     --nav-height: 50px;
@@ -60,6 +63,43 @@ a {
 
 img {
     max-width: 100%;
+}
+
+.skip_link {
+    position: fixed;
+    top: -60px;
+    left: 12px;
+    z-index: 1000;
+    padding: 12px 18px;
+    border-radius: 6px;
+    background: var(--accent-strong);
+    color: #0a0a0a;
+    font-weight: 800;
+    transition: top 0.2s ease;
+}
+
+.skip_link:focus {
+    top: 12px;
+}
+
+:focus-visible {
+    outline: 2px solid var(--focus-ring);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    html {
+        scroll-behavior: auto;
+    }
 }
 
 .site_header {
@@ -145,9 +185,8 @@ img {
 .toggle_btn.active,
 .footer_contact button:hover {
     color: var(--text);
-    /* background: rgba(255, 255, 255, 0.08); */
-    background: rgb(0 234 255 / 53%);
-    border-color: var(--line);
+    background: rgba(122, 168, 255, 0.16);
+    border-color: var(--accent-cool);
 }
 
 .menu_toggle {
@@ -263,6 +302,30 @@ main {
 .ghost_link {
     background: transparent;
     color: var(--text);
+}
+
+.code_btn {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border: 1px solid var(--accent-pink);
+    border-radius: 6px;
+    background: rgba(236, 111, 168, 0.14);
+    color: var(--accent-pink-strong);
+    font-size: 14px;
+    font-weight: 800;
+    font-family: Consolas, "Courier New", monospace;
+    transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.code_btn:hover {
+    background: var(--accent-pink);
+    border-color: var(--accent-pink);
+    color: #0a0a0a;
+    transform: translateY(-1px);
 }
 
 .hero_stage {
@@ -801,7 +864,7 @@ main {
 }
 
 .code_section {
-    scroll-margin-top: 100px;
+    scroll-margin-top: 140px;
 }
 
 .code_header {
@@ -812,21 +875,32 @@ main {
 }
 
 .copy_code_btn {
-    min-height: 34px;
-    padding: 7px 12px;
-    border: 1px solid var(--line);
+    min-height: 38px;
+    padding: 8px 14px;
+    border: 1px solid var(--accent-pink);
     border-radius: 6px;
-    background: rgba(255, 255, 255, 0.06);
-    color: var(--text);
-    font-size: 12px;
+    background: rgba(236, 111, 168, 0.14);
+    color: var(--accent-pink-strong);
+    font-size: 13px;
     font-weight: 800;
+}
+
+.copy_code_btn:hover {
+    background: var(--accent-pink);
+    color: #0a0a0a;
+}
+
+.copy_code_btn.copied {
+    background: #2cd97a;
+    border-color: #2cd97a;
+    color: #06210f;
 }
 
 .firmware_code_block {
     max-height: 560px;
     overflow: auto;
     padding: 16px;
-    border: 1px solid var(--line);
+    border: 1px solid var(--accent-pink);
     border-radius: var(--radius);
     background: #050505;
     color: #e9edf0;
@@ -839,6 +913,112 @@ main {
     white-space: pre;
 }
 
+.detail_tabs {
+    display: flex;
+    gap: 6px;
+    margin: 4px 0 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--line);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.detail_tab_btn {
+    flex: 0 0 auto;
+    min-height: 42px;
+    padding: 9px 16px;
+    border: 1px solid transparent;
+    border-radius: 6px 6px 0 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.detail_tab_btn:hover {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.detail_tab_btn.active {
+    color: var(--bg);
+    background: var(--accent-cool);
+    border-color: var(--accent-cool);
+}
+
+.detail_tab_btn.code_tab_btn {
+    font-family: Consolas, "Courier New", monospace;
+    color: var(--accent-pink-strong);
+}
+
+.detail_tab_btn.code_tab_btn.active {
+    color: #0a0a0a;
+    background: var(--accent-pink);
+    border-color: var(--accent-pink);
+}
+
+.project_tab_panel {
+    display: none;
+    animation: fadeInTab 0.2s ease;
+}
+
+.project_tab_panel.active_project_mode {
+    display: grid;
+    gap: 22px;
+}
+
+@keyframes fadeInTab {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.quick_action_bar {
+    position: sticky;
+    top: calc(var(--nav-height) + 24px);
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: min(var(--container), calc(100% - 32px));
+    margin: 0 auto;
+    padding: 10px 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: rgba(8, 8, 8, 0.86);
+    backdrop-filter: blur(18px);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.32);
+}
+
+.quick_action_title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 800;
+    color: var(--muted);
+}
+
+.quick_action_buttons {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 8px;
+}
+
+.quick_action_buttons .primary_btn,
+.quick_action_buttons .code_btn {
+    min-height: 38px;
+    padding: 8px 14px;
+    font-size: 13px;
+}
+
+.project_detail_page .quick_action_bar {
+    margin-top: 8px;
+    margin-bottom: -8px;
+}
+
 .resource_grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -847,7 +1027,7 @@ main {
 
 .download_panel {
     position: sticky;
-    top: 104px;
+    top: 168px;
     display: grid;
     gap: 14px;
     padding: 18px;

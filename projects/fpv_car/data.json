@@ -17,19 +17,15 @@
     ],
     "resources": [
         {
-            "label": "Control Demo",
+            "label": "Open Web Controller Demo",
             "href": "FPV_Car/RC_Control_4.3.html"
         },
         {
-            "label": "Guide Draft",
-            "href": "projects/fpv_car/guide.md"
+            "label": "Download Build Guide (PDF)",
+            "href": "FPV_Car_Build_Guide.pdf"
         },
         {
-            "label": "Build Guide",
-            "href": "projects/fpv_car/guide.json"
-        },
-        {
-            "label": "Firmware Code",
+            "label": "View Firmware Code",
             "href": "projects/fpv_car/firmware.ino"
         }
     ],

@@ -19,6 +19,30 @@
 }
 
 @media only screen and (max-width: 720px) {
+    .quick_action_bar {
+        top: calc(var(--nav-height) + 30px);
+        padding: 8px 12px;
+    }
+
+    .quick_action_title {
+        display: none;
+    }
+
+    .quick_action_buttons {
+        width: 100%;
+        justify-content: stretch;
+    }
+
+    .quick_action_buttons .primary_btn,
+    .quick_action_buttons .code_btn {
+        flex: 1;
+    }
+
+    .detail_tab_btn {
+        font-size: 13px;
+        padding: 8px 12px;
+    }
+
     .site_header {
         padding: 10px 12px;
     }
@@ -134,7 +158,8 @@
 
     .primary_btn,
     .ghost_btn,
-    .ghost_link {
+    .ghost_link,
+    .code_btn {
         width: 100%;
     }
 

@@ -18,6 +18,7 @@
 </head>
 
 <body>
+    <a class="skip_link" href="#main_content">Skip to main content</a>
     <header class="site_header">
         <nav class="top_nav" aria-label="Primary navigation">
             <button class="brand_button" type="button" data-page="home" aria-label="Open home">
@@ -42,7 +43,7 @@
         </nav>
     </header>
 
-    <main>
+    <main id="main_content">
         <section class="page_view home_page active_page" data-view="home">
             <section class="hero" aria-label="Welcome">
                 <div class="hero_copy">
@@ -59,7 +60,7 @@
                 </div>
 
                 <div class="hero_stage" aria-label="Interactive technology preview">
-                    <img id="hero_image" src="Assets/hero/gallery1.png" alt="Maker project preview" fetchpriority="high">
+                    <img id="hero_image" src="Assets/hero/rc_car_0.webp" alt="Maker project preview" fetchpriority="high">
                     <!-- <div class="circuit_overlay" aria-hidden="true"> -->
                     <div aria-hidden="true">
                         <span></span>
@@ -100,8 +101,9 @@
                         <p id="featured_description">Loading the project library.</p>
                         <div class="feature_list" id="featured_features"></div>
                         <div class="summary_actions">
-                            <button class="primary_btn" type="button" id="featured_open">Open Project</button>
-                            <a class="ghost_link" id="featured_demo" href="#" target="_blank" rel="noreferrer">Demo</a>
+                            <a class="primary_btn" id="featured_demo" href="#" target="_blank" rel="noreferrer">▶ View Demo</a>
+                            <button class="code_btn" type="button" id="featured_code">&lt;/&gt; Get Code</button>
+                            <button class="ghost_link" type="button" id="featured_open">Full Guide</button>
                             <div class="project_pager" id="featured_pager" aria-label="Project carousel"></div>
                         </div>
                     </article>
@@ -162,8 +164,16 @@
         </section>
 
         <section class="page_view project_detail_page" data-view="project-detail" aria-label="Project detail">
+            <div class="quick_action_bar" id="quick_action_bar" aria-label="Quick project actions">
+                <button class="back_btn" type="button" data-page="projects">&larr; Back</button>
+                <span class="quick_action_title" id="quick_action_title">Project</span>
+                <div class="quick_action_buttons">
+                    <a class="primary_btn" id="quick_demo_link" href="#" target="_blank" rel="noreferrer">▶ Demo</a>
+                    <button class="code_btn" id="quick_code_button" type="button">&lt;/&gt; Code</button>
+                </div>
+            </div>
+
             <div class="project_detail_shell">
-                <button class="back_btn" type="button" data-page="projects">Back to projects</button>
                 <article class="guide_layout">
                     <div class="guide_main">
                         <div class="detail_media">
@@ -175,33 +185,54 @@
                         <h1 id="detail_title">Project Title</h1>
                         <p id="detail_description" class="guide_intro"></p>
 
-                        <section class="guide_section">
-                            <h2>Overview</h2>
-                            <p id="detail_overview"></p>
-                        </section>
+                        <div class="detail_tabs" id="detail_tabs" role="tablist" aria-label="Project sections">
+                            <button class="detail_tab_btn active" type="button" role="tab" aria-selected="true"
+                                data-project-mode="overview" id="tab_btn_overview">Overview</button>
+                            <button class="detail_tab_btn" type="button" role="tab" aria-selected="false"
+                                data-project-mode="guide" id="tab_btn_guide">Build Guide</button>
+                            <button class="detail_tab_btn code_tab_btn" type="button" role="tab" aria-selected="false"
+                                data-project-mode="code" id="tab_btn_code" style="display: none;">&lt;/&gt; Firmware
+                                Code</button>
+                        </div>
 
-                        <section class="guide_section">
-                            <h2>What this page provides</h2>
-                            <div class="resource_grid" id="detail_resources"></div>
-                        </section>
+                        <div data-project-view="overview" class="project_tab_panel active_project_mode" role="tabpanel"
+                            aria-labelledby="tab_btn_overview">
+                            <section class="guide_section" style="border-top: 0;">
+                                <h2>Overview</h2>
+                                <p id="detail_overview"></p>
+                            </section>
 
-                        <section class="guide_section">
-                            <h2>Build Flow</h2>
-                            <ol id="detail_steps" class="step_list"></ol>
-                        </section>
+                            <section class="guide_section">
+                                <h2>What this page provides</h2>
+                                <div class="resource_grid" id="detail_resources"></div>
+                            </section>
 
-                        <section class="guide_section" id="detail_doc_section">
-                            <h2>Full Build Guide</h2>
-                            <div class="guide_doc_content" id="detail_guide_content"></div>
-                        </section>
+                            <section class="guide_section">
+                                <h2>Build Flow</h2>
+                                <ol id="detail_steps" class="step_list"></ol>
+                            </section>
+                        </div>
 
-                        <section class="guide_section code_section" id="firmware_code_section">
-                            <div class="code_header">
-                                <h2>Firmware Code</h2>
-                                <button class="copy_code_btn" id="copy_firmware_code" type="button">Copy</button>
-                            </div>
-                            <pre class="firmware_code_block"><code id="firmware_code"></code></pre>
-                        </section>
+                        <div data-project-view="guide" class="project_tab_panel" role="tabpanel"
+                            aria-labelledby="tab_btn_guide">
+                            <section class="guide_section" id="detail_doc_section" style="border-top: 0;">
+                                <h2>Full Build Guide</h2>
+                                <div class="guide_doc_content" id="detail_guide_content"></div>
+                            </section>
+                        </div>
+
+                        <div data-project-view="code" class="project_tab_panel" role="tabpanel"
+                            aria-labelledby="tab_btn_code">
+                            <section class="guide_section code_section" id="firmware_code_section"
+                                style="border-top: 0;">
+                                <div class="code_header">
+                                    <h2>Firmware Code</h2>
+                                    <button class="copy_code_btn" id="copy_firmware_code" type="button"
+                                        aria-live="polite">Copy code</button>
+                                </div>
+                                <pre class="firmware_code_block"><code id="firmware_code"></code></pre>
+                            </section>
+                        </div>
                     </div>
 
                     <aside class="download_panel">
@@ -211,10 +242,11 @@
                         <h2>Project Hub</h2>
                         <p id="detail_price">Open resources</p>
                         <a class="primary_btn full_width" id="detail_demo_link" href="#" target="_blank"
-                            rel="noreferrer">Open Demo</a>
+                            rel="noreferrer">▶ Open Demo</a>
+                        <button class="code_btn full_width" id="detail_code_button" type="button">&lt;/&gt; Firmware
+                            Code</button>
                         <a class="ghost_link full_width" id="detail_live_link" href="#" target="_blank"
                             rel="noreferrer">Project Page</a>
-                        <button class="ghost_link full_width" id="detail_code_button" type="button">Code</button>
                         <button class="back_btn full_width" type="button" data-page="contact">Ask About Build</button>
                     </aside>
                 </article>
@@ -340,7 +372,7 @@
         </div>
 
         <div class="footer_bottom">
-            <span>2026 � be1JD. All rights reserved.</span>
+            <span>2026 &copy; be1JD. All rights reserved.</span>
             <span>Personal maker lab and project documentation hub.</span>
             <button type="button" data-page="contact">Contact JD</button>
         </div>

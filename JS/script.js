@@ -8,6 +8,9 @@ const heroImages = [
 let projects = [];
 let featuredProjectIndex = 0;
 let selectedProjectIndex = 0;
+let selectedDetailIndex = 0;
+let isRoutingFromHash = false;
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 let activeGalleryIndex = 0;
 let selectorImageIndex = 0;
 let detailImageIndex = 0;
@@ -26,6 +29,7 @@ const featuredTitle = document.querySelector("#featured_title");
 const featuredDescription = document.querySelector("#featured_description");
 const featuredFeatures = document.querySelector("#featured_features");
 const featuredOpen = document.querySelector("#featured_open");
+const featuredCode = document.querySelector("#featured_code");
 const featuredDemo = document.querySelector("#featured_demo");
 const featuredPager = document.querySelector("#featured_pager");
 const gallery = document.querySelector("#home_project_gallery");
@@ -54,7 +58,7 @@ function closeMenu() {
     menuToggle.setAttribute("aria-expanded", "false");
 }
 
-function showPage(pageName) {
+function showPage(pageName, routeInfo) {
     pageViews.forEach((view) => {
         view.classList.toggle("active_page", view.dataset.view === pageName);
     });
@@ -64,7 +68,60 @@ function showPage(pageName) {
     });
 
     closeMenu();
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
+
+    if (routeInfo !== null) {
+        updateRoute(routeInfo || { page: pageName });
+    }
+}
+
+function updateRoute(routeInfo) {
+    if (isRoutingFromHash) {
+        return;
+    }
+    const hash = routeInfo.project
+        ? `#/project/${routeInfo.project}${routeInfo.tab && routeInfo.tab !== "overview" ? `/${routeInfo.tab}` : ""}`
+        : `#/${routeInfo.page && routeInfo.page !== "home" ? routeInfo.page : ""}`;
+
+    if (window.location.hash !== hash) {
+        window.history.pushState(null, "", hash || "#/");
+    }
+}
+
+function parseRoute() {
+    const raw = window.location.hash.replace(/^#\/?/, "");
+    const parts = raw.split("/").filter(Boolean);
+
+    if (!parts.length) {
+        return { page: "home" };
+    }
+
+    if (parts[0] === "project" && parts[1]) {
+        return { page: "project-detail", project: parts[1], tab: parts[2] || "overview" };
+    }
+
+    return { page: parts[0] };
+}
+
+async function applyRoute() {
+    const route = parseRoute();
+    isRoutingFromHash = true;
+
+    try {
+        if (route.page === "project-detail" && route.project) {
+            const project = projects.find((item) => item.folder === route.project);
+            if (project) {
+                await openProject(project, route.tab || "overview", null);
+            } else {
+                showPage("home", null);
+            }
+        } else {
+            const validPages = ["home", "projects", "about", "contact"];
+            showPage(validPages.includes(route.page) ? route.page : "home", null);
+        }
+    } finally {
+        isRoutingFromHash = false;
+    }
 }
 
 function imageExists(src) {
@@ -136,17 +193,42 @@ function renderResources(container, resources = []) {
     }));
 }
 
-async function openProject(project, target = "guide") {
+async function openProject(project, target = "overview", pushHistory = true) {
     try {
         await renderProjectDetail(project);
-        showPage("project-detail");
-
-        if (target === "code") {
+        showPage("project-detail", pushHistory === false ? null : { project: project.folder, tab: target });
+        const resolvedTarget = target === "code" && !project.codeHref ? "overview" : target;
+        setProjectTab(resolvedTarget);
+        window.scrollTo({ top: 0, behavior: "auto" });
+        if (resolvedTarget === "code") {
             window.requestAnimationFrame(scrollToFirmwareCode);
         }
     } catch (error) {
         console.error("Failed to open project detail", error);
     }
+}
+
+function setProjectTab(mode) {
+    const tabs = document.querySelectorAll("#detail_tabs [data-project-mode]");
+    if (!tabs.length) {
+        return;
+    }
+
+    let resolvedMode = mode;
+    const targetTab = document.querySelector(`#detail_tabs [data-project-mode="${mode}"]`);
+    if (!targetTab || targetTab.style.display === "none") {
+        resolvedMode = "overview";
+    }
+
+    tabs.forEach((tab) => {
+        const isActive = tab.dataset.projectMode === resolvedMode;
+        tab.classList.toggle("active", isActive);
+        tab.setAttribute("aria-selected", String(isActive));
+    });
+
+    document.querySelectorAll("[data-project-view]").forEach((view) => {
+        view.classList.toggle("active_project_mode", view.dataset.projectView === resolvedMode);
+    });
 }
 
 function updateFeaturedProject(index) {
@@ -163,9 +245,13 @@ function updateFeaturedProject(index) {
     featuredDescription.textContent = project.description;
     setProgress(featuredProgress, project.progress);
     renderTags(featuredFeatures, project.features);
-    setLinkState(featuredDemo, project.demoLink || project.liveLink, "Demo");
+    setLinkState(featuredDemo, project.demoLink || project.liveLink, "▶ View Demo");
 
     featuredOpen.onclick = () => openProject(project);
+    if (featuredCode) {
+        featuredCode.style.display = project.codeHref ? "inline-flex" : "none";
+        featuredCode.onclick = () => openProject(project, "code");
+    }
     renderFeaturedPager();
     updateFeaturedImage();
     restartGalleryTimer();
@@ -194,6 +280,9 @@ function moveGallery(direction) {
 
 function restartGalleryTimer() {
     window.clearInterval(galleryTimer);
+    if (prefersReducedMotion) {
+        return;
+    }
     galleryTimer = window.setInterval(() => {
         if (projects.length) {
             const imageCount = projects[featuredProjectIndex].images.length;
@@ -252,22 +341,21 @@ function createProjectListItem(project) {
     const actions = document.createElement("div");
     actions.className = "project_list_actions";
 
-    const guideButton = document.createElement("button");
-    guideButton.className = "primary_btn";
-    guideButton.type = "button";
-    guideButton.textContent = "Open Full Guide";
-    guideButton.addEventListener("click", (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        openProject(project);
-    });
-    actions.append(guideButton);
+    if (project.demoLink || project.liveLink) {
+        const demo = document.createElement("a");
+        demo.className = "primary_btn";
+        demo.href = project.demoLink || project.liveLink;
+        demo.target = "_blank";
+        demo.rel = "noreferrer";
+        demo.textContent = "▶ View Demo";
+        actions.append(demo);
+    }
 
     if (project.codeHref) {
         const codeButton = document.createElement("button");
-        codeButton.className = "ghost_link";
+        codeButton.className = "code_btn";
         codeButton.type = "button";
-        codeButton.textContent = "Code";
+        codeButton.textContent = "</> Get Code";
         codeButton.addEventListener("click", (event) => {
             event.preventDefault();
             event.stopPropagation();
@@ -276,15 +364,16 @@ function createProjectListItem(project) {
         actions.append(codeButton);
     }
 
-    if (project.demoLink || project.liveLink) {
-        const demo = document.createElement("a");
-        demo.className = "ghost_link";
-        demo.href = project.demoLink || project.liveLink;
-        demo.target = "_blank";
-        demo.rel = "noreferrer";
-        demo.textContent = "Demo";
-        actions.append(demo);
-    }
+    const guideButton = document.createElement("button");
+    guideButton.className = "ghost_link";
+    guideButton.type = "button";
+    guideButton.textContent = "Full Guide";
+    guideButton.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        openProject(project);
+    });
+    actions.append(guideButton);
 
     body.append(meta, title, description, actions);
     row.append(thumbWrap, body);
@@ -437,6 +526,7 @@ function renderDetailThumbs(project) {
 
 async function renderProjectDetail(project) {
     detailImageIndex = 0;
+    selectedDetailIndex = projects.indexOf(project);
     document.querySelector("#detail_meta").textContent = `${project.tag} / ${project.folder}`;
     document.querySelector("#detail_title").textContent = project.name;
     document.querySelector("#detail_description").textContent = project.description;
@@ -463,50 +553,71 @@ async function renderProjectDetail(project) {
     const codeElement = document.querySelector("#firmware_code");
     const copyButton = document.querySelector("#copy_firmware_code");
     const codeButton = document.querySelector("#detail_code_button");
+    const codeTabButton = document.querySelector("#tab_btn_code");
+    const quickCodeButton = document.querySelector("#quick_code_button");
 
-    if (code && codeElement && codeSection && codeButton) {
+    const hasCode = Boolean(code && codeElement);
+
+    if (hasCode) {
         codeElement.textContent = code;
-        codeSection.style.display = "grid";
-        codeButton.style.display = "inline-flex";
-        codeButton.replaceWith(codeButton.cloneNode(true));
-        const newCodeButton = document.querySelector("#detail_code_button");
-        if (newCodeButton) {
-            newCodeButton.addEventListener("click", (event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                openProject(project, "code");
-            });
-        }
-
-        copyButton.replaceWith(copyButton.cloneNode(true));
-        const newCopyButton = document.querySelector("#copy_firmware_code");
-        if (newCopyButton) {
-            newCopyButton.addEventListener("click", async () => {
-                try {
-                    await navigator.clipboard.writeText(code);
-                    newCopyButton.textContent = "Copied";
-                } catch (error) {
-                    newCopyButton.textContent = "Select";
-                }
-                window.setTimeout(() => {
-                    newCopyButton.textContent = "Copy";
-                }, 1300);
-            });
-        }
-    } else {
-        if (codeElement) {
-            codeElement.textContent = "";
-        }
-        if (codeSection) {
-            codeSection.style.display = "none";
-        }
-        if (codeButton) {
-            codeButton.style.display = "none";
-        }
+    } else if (codeElement) {
+        codeElement.textContent = "";
     }
 
-    setLinkState(document.querySelector("#detail_demo_link"), project.demoLink || project.liveLink, "Open Demo");
+    if (codeSection) {
+        codeSection.style.display = hasCode ? "grid" : "none";
+    }
+    if (codeButton) {
+        codeButton.style.display = hasCode ? "inline-flex" : "none";
+    }
+    if (codeTabButton) {
+        codeTabButton.style.display = hasCode ? "inline-flex" : "none";
+    }
+    if (quickCodeButton) {
+        quickCodeButton.style.display = hasCode ? "inline-flex" : "none";
+    }
+
+    if (hasCode) {
+        [codeButton, quickCodeButton].forEach((button) => {
+            if (!button) return;
+            const clone = button.cloneNode(true);
+            button.replaceWith(clone);
+        });
+        document.querySelectorAll("#detail_code_button, #quick_code_button").forEach((button) => {
+            button.addEventListener("click", (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                setProjectTab("code");
+                updateRoute({ project: project.folder, tab: "code" });
+                window.requestAnimationFrame(scrollToFirmwareCode);
+            });
+        });
+
+        const copyClone = copyButton.cloneNode(true);
+        copyButton.replaceWith(copyClone);
+        copyClone.addEventListener("click", async () => {
+            try {
+                await navigator.clipboard.writeText(code);
+                copyClone.textContent = "Copied to clipboard";
+                copyClone.classList.add("copied");
+            } catch (error) {
+                copyClone.textContent = "Select code manually";
+            }
+            window.setTimeout(() => {
+                copyClone.textContent = "Copy code";
+                copyClone.classList.remove("copied");
+            }, 1600);
+        });
+    }
+
+    setLinkState(document.querySelector("#detail_demo_link"), project.demoLink || project.liveLink, "▶ Open Demo");
     setLinkState(document.querySelector("#detail_live_link"), project.liveLink, "Project Page");
+
+    const quickTitle = document.querySelector("#quick_action_title");
+    if (quickTitle) {
+        quickTitle.textContent = project.name;
+    }
+    setLinkState(document.querySelector("#quick_demo_link"), project.demoLink || project.liveLink, "▶ Demo");
 
     renderDetailThumbs(project);
 }
@@ -554,13 +665,14 @@ function bindFeaturedProjectControls() {
 function bindProjectViewToggle() {
     document.querySelectorAll("[data-project-mode]").forEach((button) => {
         button.addEventListener("click", () => {
-            const mode = button.dataset.projectMode;
-            document.querySelectorAll("[data-project-mode]").forEach((toggle) => {
-                toggle.classList.toggle("active", toggle === button);
-            });
-            document.querySelectorAll("[data-project-view]").forEach((view) => {
-                view.classList.toggle("active_project_mode", view.dataset.projectView === mode);
-            });
+            setProjectTab(button.dataset.projectMode);
+            const current = projects[selectedDetailIndex];
+            if (current) {
+                updateRoute({ project: current.folder, tab: button.dataset.projectMode });
+            }
+            if (button.dataset.projectMode === "code") {
+                window.requestAnimationFrame(scrollToFirmwareCode);
+            }
         });
     });
 }
@@ -660,5 +772,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     bindProjectViewToggle();
     bindCopyButtons();
     await loadProjects();
-    startHeroSlideshow();
+    await applyRoute();
+    window.addEventListener("hashchange", applyRoute);
+    if (!prefersReducedMotion) {
+        startHeroSlideshow();
+    }
 });
