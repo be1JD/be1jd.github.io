@@ -25,8 +25,9 @@
     --nav-height: 50px;
     --container: 90vw;
     --code-bg: #0a0a0d;
+    --code-text: #e9edf0;
     --code-line: rgba(255, 255, 255, 0.08);
-    --header-bg: rgba(8, 8, 8, 0.70);
+    --header-bg: rgba(8, 8, 8, 0.88);
     --header-bg-solid: rgba(8, 8, 8, 0.94);
     --hero-bg: #111111;
     --thumb-bg: #101010;
@@ -60,9 +61,10 @@
     --focus-ring: #2f62d6;
     --shadow: 0 24px 60px rgba(20, 20, 25, 0.12);
     --shadow-soft: 0 10px 28px rgba(20, 20, 25, 0.08);
-    --code-bg: #14161d;
+    --code-bg: #f3f1ea;
+    --code-text: #22242b;
     --code-line: rgba(255, 255, 255, 0.08);
-    --header-bg: rgba(255, 255, 255, 0.78);
+    --header-bg: rgba(255, 255, 255, 0.90);
     --header-bg-solid: rgba(255, 255, 255, 0.96);
     --hero-bg: #eeeae0;
     --thumb-bg: #e7e4dc;
@@ -242,8 +244,8 @@ img {
 .toggle_btn.active,
 .footer_contact button:hover {
     color: var(--text);
-    background: rgba(122, 168, 255, 0.16);
-    border-color: var(--accent-cool);
+    background: color-mix(in srgb, var(--accent) 18%, transparent);
+    border-color: var(--accent);
 }
 
 .menu_toggle {
@@ -279,8 +281,8 @@ img {
 }
 
 .theme_toggle:hover {
-    border-color: var(--accent-cool);
-    background: rgba(111, 157, 255, 0.12);
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
     transform: translateY(-1px);
 }
 
@@ -432,8 +434,8 @@ main {
 }
 
 .ghost_link:hover {
-    border-color: var(--accent-cool);
-    background: rgba(111, 157, 255, 0.1);
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 14%, transparent);
     transform: translateY(-2px);
 }
 
@@ -464,8 +466,8 @@ main {
 }
 
 .hero_copy .ghost_link:hover {
-    border-color: var(--accent-cool);
-    background: rgba(111, 157, 255, 0.18);
+    border-color: #f1c75b;
+    background: rgba(241, 199, 91, 0.18);
 }
 
 .hero_stage {
@@ -1083,7 +1085,7 @@ main {
     border: 0;
     border-radius: 0 0 var(--radius) var(--radius);
     background: var(--code-bg);
-    color: #e9edf0;
+    color: var(--code-text);
     font-size: 12px;
     line-height: 1.55;
 }
@@ -1189,7 +1191,7 @@ main {
 }
 
 .firmware_code_block .token.variable {
-    color: #e9edf0;
+    color: var(--code-text);
 }
 
 .detail_tabs {
@@ -1266,9 +1268,9 @@ main {
     padding: 10px 16px;
     border: 1px solid var(--line);
     border-radius: var(--radius);
-    background: rgba(8, 8, 8, 0.86);
+    background: var(--header-bg-solid);
     backdrop-filter: blur(18px);
-    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.32);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
 }
 
 .quick_action_title {
@@ -1349,6 +1351,85 @@ main {
 .about_content p:not(.eyebrow) {
     color: var(--muted);
     line-height: 1.75;
+}
+
+.section_subtext {
+    max-width: 640px;
+    color: var(--muted);
+    line-height: 1.7;
+}
+
+.skill_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.skill_card {
+    display: grid;
+    gap: 8px;
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--surface-strong);
+    box-shadow: var(--shadow-soft);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.skill_card:hover {
+    border-color: var(--accent);
+    transform: translateY(-3px);
+}
+
+.skill_card h3 {
+    font-size: 16px;
+    color: var(--accent-strong);
+}
+
+.skill_card p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.approach_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+    padding: 30px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--surface-strong);
+    box-shadow: var(--shadow-soft);
+}
+
+.approach_card {
+    display: grid;
+    gap: 8px;
+}
+
+.approach_index {
+    display: inline-block;
+    color: var(--accent-pink-strong);
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+}
+
+.approach_card h3 {
+    font-size: 17px;
+}
+
+.approach_card p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+.contact_email_btn {
+    margin-top: 4px;
 }
 
 .contact_columns {
