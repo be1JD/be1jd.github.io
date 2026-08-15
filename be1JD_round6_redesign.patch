@@ -1,0 +1,355 @@
+diff --git a/CSS/media_query.css b/CSS/media_query.css
+index a6949c8..5fe3e34 100644
+--- a/CSS/media_query.css
++++ b/CSS/media_query.css
+@@ -164,15 +164,14 @@
+         grid-template-columns: 1fr;
+     }
+ 
+-    .footer_top,
+-    .footer_grid,
+-    .footer_bottom {
+-        grid-template-columns: 1fr;
++    .footer_top {
++        flex-direction: column;
++        align-items: flex-start;
+     }
+ 
+-    .footer_socials,
+-    .footer_bottom {
+-        justify-items: start;
++    .footer_grid {
++        grid-template-columns: 1fr;
++        max-width: none;
+     }
+ }
+ 
+@@ -209,10 +208,6 @@
+         flex-direction: column;
+     }
+ 
+-    .footer_socials div {
+-        gap: 10px;
+-    }
+-
+     .breathing_space {
+         height: 18vh;
+     }
+diff --git a/CSS/style.css b/CSS/style.css
+index 04573ab..c511d73 100644
+--- a/CSS/style.css
++++ b/CSS/style.css
+@@ -96,6 +96,7 @@ body {
+         var(--bg);
+     background-size: 42px 42px, 42px 42px, auto, auto, auto;
+     color: var(--text);
++    overflow-wrap: break-word;
+ }
+ 
+ button,
+@@ -1092,11 +1093,13 @@ main {
+     padding-left: 22px;
+     color: var(--muted);
+     line-height: 1.65;
++    overflow-wrap: anywhere;
+ }
+ 
+ .guide_doc_group p {
+     color: var(--muted);
+     line-height: 1.7;
++    overflow-wrap: anywhere;
+ }
+ 
+ .code_section {
+@@ -1539,19 +1542,22 @@ main {
+ .site_footer {
+     width: 100%;
+     display: grid;
+-    gap: clamp(38px, 6vw, 70px);
++    gap: clamp(32px, 5vw, 56px);
+     margin: 0 auto;
+-    padding: clamp(52px, 8vw, 92px) max(5vw, calc((100vw - var(--container)) / 2)) 34px;
++    padding: clamp(52px, 8vw, 92px) max(5vw, calc((100vw - var(--container)) / 2)) 30px;
+     border-top: 1px solid var(--line);
+     background: var(--footer-bg);
+     color: var(--muted);
+ }
+ 
+ .footer_top {
+-    display: grid;
+-    grid-template-columns: minmax(260px, 0.9fr) minmax(260px, 1fr);
+-    gap: clamp(28px, 8vw, 110px);
++    display: flex;
++    flex-wrap: wrap;
++    justify-content: space-between;
+     align-items: center;
++    gap: 24px;
++    padding-bottom: clamp(28px, 5vw, 44px);
++    border-bottom: 1px solid var(--line);
+ }
+ 
+ .footer_brand {
+@@ -1561,8 +1567,8 @@ main {
+ }
+ 
+ .footer_mark {
+-    width: 64px;
+-    height: 64px;
++    width: 56px;
++    height: 56px;
+     display: grid;
+     place-items: center;
+     flex: 0 0 auto;
+@@ -1570,14 +1576,14 @@ main {
+     border-radius: 8px;
+     background: linear-gradient(145deg, #313131, #050505);
+     color: #ffffff;
+-    font-size: 20px;
++    font-size: 18px;
+     font-weight: 800;
+ }
+ 
+ .site_footer strong {
+     color: var(--text);
+-    font-size: clamp(20px, 2.2vw, 26px);
+-    line-height: 1;
++    font-size: 20px;
++    line-height: 1.3;
+ }
+ 
+ .footer_brand p,
+@@ -1588,87 +1594,96 @@ main {
+     line-height: 1.65;
+ }
+ 
+-.footer_socials {
+-    display: grid;
+-    gap: 18px;
+-    justify-items: start;
+-}
+-
+-.footer_socials > span {
+-    color: var(--text);
+-    font-weight: 800;
++.footer_brand p {
++    max-width: 360px;
++    margin-top: 2px;
+ }
+ 
+-.footer_socials div {
++.footer_socials {
+     display: flex;
+-    flex-wrap: wrap;
+-    gap: 16px;
++    align-items: center;
++    gap: 10px;
+ }
+ 
+-.footer_socials a,
+-.footer_socials button {
+-    width: 44px;
+-    height: 44px;
++.footer_socials a {
++    width: 40px;
++    height: 40px;
+     display: grid;
+     place-items: center;
+     border: 1px solid var(--line);
+     border-radius: 50%;
+     background: transparent;
+     color: var(--muted);
+-    font-size: 12px;
+-    font-weight: 800;
+-    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
++    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+ }
+ 
+-.footer_socials a:hover,
+-.footer_socials button:hover {
++.footer_socials a:hover {
+     color: var(--text);
+     border-color: var(--accent);
+-    background: rgba(215, 167, 54, 0.10);
++    background: color-mix(in srgb, var(--accent) 12%, transparent);
++    transform: translateY(-2px);
+ }
+ 
+ .footer_grid {
+     display: grid;
+-    grid-template-columns: 1.35fr repeat(3, minmax(150px, 1fr));
++    grid-template-columns: repeat(2, minmax(160px, 1fr));
+     gap: clamp(26px, 5vw, 70px);
+     align-items: start;
++    max-width: 480px;
+ }
+ 
+ .footer_grid section {
+     display: grid;
+-    gap: 16px;
++    gap: 14px;
+ }
+ 
+ .footer_grid h2 {
+     color: var(--text);
+-    font-size: 16px;
++    font-size: 13px;
+     font-weight: 800;
++    text-transform: uppercase;
++    letter-spacing: 0.05em;
+ }
+ 
+ .footer_grid a,
+-.footer_grid button,
+-.footer_bottom button {
++.footer_grid button {
+     width: fit-content;
+     padding: 0;
+     border: 0;
+     background: transparent;
+-    color: var(--text);
++    color: var(--muted);
+     font-size: 14px;
+-    font-weight: 700;
++    font-weight: 600;
+     text-align: left;
++    overflow-wrap: anywhere;
++    transition: color 0.2s ease;
+ }
+ 
+ .footer_grid a:hover,
+-.footer_grid button:hover,
+-.footer_bottom button:hover {
++.footer_grid button:hover {
+     color: var(--accent-strong);
+ }
+ 
+ .footer_bottom {
+-    display: grid;
+-    grid-template-columns: minmax(180px, 1fr) minmax(220px, 1fr) auto;
+-    gap: 18px;
++    display: flex;
++    flex-wrap: wrap;
++    justify-content: space-between;
+     align-items: center;
+-    padding-top: 26px;
++    gap: 14px;
++    padding-top: 22px;
+     border-top: 1px solid var(--line);
+ }
++
++.footer_top_btn {
++    padding: 0;
++    border: 0;
++    background: transparent;
++    color: var(--muted);
++    font-size: 13px;
++    font-weight: 700;
++    transition: color 0.2s ease;
++}
++
++.footer_top_btn:hover {
++    color: var(--accent-strong);
++}
+diff --git a/JS/script.js b/JS/script.js
+index 6cbd071..0a325fb 100644
+--- a/JS/script.js
++++ b/JS/script.js
+@@ -734,6 +734,13 @@ function bindNavigation() {
+         const isOpen = navMenu.classList.toggle("open");
+         menuToggle.setAttribute("aria-expanded", String(isOpen));
+     });
++
++    const backToTopButton = document.querySelector("#footer_back_to_top");
++    if (backToTopButton) {
++        backToTopButton.addEventListener("click", () => {
++            window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
++        });
++    }
+ }
+ 
+ function bindGallery() {
+diff --git a/index.html b/index.html
+index 3539cd2..c85a9f2 100644
+--- a/index.html
++++ b/index.html
+@@ -423,30 +423,32 @@
+                 <span class="footer_mark" aria-hidden="true">JD</span>
+                 <div>
+                     <strong>be1JD</strong>
+-                    <p>Embedded builds, web-controlled electronics, project guides, demos, and download resources.</p>
++                    <p>Embedded builds, web-controlled electronics, and documented project guides.</p>
+                 </div>
+             </div>
+ 
+             <div class="footer_socials" aria-label="Social links">
+-                <span>Follow / connect</span>
+-                <div>
+-                    <a href="mailto:jaypatel3000k@gmail.com" aria-label="Email JD">Mail</a>
+-                    <a href="https://www.instagram.com/be1jd" target="_blank" rel="noreferrer" aria-label="Instagram">IG</a>
+-                    <button type="button" data-page="contact">Contact</button>
+-                </div>
++                <a href="mailto:jaypatel3000k@gmail.com" aria-label="Email JD">
++                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
++                        stroke-width="1.8" aria-hidden="true">
++                        <rect x="3" y="5" width="18" height="14" rx="2"></rect>
++                        <path d="m4 7 8 6 8-6"></path>
++                    </svg>
++                </a>
++                <a href="https://www.instagram.com/be1jd" target="_blank" rel="noreferrer" aria-label="Instagram">
++                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
++                        stroke-width="1.8" aria-hidden="true">
++                        <rect x="3" y="3" width="18" height="18" rx="5"></rect>
++                        <circle cx="12" cy="12" r="4"></circle>
++                        <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"></circle>
++                    </svg>
++                </a>
+             </div>
+         </div>
+ 
+         <div class="footer_grid">
+             <section>
+-                <h2>Contact Info</h2>
+-                <p>Email: <a href="mailto:jaypatel3000k@gmail.com">jaypatel3000k@gmail.com</a></p>
+-                <p>Location: India</p>
+-                <p>For project questions, demos, collaborations, and build guidance.</p>
+-            </section>
+-
+-            <section>
+-                <h2>Website</h2>
++                <h2>Site</h2>
+                 <button type="button" data-page="home">Home</button>
+                 <button type="button" data-page="projects">Projects</button>
+                 <button type="button" data-page="about">About</button>
+@@ -454,25 +456,18 @@
+             </section>
+ 
+             <section>
+-                <h2>Builds</h2>
+-                <button type="button" data-page="projects">FPV Controller</button>
+-                <button type="button" data-page="projects">Electronics Guides</button>
+-                <button type="button" data-page="projects">Web Tools</button>
+-                <button type="button" data-page="projects">Downloads</button>
+-            </section>
+-
+-            <section>
+-                <h2>Reach Out</h2>
+-                <a href="mailto:jaypatel3000k@gmail.com">Ask about a build</a>
+-                <button type="button" data-page="contact">Collaboration</button>
+-                <button type="button" data-page="projects">View demos</button>
++                <h2>Get in touch</h2>
++                <a href="mailto:jaypatel3000k@gmail.com">jaypatel3000k@gmail.com</a>
++                <a href="https://www.instagram.com/be1jd" target="_blank" rel="noreferrer">@be1jd on Instagram</a>
++                <button type="button" data-page="projects">View live demos</button>
+             </section>
+         </div>
+ 
+         <div class="footer_bottom">
+             <span>2026 &copy; be1JD. All rights reserved.</span>
+-            <span>Personal maker lab and project documentation hub.</span>
+-            <button type="button" data-page="contact">Contact JD</button>
++            <button class="footer_top_btn" type="button" id="footer_back_to_top" aria-label="Back to top">
++                Back to top ↑
++            </button>
+         </div>
+     </footer>
+ 

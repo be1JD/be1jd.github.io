@@ -734,6 +734,13 @@ function bindNavigation() {
         const isOpen = navMenu.classList.toggle("open");
         menuToggle.setAttribute("aria-expanded", String(isOpen));
     });
+
+    const backToTopButton = document.querySelector("#footer_back_to_top");
+    if (backToTopButton) {
+        backToTopButton.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" });
+        });
+    }
 }
 
 function bindGallery() {

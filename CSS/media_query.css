@@ -164,15 +164,14 @@
         grid-template-columns: 1fr;
     }
 
-    .footer_top,
-    .footer_grid,
-    .footer_bottom {
-        grid-template-columns: 1fr;
+    .footer_top {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
-    .footer_socials,
-    .footer_bottom {
-        justify-items: start;
+    .footer_grid {
+        grid-template-columns: 1fr;
+        max-width: none;
     }
 }
 
@@ -207,10 +206,6 @@
     .footer_brand {
         align-items: flex-start;
         flex-direction: column;
-    }
-
-    .footer_socials div {
-        gap: 10px;
     }
 
     .breathing_space {
