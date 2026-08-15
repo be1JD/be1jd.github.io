@@ -16,6 +16,14 @@
     .download_panel {
         position: static;
     }
+
+    .project_list_thumb {
+        max-height: 260px;
+    }
+
+    .project_list_body p:not(.project_meta) {
+        -webkit-line-clamp: 2;
+    }
 }
 
 @media only screen and (max-width: 720px) {
@@ -67,7 +75,7 @@
         padding: 8px;
         border: 1px solid var(--line);
         border-radius: var(--radius);
-        background: rgba(8, 8, 8, 0.94);
+        background: var(--header-bg-solid);
         backdrop-filter: blur(18px);
         box-shadow: var(--shadow);
     }

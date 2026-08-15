@@ -7,6 +7,19 @@
     <title>JD | Maker Projects and Embedded Tech</title>
     <meta name="description"
         content="JD's personal maker lab for embedded technology, web-controlled electronics, project guides, downloads, demos, and build resources.">
+    <script>
+        (function () {
+            try {
+                var stored = window.localStorage.getItem("be1jd_theme");
+                var theme = stored || (window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+                if (theme === "light") {
+                    document.documentElement.setAttribute("data-theme", "light");
+                }
+            } catch (error) {
+                /* localStorage unavailable, default theme stands */
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="CSS/style.css">
     <link rel="stylesheet" href="CSS/utility.css">
     <link rel="stylesheet" href="CSS/media_query.css">
@@ -28,17 +41,25 @@
                 <span class="brand_text"></span>
             </button>
 
-            <button class="menu_toggle" type="button" aria-label="Open menu" aria-expanded="false">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
+            <div class="nav_controls">
+                <div class="nav_btn_container" id="nav_menu">
+                    <button class="nav_btn" type="button" data-page="home">Home</button>
+                    <button class="nav_btn" type="button" data-page="projects">Projects</button>
+                    <button class="nav_btn" type="button" data-page="about">About</button>
+                    <button class="nav_btn" type="button" data-page="contact">Contact</button>
+                </div>
 
-            <div class="nav_btn_container" id="nav_menu">
-                <button class="nav_btn active_nav" type="button" data-page="home">Home</button>
-                <button class="nav_btn" type="button" data-page="projects">Projects</button>
-                <button class="nav_btn" type="button" data-page="about">About</button>
-                <button class="nav_btn" type="button" data-page="contact">Contact</button>
+                <button class="theme_toggle" id="theme_toggle" type="button" aria-label="Switch to light mode"
+                    aria-pressed="false">
+                    <span class="theme_icon theme_icon_moon" aria-hidden="true">&#9789;</span>
+                    <span class="theme_icon theme_icon_sun" aria-hidden="true">&#9728;</span>
+                </button>
+
+                <button class="menu_toggle" type="button" aria-label="Open menu" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </nav>
     </header>
@@ -103,7 +124,7 @@
                         <div class="summary_actions">
                             <a class="primary_btn" id="featured_demo" href="#" target="_blank" rel="noreferrer">▶ View Demo</a>
                             <button class="code_btn" type="button" id="featured_code">&lt;/&gt; Get Code</button>
-                            <button class="ghost_link" type="button" id="featured_open">Full Guide</button>
+                            <button class="guide_btn" type="button" id="featured_open">Full Guide</button>
                             <div class="project_pager" id="featured_pager" aria-label="Project carousel"></div>
                         </div>
                     </article>
@@ -230,7 +251,15 @@
                                     <button class="copy_code_btn" id="copy_firmware_code" type="button"
                                         aria-live="polite">Copy code</button>
                                 </div>
-                                <pre class="firmware_code_block"><code id="firmware_code"></code></pre>
+                                <div class="code_window">
+                                    <div class="code_window_bar">
+                                        <span class="code_dot code_dot_red" aria-hidden="true"></span>
+                                        <span class="code_dot code_dot_yellow" aria-hidden="true"></span>
+                                        <span class="code_dot code_dot_green" aria-hidden="true"></span>
+                                        <span class="code_window_filename" id="code_window_filename">firmware.ino</span>
+                                    </div>
+                                    <pre class="firmware_code_block"><code id="firmware_code" class="language-cpp"></code></pre>
+                                </div>
                             </section>
                         </div>
                     </div>
@@ -378,6 +407,9 @@
         </div>
     </footer>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js" defer></script>
     <script src="JS/script.js" defer></script>
 </body>
 

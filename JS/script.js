@@ -323,14 +323,23 @@ function createProjectListItem(project) {
     const image = document.createElement("img");
     image.alt = `${project.name} thumbnail`;
     setImageFromCandidates(image, project.images, `${project.name} thumbnail`);
-    thumbWrap.append(image);
+
+    const tagBadge = document.createElement("span");
+    tagBadge.className = "project_list_tag";
+    tagBadge.textContent = project.tag;
+
+    const progressBadge = document.createElement("span");
+    progressBadge.className = "project_list_progress";
+    progressBadge.textContent = `${project.progress}% built`;
+
+    thumbWrap.append(image, tagBadge, progressBadge);
 
     const body = document.createElement("div");
     body.className = "project_list_body";
 
     const meta = document.createElement("p");
     meta.className = "project_meta";
-    meta.textContent = `${project.tag} / ${project.progress}% complete`;
+    meta.textContent = `${project.tag} · ${project.progress}% complete`;
 
     const title = document.createElement("h2");
     title.textContent = project.name;
@@ -365,7 +374,7 @@ function createProjectListItem(project) {
     }
 
     const guideButton = document.createElement("button");
-    guideButton.className = "ghost_link";
+    guideButton.className = "guide_btn";
     guideButton.type = "button";
     guideButton.textContent = "Full Guide";
     guideButton.addEventListener("click", (event) => {
@@ -375,7 +384,7 @@ function createProjectListItem(project) {
     });
     actions.append(guideButton);
 
-    body.append(meta, title, description, actions);
+    body.append(title, meta, description, actions);
     row.append(thumbWrap, body);
     return row;
 }
@@ -402,6 +411,24 @@ async function loadProjectGuide(project) {
     } catch (error) {
         console.error("Failed to load project guide", error);
         return null;
+    }
+}
+
+function highlightFirmwareCode(codeElement, codeHref = "") {
+    const extension = (codeHref.split(".").pop() || "").toLowerCase();
+    const languageMap = { ino: "cpp", cpp: "cpp", cc: "cpp", h: "cpp", hpp: "cpp", c: "c", py: "python", js: "javascript" };
+    const language = languageMap[extension] || "cpp";
+
+    codeElement.className = `language-${language}`;
+
+    const filenameLabel = document.querySelector("#code_window_filename");
+    if (filenameLabel) {
+        const filename = codeHref.split("/").pop() || "firmware";
+        filenameLabel.textContent = filename;
+    }
+
+    if (window.Prism && window.Prism.highlightElement) {
+        window.Prism.highlightElement(codeElement);
     }
 }
 
@@ -560,6 +587,7 @@ async function renderProjectDetail(project) {
 
     if (hasCode) {
         codeElement.textContent = code;
+        highlightFirmwareCode(codeElement, project.codeHref);
     } else if (codeElement) {
         codeElement.textContent = "";
     }
@@ -765,7 +793,40 @@ async function startHeroSlideshow() {
     }
 }
 
+function initThemeToggle() {
+    const toggleButton = document.querySelector("#theme_toggle");
+    if (!toggleButton) {
+        return;
+    }
+
+    const storedTheme = window.localStorage.getItem("be1jd_theme");
+    const systemPrefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+    const initialTheme = storedTheme || (systemPrefersLight ? "light" : "dark");
+
+    applyTheme(initialTheme, toggleButton);
+
+    toggleButton.addEventListener("click", () => {
+        const currentTheme = document.documentElement.dataset.theme === "light" ? "light" : "dark";
+        const nextTheme = currentTheme === "light" ? "dark" : "light";
+        applyTheme(nextTheme, toggleButton);
+        window.localStorage.setItem("be1jd_theme", nextTheme);
+    });
+}
+
+function applyTheme(theme, toggleButton) {
+    if (theme === "light") {
+        document.documentElement.setAttribute("data-theme", "light");
+        toggleButton.setAttribute("aria-pressed", "true");
+        toggleButton.setAttribute("aria-label", "Switch to dark mode");
+    } else {
+        document.documentElement.removeAttribute("data-theme");
+        toggleButton.setAttribute("aria-pressed", "false");
+        toggleButton.setAttribute("aria-label", "Switch to light mode");
+    }
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
+    initThemeToggle();
     bindNavigation();
     bindGallery();
     bindFeaturedProjectControls();
