@@ -37,20 +37,87 @@ const projectList = document.querySelector("#project_list");
 
 async function loadProjects() {
     try {
-        const response = await fetch("projects/projects.json");
+        const response = await fetchWithTimeout("projects/projects.json");
+        if (!response.ok) {
+            throw new Error(`Project manifest request failed: ${response.status}`);
+        }
         const manifest = await response.json();
 
-        projects = await Promise.all(manifest.map(async (project) => {
-            const dataResponse = await fetch(`projects/${project.folder}/data.json`);
+        const results = await Promise.allSettled(manifest.map(async (project) => {
+            const dataResponse = await fetchWithTimeout(`projects/${project.folder}/data.json`);
+            if (!dataResponse.ok) {
+                throw new Error(`Project data request failed: ${dataResponse.status}`);
+            }
             const data = await dataResponse.json();
             return { ...data, folder: project.folder };
         }));
 
+        projects = results
+            .filter((result) => result.status === "fulfilled")
+            .map((result) => result.value);
+
+        const failedCount = results.length - projects.length;
+        if (failedCount > 0) {
+            results
+                .filter((result) => result.status === "rejected")
+                .forEach((result) => console.error("A project failed to load and was skipped:", result.reason));
+        }
+
+        if (!projects.length) {
+            showProjectsLoadError();
+            return;
+        }
+
         updateFeaturedProject(0);
         renderProjectList();
+
+        if (failedCount > 0) {
+            showProjectsLoadWarning(failedCount);
+        }
     } catch (error) {
         console.error("Failed to load projects", error);
+        showProjectsLoadError();
     }
+}
+
+function fetchWithTimeout(url, timeoutMs = 10000) {
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => controller.abort(), timeoutMs);
+
+    return fetch(url, { signal: controller.signal }).finally(() => window.clearTimeout(timer));
+}
+
+function showProjectsLoadError() {
+    if (!projectList) {
+        return;
+    }
+    projectList.innerHTML = `
+        <div class="load_error_card" role="alert">
+            <p>Projects couldn't be loaded right now. This is usually a slow or interrupted
+                connection, not a broken page.</p>
+            <button class="ghost_link" type="button" id="retry_projects_load">Try again</button>
+        </div>
+    `;
+    const retryButton = document.querySelector("#retry_projects_load");
+    if (retryButton) {
+        retryButton.addEventListener("click", () => {
+            projectList.innerHTML = "";
+            loadProjects();
+        });
+    }
+}
+
+function showProjectsLoadWarning(failedCount) {
+    if (!projectList) {
+        return;
+    }
+    const notice = document.createElement("div");
+    notice.className = "load_warning_banner";
+    notice.setAttribute("role", "status");
+    notice.textContent = failedCount === 1
+        ? "1 project couldn't be loaded and was skipped."
+        : `${failedCount} projects couldn't be loaded and were skipped.`;
+    projectList.prepend(notice);
 }
 
 function closeMenu() {
@@ -403,7 +470,7 @@ async function loadProjectGuide(project) {
     }
 
     try {
-        const response = await fetch(project.guideHref);
+        const response = await fetchWithTimeout(project.guideHref);
         if (!response.ok) {
             throw new Error(`Guide request failed: ${response.status}`);
         }
@@ -438,7 +505,7 @@ async function loadProjectCode(project) {
     }
 
     try {
-        const response = await fetch(project.codeHref);
+        const response = await fetchWithTimeout(project.codeHref);
         if (!response.ok) {
             throw new Error(`Code request failed: ${response.status}`);
         }
@@ -825,17 +892,38 @@ function applyTheme(theme, toggleButton) {
     }
 }
 
+function hideSiteLoader() {
+    const loader = document.querySelector("#site_loader");
+    if (!loader || loader.classList.contains("site_loader_hidden")) {
+        return;
+    }
+    loader.classList.add("site_loader_hidden");
+    window.setTimeout(() => loader.remove(), 500);
+}
+
+// Safety net: never let a slow or failed request leave the loading screen
+// stuck on top of the page. This fires regardless of what else happens below.
+window.setTimeout(hideSiteLoader, 6000);
+window.addEventListener("error", hideSiteLoader);
+window.addEventListener("unhandledrejection", hideSiteLoader);
+
 document.addEventListener("DOMContentLoaded", async () => {
-    initThemeToggle();
-    bindNavigation();
-    bindGallery();
-    bindFeaturedProjectControls();
-    bindProjectViewToggle();
-    bindCopyButtons();
-    await loadProjects();
-    await applyRoute();
-    window.addEventListener("hashchange", applyRoute);
-    if (!prefersReducedMotion) {
-        startHeroSlideshow();
+    try {
+        initThemeToggle();
+        bindNavigation();
+        bindGallery();
+        bindFeaturedProjectControls();
+        bindProjectViewToggle();
+        bindCopyButtons();
+        await loadProjects();
+        await applyRoute();
+        window.addEventListener("hashchange", applyRoute);
+        if (!prefersReducedMotion) {
+            startHeroSlideshow();
+        }
+    } catch (error) {
+        console.error("Startup encountered an error, showing the site anyway:", error);
+    } finally {
+        hideSiteLoader();
     }
 });

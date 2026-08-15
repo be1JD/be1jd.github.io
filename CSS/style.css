@@ -118,6 +118,40 @@ img {
     max-width: 100%;
 }
 
+.site_loader {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+    opacity: 1;
+    transition: opacity 0.45s ease;
+}
+
+.site_loader.site_loader_hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.site_loader_logo {
+    width: clamp(56px, 12vw, 84px);
+    height: clamp(56px, 12vw, 84px);
+    animation: site_loader_pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes site_loader_pulse {
+    0%, 100% {
+        opacity: 0.55;
+        transform: scale(0.94);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.04);
+    }
+}
+
 .skip_link {
     position: fixed;
     top: -60px;
@@ -346,8 +380,8 @@ main {
 .section_heading h1,
 .about_content h1,
 .guide_main h1 {
-    font-size: clamp(36px, 6.3vw, 64px);
-    line-height: 1;
+    font-size: clamp(28px, 4.2vw, 46px);
+    line-height: 1.08;
     letter-spacing: 0;
 }
 
@@ -573,8 +607,8 @@ main {
 
 .section_heading h2,
 .home_contact_summary h2 {
-    font-size: clamp(26px, 4.2vw, 44px);
-    line-height: 1.06;
+    font-size: clamp(22px, 2.6vw, 32px);
+    line-height: 1.15;
 }
 
 .featured_project {
@@ -688,8 +722,8 @@ main {
 .project_summary h3,
 .selector_details h2 {
     margin-top: 4px;
-    font-size: clamp(24px, 3.4vw, 38px);
-    line-height: 1.05;
+    font-size: clamp(20px, 2.4vw, 28px);
+    line-height: 1.15;
 }
 
 .project_summary > p,
@@ -833,6 +867,27 @@ main {
     gap: 18px;
 }
 
+.load_error_card {
+    display: grid;
+    gap: 14px;
+    justify-items: start;
+    padding: 28px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--surface-strong);
+    color: var(--muted);
+    line-height: 1.6;
+}
+
+.load_warning_banner {
+    padding: 10px 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    color: var(--muted);
+    font-size: 13px;
+}
+
 .project_list_item {
     width: 100%;
     display: grid;
@@ -912,8 +967,8 @@ main {
 }
 
 .project_list_body h2 {
-    font-size: clamp(20px, 2.2vw, 26px);
-    line-height: 1.2;
+    font-size: clamp(17px, 1.6vw, 21px);
+    line-height: 1.25;
     margin: 0;
 }
 
@@ -1521,7 +1576,7 @@ main {
 
 .site_footer strong {
     color: var(--text);
-    font-size: clamp(26px, 4vw, 42px);
+    font-size: clamp(20px, 2.2vw, 26px);
     line-height: 1;
 }
 
