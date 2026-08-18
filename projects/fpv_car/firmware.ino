@@ -2119,7 +2119,7 @@ const SOC_Point socTable[] = {
 
 
 const char *ssid = "192.168.4.1";   // SSID of Wifi
-const char *password = "JD232323";  // Password of Wifi
+const char *password = "12345678";  // Password of Wifi
 
 const IPAddress apIP(192, 168, 4, 1);        // Static IP of ESP32 Itself
 const IPAddress apGateway(192, 168, 4, 1);   // Static IP of Gateway (ap router)
